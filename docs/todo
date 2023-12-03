@@ -1,0 +1,63 @@
+=============
+MVP
+=============
+
+FE
+    list
+        card
+            title
+            company
+            (optional) location
+            (optional) YoE summary
+        pagination
+        sort
+    search
+    filters
+        (subset of details)
+    details
+        title
+        company
+        parsed (optionals)
+            (with citations)
+            skills + YoE
+                languages / tech
+                (no degree-conditional YoE, pick or assume BS)
+            responsibilities
+                on-call
+                design
+            pay
+            hours
+        description
+
+BE
+    data
+        title
+        company
+        description
+            plain-text
+        
+        skills + yoe
+        responsibilities
+        pay
+        hours
+    training
+        independent extractors (easy to add more)
+        citations
+            check each sentence?
+                + also solves context window problem
+                - what if conflicting?
+                    use confidence rating
+        structured output
+            jsonformer
+                no particular reason
+            not lmql
+                custom template language
+                    no ide support
+                    hard to extend / debug 
+
+=============
+Dream
+=============
+
+subscriptions
+    rss or email or accounts
