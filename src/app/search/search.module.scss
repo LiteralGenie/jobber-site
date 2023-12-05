@@ -1,0 +1,15 @@
+.search-form {
+    @apply w-60;
+
+    input {
+        color: black;
+    }
+}
+
+.skill {
+    @apply flex flex-col gap-1;
+
+    input {
+        @apply w-full;
+    }
+}
