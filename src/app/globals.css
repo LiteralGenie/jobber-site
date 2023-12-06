@@ -30,3 +30,8 @@ ul {
     list-style: revert;
     padding: revert;
 }
+
+html,
+body {
+    @apply h-full;
+}

@@ -11,7 +11,7 @@ export default function Home() {
     const [activeIndex, setActiveIndex] = useState(0)
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center h-full">
             <div className="flex gap-16 p-8 w-full max-w-7xl">
                 <Search />
                 <PreviewCardList

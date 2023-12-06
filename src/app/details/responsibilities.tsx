@@ -12,7 +12,7 @@ export default function Responsibilities({
             <p>Responsibilities</p>
             <ul>
                 {responsibilities.map((r) => (
-                    <li>{r}</li>
+                    <li key={r}>{r}</li>
                 ))}
             </ul>
         </div>
