@@ -12,7 +12,7 @@ export default function Home() {
 
     return (
         <div className="flex justify-center">
-            <div className="flex gap-16 p-8 w-full max-w-6xl">
+            <div className="flex gap-16 p-8 w-full max-w-7xl">
                 <Search />
                 <PreviewCardList
                     activeIndex={activeIndex}

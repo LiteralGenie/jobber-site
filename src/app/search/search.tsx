@@ -1,3 +1,5 @@
+"use-client"
+
 import styles from "./search.module.scss"
 
 export default function Search() {
@@ -20,56 +22,43 @@ export default function Search() {
                 {/* Skills */}
                 <section>
                     <h1>Skills</h1>
-                    <div className="flex flex-col gap-4">
-                        <div className={styles.skill}>
-                            <input name="s1" type="text" value="Python" />
 
+                    <div className="flex flex-col gap-2">
+                        <div>
+                            <h2>Include</h2>
                             <div className="flex gap-2">
-                                <input
-                                    name="s1-min"
-                                    type="number"
-                                    placeholder="0"
-                                />
-                                -
-                                <input
-                                    name="s1-max"
-                                    type="number"
-                                    placeholder="∞"
-                                />
+                                <select className="flex-1">
+                                    <option value="">(empty)</option>
+                                    <option value="python">Python</option>
+                                    <option value="typescript">
+                                        TypeScript
+                                    </option>
+                                    <option value="rust">Rust</option>
+                                </select>
+                                <select className="flex-1">
+                                    <option value="0">0 years</option>
+                                </select>
+                                <button>x</button>
                             </div>
+                            <p className={styles.instructions}>
+                                "years" = years-of-experience
+                                <br />
+                                Listings requesting a greater amount will be
+                                excluded.
+                            </p>
                         </div>
-                        <div className={styles.skill}>
-                            <input name="s2" type="text" value="TypeScript" />
-
+                        <div>
+                            <h2>Exclude</h2>
                             <div className="flex gap-2">
-                                <input
-                                    name="s2-min"
-                                    type="number"
-                                    placeholder="0"
-                                />
-                                -
-                                <input
-                                    name="s2-max"
-                                    type="number"
-                                    placeholder="∞"
-                                />
-                            </div>
-                        </div>
-                        <div className={styles.skill}>
-                            <input name="s3" type="text" value="Rust" />
-
-                            <div className="flex gap-2">
-                                <input
-                                    name="s3-min"
-                                    type="number"
-                                    placeholder="0"
-                                />
-                                -
-                                <input
-                                    name="s3-max"
-                                    type="number"
-                                    placeholder="∞"
-                                />
+                                <select className="flex-1">
+                                    <option value="">(empty)</option>
+                                    <option value="python">Python</option>
+                                    <option value="typescript">
+                                        TypeScript
+                                    </option>
+                                    <option value="rust">Rust</option>
+                                </select>
+                                <button>x</button>
                             </div>
                         </div>
                     </div>
@@ -80,65 +69,90 @@ export default function Search() {
                 {/* Responsibilities */}
                 <section>
                     <h1>Responsibilities</h1>
-                    <div>
-                        <input name="r1" type="checkbox" />
-                        <label htmlFor="r1">On-Call</label>
-                    </div>
-                    <div>
-                        <input name="r2" type="checkbox" />
-                        <label htmlFor="r2">Design</label>
+
+                    <div className="flex flex-col gap-2">
+                        <div>
+                            <h2>Include</h2>
+                            <div className="flex gap-2">
+                                <select className="flex-1">
+                                    <option value="">(empty)</option>
+                                    <option value="oncall">On-call</option>
+                                    <option value="design">UI Design</option>
+                                </select>
+                                <button>x</button>
+                            </div>
+                        </div>
+                        <div>
+                            <h2>Exclude</h2>
+                            <div className="flex gap-2">
+                                <select className="flex-1">
+                                    <option value="">(empty)</option>
+                                    <option value="oncall">On-call</option>
+                                    <option value="design">UI Design</option>
+                                </select>
+                                <button>x</button>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
                 <hr />
 
                 {/* Miscellaenous */}
-                <section>
-                    <div>
-                        <h1>Salary</h1>
+                <section className="flex flex-col">
+                    <h1>Miscellaneous</h1>
 
-                        <div className="flex gap-2">
-                            <input
-                                name="s3-min"
-                                type="number"
-                                placeholder="0"
-                                className="w-full"
-                            />
-                            -
-                            <input
-                                name="s3-max"
-                                type="number"
-                                placeholder="∞"
-                                className="w-full"
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <h1>Clearance Requirements</h1>
-
+                    <div className="flex flex-col gap-4">
                         <div>
-                            <input
-                                name="clearance-any"
-                                type="radio"
-                                value="0"
-                                checked
-                            />
-                            <label htmlFor="clearance-any">Any</label>
+                            <h2>Salary</h2>
+
+                            <div className="flex gap-2">
+                                <input
+                                    name="s3-min"
+                                    type="number"
+                                    placeholder="0"
+                                    className="w-full"
+                                />
+                                -
+                                <input
+                                    name="s3-max"
+                                    type="number"
+                                    placeholder="∞"
+                                    className="w-full"
+                                />
+                            </div>
                         </div>
 
                         <div>
-                            <input name="clearance-no" type="radio" value="1" />
-                            <label htmlFor="clearance-no">No</label>
-                        </div>
+                            <h2>Clearance Requirements</h2>
 
-                        <div>
-                            <input
-                                name="clearance-yes"
-                                type="radio"
-                                value="2"
-                            />
-                            <label htmlFor="clearance-yes">Yes</label>
+                            <div>
+                                <input
+                                    name="clearance-any"
+                                    type="radio"
+                                    value="0"
+                                    checked
+                                />
+                                <label htmlFor="clearance-any">Any</label>
+                            </div>
+
+                            <div>
+                                <input
+                                    name="clearance-no"
+                                    type="radio"
+                                    value="1"
+                                />
+                                <label htmlFor="clearance-no">No</label>
+                            </div>
+
+                            <div>
+                                <input
+                                    name="clearance-yes"
+                                    type="radio"
+                                    value="2"
+                                />
+                                <label htmlFor="clearance-yes">Yes</label>
+                            </div>
                         </div>
                     </div>
                 </section>

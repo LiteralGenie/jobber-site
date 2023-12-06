@@ -14,15 +14,16 @@ export default function PreviewCard({
     return (
         // Active cards have a thicker border
         // Inactive cards have an additional invisible outer border to prevent jittering
-        <div
+        <button
             className={`${
                 isActive ? "" : "border border-transparent border-1"
             }`}
+            disabled={isActive}
         >
             <div
                 onClick={onClick}
                 className={`flex border p-4 rounded-md h-full ${
-                    isActive ? "border-2" : "cursor-pointer"
+                    isActive ? "border-2" : ""
                 }`}
             >
                 {/* Name */}
@@ -38,6 +39,6 @@ export default function PreviewCard({
                 {/* Highlights */}
                 <div>highlights</div>
             </div>
-        </div>
+        </button>
     )
 }

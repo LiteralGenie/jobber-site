@@ -1,19 +1,29 @@
 .search-form {
     @apply w-60;
 
-    input {
-        color: black;
+    input,
+    select {
+        @apply text-black;
     }
 
     hr {
-        @apply my-4;
+        @apply my-2;
+    }
+
+    h1,
+    h2 {
+        @apply leading-tight;
+    }
+
+    h1 {
+        @apply mb-2;
+    }
+
+    h2 {
+        @apply mb-1;
     }
 }
 
-.skill {
-    @apply flex flex-col gap-1;
-
-    input {
-        @apply w-full;
-    }
+.instructions {
+    @apply text-xs italic mt-2;
 }
