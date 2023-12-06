@@ -4,6 +4,10 @@
     input {
         color: black;
     }
+
+    hr {
+        @apply my-4;
+    }
 }
 
 .skill {

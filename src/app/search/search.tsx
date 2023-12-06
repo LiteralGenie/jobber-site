@@ -13,13 +13,13 @@ export default function Search() {
                 />
             </section>
 
+            <hr />
+
             {/* Filters */}
             <section>
-                <h1>Filters</h1>
-
                 {/* Skills */}
                 <section>
-                    <h2>Skills</h2>
+                    <h1>Skills</h1>
                     <div className="flex flex-col gap-4">
                         <div className={styles.skill}>
                             <input name="s1" type="text" value="Python" />
@@ -75,9 +75,11 @@ export default function Search() {
                     </div>
                 </section>
 
+                <hr />
+
                 {/* Responsibilities */}
                 <section>
-                    <h2>Responsibilities</h2>
+                    <h1>Responsibilities</h1>
                     <div>
                         <input name="r1" type="checkbox" />
                         <label htmlFor="r1">On-Call</label>
@@ -88,26 +90,12 @@ export default function Search() {
                     </div>
                 </section>
 
-                {/* Clearance */}
-                <section>
-                    <h2>Clearance Requirements</h2>
-                    <div className="flex flex-col gap-1">
-                        <div>
-                            <input name="c1" type="checkbox" />
-                            <label htmlFor="c1">Not Required</label>
-                        </div>
+                <hr />
 
-                        <div>
-                            <input name="c2" type="checkbox" />
-                            <label htmlFor="c2">Required</label>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Salary + Benefits */}
+                {/* Miscellaenous */}
                 <section>
                     <div>
-                        <h2>Salary</h2>
+                        <h1>Salary</h1>
 
                         <div className="flex gap-2">
                             <input
@@ -127,17 +115,30 @@ export default function Search() {
                     </div>
 
                     <div>
-                        <h2>Benefits</h2>
+                        <h1>Clearance Requirements</h1>
 
-                        <div className="flex flex-col">
-                            <div>
-                                <input name="b1" type="checkbox" />
-                                <label htmlFor="b1">401k</label>
-                            </div>
-                            <div>
-                                <input name="b2" type="checkbox" />
-                                <label htmlFor="b2">Insurance</label>
-                            </div>
+                        <div>
+                            <input
+                                name="clearance-any"
+                                type="radio"
+                                value="0"
+                                checked
+                            />
+                            <label htmlFor="clearance-any">Any</label>
+                        </div>
+
+                        <div>
+                            <input name="clearance-no" type="radio" value="1" />
+                            <label htmlFor="clearance-no">No</label>
+                        </div>
+
+                        <div>
+                            <input
+                                name="clearance-yes"
+                                type="radio"
+                                value="2"
+                            />
+                            <label htmlFor="clearance-yes">Yes</label>
                         </div>
                     </div>
                 </section>
