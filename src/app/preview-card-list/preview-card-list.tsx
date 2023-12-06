@@ -1,16 +1,19 @@
 import { JobData } from "@/lib/job-data"
 import PreviewCard from "./preview-card/preview-card"
-import { useState } from "react"
 
 export interface PreviewCardListProps {
+    activeIndex: number
+    setActiveIndex: (idx: number) => void
     items: JobData[]
 }
 
-export default function PreviewCardList({ items }: PreviewCardListProps) {
-    const [activeIndex, setActiveIndex] = useState(0)
-
+export default function PreviewCardList({
+    activeIndex,
+    setActiveIndex,
+    items,
+}: PreviewCardListProps) {
     return (
-        <div className="flex flex-col gap-4">
+        <section className="flex flex-col gap-4">
             {items.map((item, idx) => (
                 <PreviewCard
                     data={item}
@@ -19,6 +22,6 @@ export default function PreviewCardList({ items }: PreviewCardListProps) {
                     key={item.id}
                 />
             ))}
-        </div>
+        </section>
     )
 }

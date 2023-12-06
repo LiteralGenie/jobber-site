@@ -2,21 +2,24 @@ type IsoDate = string
 
 export interface JobData {
     id: string
-    title: string
+
+    clearance: boolean
     company: string
-    time_updated: IsoDate
     description: string
+    time_updated: IsoDate
+    title: string
 
     // optionals
-    benefits: Record<string, number | null>
-    responsibilities: Record<string, string>
+    location: null | 'remote' | 'hybrid' | 'on-site'
     salary: SalaryRange | null
-    skills: Record<string, SkillRange | null>
+
+    responsibilities: string[]
+    skills: Record<string, number>
 }
 
 interface SalaryRange {
     min: number
-    max: number
+    max: number | null
 }
 
 interface SkillRange {

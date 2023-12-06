@@ -26,9 +26,6 @@ FE
                 on-call
                 design
             pay
-            benefits
-                401k
-                insurance
             clearance
         description
 
@@ -62,3 +59,4 @@ part-time / hourly filters
 sorting
     why is anything other than date useful?
     maybe an argument for salary / yoe
+benefits

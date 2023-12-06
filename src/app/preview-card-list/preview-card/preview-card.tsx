@@ -1,5 +1,4 @@
 import { JobData } from "@/lib/job-data"
-import styles from "./preview-card.module.scss"
 
 export interface PreviewCardProps {
     data: JobData
