@@ -2,11 +2,62 @@
 
 import { usePathname, useRouter } from "next/navigation"
 import { FormEvent } from "react"
+import { useFieldArray, useForm } from "react-hook-form"
 import styles from "./search.module.scss"
+
+interface SearchForm {
+    skills: {
+        include: Array<{
+            name: string
+            yoe: number
+        }>
+        exclude: { name: string }[]
+    }
+    responsibilities: {
+        include: { value: string }[]
+        exclude: { value: string }[]
+    }
+    salary: number
+    clearance: "any" | "no" | "yes"
+}
+
+interface SearchParams {}
 
 export default function Search() {
     const router = useRouter()
     const pathName = usePathname()
+
+    const { control, register } = useForm<SearchForm>({
+        defaultValues: {
+            skills: {
+                include: [
+                    {
+                        name: "",
+                        yoe: 0,
+                    },
+                ],
+                exclude: [{ name: "" }],
+            },
+            responsibilities: {
+                include: [{ value: "" }],
+                exclude: [{ value: "" }],
+            },
+            salary: 0,
+            clearance: "any",
+        },
+    })
+
+    const skillsIncluded = useFieldArray({ control, name: "skills.include" })
+    const skillsExcluded = useFieldArray({ control, name: "skills.exclude" })
+
+    const respsIncluded = useFieldArray({
+        control,
+        name: "responsibilities.include",
+    })
+    const respsExcluded = useFieldArray({
+        control,
+        name: "responsibilities.exclude",
+    })
 
     function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -95,26 +146,36 @@ export default function Search() {
                     <div className="flex flex-col gap-2">
                         <div>
                             <h2>Include</h2>
-                            <div className="flex gap-2">
-                                <select
-                                    name="include-skill-name"
-                                    className="flex-1"
-                                >
-                                    <option value="">(empty)</option>
-                                    <option value="python">Python</option>
-                                    <option value="typescript">
-                                        TypeScript
-                                    </option>
-                                    <option value="rust">Rust</option>
-                                </select>
-                                <select
-                                    name="include-skill-yoe"
-                                    className="flex-1"
-                                >
-                                    <option value="0">0 years</option>
-                                </select>
-                                <button>x</button>
-                            </div>
+                            {skillsIncluded.fields.map((field, idx) => (
+                                <div className="flex gap-2">
+                                    <select
+                                        key={field.id}
+                                        className="flex-1"
+                                        {...register(
+                                            `skills.include.${idx}.name`
+                                        )}
+                                    >
+                                        <option value="">(empty)</option>
+                                        <option value="python">Python</option>
+                                        <option value="typescript">
+                                            TypeScript
+                                        </option>
+                                        <option value="rust">Rust</option>
+                                    </select>
+                                    <select
+                                        key={field.id}
+                                        className="flex-1"
+                                        {...register(
+                                            `skills.include.${idx}.yoe`,
+                                            { valueAsNumber: true }
+                                        )}
+                                    >
+                                        <option value="0">0 years</option>
+                                    </select>
+                                    <button>x</button>
+                                </div>
+                            ))}
+
                             <p className={styles.instructions}>
                                 "years" = years-of-experience
                                 <br />
@@ -124,17 +185,25 @@ export default function Search() {
                         </div>
                         <div>
                             <h2>Exclude</h2>
-                            <div className="flex gap-2">
-                                <select name="exclude-skill" className="flex-1">
-                                    <option value="">(empty)</option>
-                                    <option value="python">Python</option>
-                                    <option value="typescript">
-                                        TypeScript
-                                    </option>
-                                    <option value="rust">Rust</option>
-                                </select>
-                                <button>x</button>
-                            </div>
+                            {...skillsExcluded.fields.map((field, idx) => (
+                                <div className="flex gap-2">
+                                    <select
+                                        key={field.id}
+                                        className="flex-1"
+                                        {...register(
+                                            `skills.exclude.${idx}.name`
+                                        )}
+                                    >
+                                        <option value="">(empty)</option>
+                                        <option value="python">Python</option>
+                                        <option value="typescript">
+                                            TypeScript
+                                        </option>
+                                        <option value="rust">Rust</option>
+                                    </select>
+                                    <button>x</button>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </section>
@@ -148,31 +217,46 @@ export default function Search() {
                     <div className="flex flex-col gap-2">
                         <div>
                             <h2>Include</h2>
-                            <div className="flex gap-2">
-                                <select
-                                    name="include-responsibility"
-                                    className="flex-1"
-                                >
-                                    <option value="">(empty)</option>
-                                    <option value="oncall">On-call</option>
-                                    <option value="design">UI Design</option>
-                                </select>
-                                <button>x</button>
-                            </div>
+                            {...respsIncluded.fields.map((field, idx) => (
+                                <div className="flex gap-2">
+                                    <select
+                                        key={field.id}
+                                        className="flex-1"
+                                        {...register(
+                                            `responsibilities.include.${idx}.value`
+                                        )}
+                                    >
+                                        <option value="">(empty)</option>
+                                        <option value="oncall">On-call</option>
+                                        <option value="design">
+                                            UI Design
+                                        </option>
+                                    </select>
+                                    <button>x</button>
+                                </div>
+                            ))}
                         </div>
                         <div>
                             <h2>Exclude</h2>
-                            <div className="flex gap-2">
-                                <select
-                                    name="exclude-responsibility"
-                                    className="flex-1"
-                                >
-                                    <option value="">(empty)</option>
-                                    <option value="oncall">On-call</option>
-                                    <option value="design">UI Design</option>
-                                </select>
-                                <button>x</button>
-                            </div>
+
+                            {...respsIncluded.fields.map((field, idx) => (
+                                <div className="flex gap-2">
+                                    <select
+                                        key={field.id}
+                                        className="flex-1"
+                                        {...register(
+                                            `responsibilities.exclude.${idx}.value`
+                                        )}
+                                    >
+                                        <option value="">(empty)</option>
+                                        <option value="oncall">On-call</option>
+                                        <option value="design">
+                                            UI Design
+                                        </option>
+                                    </select>
+                                    <button>x</button>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </section>
