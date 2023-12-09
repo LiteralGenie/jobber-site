@@ -1,44 +1,24 @@
 "use-client"
 
-import { usePathname, useRouter } from "next/navigation"
-import { FormEvent } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { FormEvent, useEffect } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import styles from "./search.module.scss"
-
-interface SearchForm {
-    skills: {
-        include: Array<{
-            name: string
-            yoe: number
-        }>
-        exclude: { name: string }[]
-    }
-    responsibilities: {
-        include: { value: string }[]
-        exclude: { value: string }[]
-    }
-    salary: number
-    clearance: "any" | "no" | "yes"
-}
-
-interface SearchParams {}
+import { useSearchForm } from "./useSearchForm"
 
 export default function Search() {
     const router = useRouter()
     const pathName = usePathname()
+    const searchParams = useSearchParams()
+    const { formToParams, deserializeParams } = useSearchForm()
 
-    const { control, register } = useForm<SearchForm>({
+    const { control, register, setValue } = useForm<SearchFormData>({
         defaultValues: {
             skills: {
-                include: [
-                    {
-                        name: "",
-                        yoe: 0,
-                    },
-                ],
+                include: [{ name: "", yoe: 0 }],
                 exclude: [{ name: "" }],
             },
-            responsibilities: {
+            duties: {
                 include: [{ value: "" }],
                 exclude: [{ value: "" }],
             },
@@ -52,86 +32,67 @@ export default function Search() {
 
     const respsIncluded = useFieldArray({
         control,
-        name: "responsibilities.include",
+        name: "duties.include",
     })
     const respsExcluded = useFieldArray({
         control,
-        name: "responsibilities.exclude",
+        name: "duties.exclude",
     })
 
     function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
 
-        const raw = new FormData(event.currentTarget)
-        const urlParams: any = {} // @todo
+        const paramString = formToParams(
+            new FormData(event.target as HTMLFormElement)
+        ).toString()
 
-        const text = raw.get("text") as string
-        if (text.length) {
-            urlParams["text"] = text
-        }
-
-        if (raw.get("clearance-no")) {
-            urlParams["clearance"] = false
-        } else if (raw.get("clearance-yes")) {
-            urlParams["clearance"] = true
-        }
-
-        const salary = raw.get("salary") as string
-        if (salary) {
-            urlParams["salary"] = salary
-        }
-
-        const namesIncluded = raw.getAll("include-skill-name") as string[]
-        const yoeIncluded = raw.getAll("include-skill-yoe") as string[]
-        const skillsIncluded = namesIncluded.flatMap((name, idx) => {
-            if (!name.length) {
-                return []
-            }
-
-            const yoe = yoeIncluded[idx]
-
-            return [`${name},${yoe}`]
-        })
-        if (skillsIncluded.length) {
-            urlParams["include-skills"] = skillsIncluded
-        }
-
-        const skillsExcluded = raw
-            .getAll("exclude-skill")
-            .filter((text) => (text as string).length)
-
-        if (skillsExcluded.length) {
-            urlParams["exclude-skills"] = skillsExcluded
-        }
-
-        const respsIncluded = raw
-            .getAll("include-responsibility")
-            .filter((text) => (text as string).length)
-        if (respsIncluded.length) {
-            urlParams["include-resps"] = respsIncluded
-        }
-
-        const respsExcluded = raw
-            .getAll("exclude-responsibility")
-            .filter((text) => (text as string).length)
-        if (respsExcluded.length) {
-            urlParams["exclude-resps"] = respsExcluded
-        }
-
-        const paramString = new URLSearchParams(urlParams).toString()
-        console.log("onSubmit", urlParams, paramString)
         router.push(`${pathName}?${paramString}`)
     }
+
+    // Load default values from query params
+    useEffect(() => {
+        const data = deserializeParams(searchParams)
+        console.log("data", data)
+
+        if (data.text) {
+            setValue("text", data.text)
+            console.log("set text")
+        }
+
+        if (data.salary) {
+            setValue("salary", data.salary)
+        }
+
+        if (data.clearance) {
+            setValue("clearance", data.clearance)
+        }
+
+        if (data.skills?.include.length) {
+            setValue("skills.include", data.skills.include)
+        }
+
+        if (data.skills?.exclude.length) {
+            setValue("skills.exclude", data.skills.exclude)
+        }
+
+        if (data.duties?.include.length) {
+            setValue("duties.include", data.duties.include)
+        }
+
+        if (data.duties?.exclude.length) {
+            setValue("duties.exclude", data.duties.exclude)
+        }
+    }, [])
 
     return (
         <form onSubmit={(ev) => onSubmit(ev)} className={styles["search-form"]}>
             {/* Query text */}
             <section>
                 <input
-                    name="text"
                     type="text"
                     placeholder="software (developer|engineer)"
                     className="w-full"
+                    {...register("text")}
                 />
             </section>
 
@@ -147,9 +108,8 @@ export default function Search() {
                         <div>
                             <h2>Include</h2>
                             {skillsIncluded.fields.map((field, idx) => (
-                                <div className="flex gap-2">
+                                <div key={field.id} className="flex gap-2">
                                     <select
-                                        key={field.id}
                                         className="flex-1"
                                         {...register(
                                             `skills.include.${idx}.name`
@@ -163,7 +123,6 @@ export default function Search() {
                                         <option value="rust">Rust</option>
                                     </select>
                                     <select
-                                        key={field.id}
                                         className="flex-1"
                                         {...register(
                                             `skills.include.${idx}.yoe`,
@@ -218,12 +177,11 @@ export default function Search() {
                         <div>
                             <h2>Include</h2>
                             {...respsIncluded.fields.map((field, idx) => (
-                                <div className="flex gap-2">
+                                <div key={field.id} className="flex gap-2">
                                     <select
-                                        key={field.id}
                                         className="flex-1"
                                         {...register(
-                                            `responsibilities.include.${idx}.value`
+                                            `duties.include.${idx}.value`
                                         )}
                                     >
                                         <option value="">(empty)</option>
@@ -239,13 +197,12 @@ export default function Search() {
                         <div>
                             <h2>Exclude</h2>
 
-                            {...respsIncluded.fields.map((field, idx) => (
-                                <div className="flex gap-2">
+                            {...respsExcluded.fields.map((field, idx) => (
+                                <div key={field.id} className="flex gap-2">
                                     <select
-                                        key={field.id}
                                         className="flex-1"
                                         {...register(
-                                            `responsibilities.exclude.${idx}.value`
+                                            `duties.exclude.${idx}.value`
                                         )}
                                     >
                                         <option value="">(empty)</option>
@@ -284,17 +241,19 @@ export default function Search() {
 
                             <div>
                                 <input
-                                    name="clearance-any"
+                                    name="clearance"
+                                    id="clearance-any"
                                     type="radio"
                                     value="0"
-                                    checked
+                                    defaultChecked
                                 />
                                 <label htmlFor="clearance-any">Any</label>
                             </div>
 
                             <div>
                                 <input
-                                    name="clearance-no"
+                                    name="clearance"
+                                    id="clearance-no"
                                     type="radio"
                                     value="1"
                                 />
@@ -303,7 +262,8 @@ export default function Search() {
 
                             <div>
                                 <input
-                                    name="clearance-yes"
+                                    name="clearance"
+                                    id="clearance-yes"
                                     type="radio"
                                     value="2"
                                 />
