@@ -12,25 +12,25 @@ export default function Search() {
     const pathName = usePathname()
     const searchParams = useSearchParams()
 
-    const { serializeForm, deserializeParams } = useSearchForm()
+    const { getInitialValue, serializeForm } = useSearchForm()
 
     const { control, register, getValues } = useForm<SearchFormData>({
-        defaultValues: {
-            skills: {
-                include: [{ name: "", yoe: 0 }],
-                exclude: [{ name: "" }],
+        defaultValues: getInitialValue(
+            {
+                skills: {
+                    include: [{ name: "", yoe: 0 }],
+                    exclude: [{ name: "" }],
+                },
+                duties: {
+                    include: [{ value: "" }],
+                    exclude: [{ value: "" }],
+                },
+                text: "",
+                salary: 0,
+                clearance: "any",
             },
-            duties: {
-                include: [{ value: "" }],
-                exclude: [{ value: "" }],
-            },
-            text: "",
-            salary: 0,
-            clearance: "any",
-
-            // Initial values from query params
-            ...deserializeParams(searchParams),
-        },
+            searchParams
+        ),
     })
 
     const skillsIncluded = useFieldArray({ control, name: "skills.include" })

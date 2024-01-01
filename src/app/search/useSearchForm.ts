@@ -1,7 +1,22 @@
 import { SearchFormData } from "./types";
 
 export function useSearchForm() {
-    return { serializeForm, deserializeParams }
+    return { getInitialValue, serializeForm }
+}
+
+function getInitialValue(defaultValue: SearchFormData, params: URLSearchParams): SearchFormData {
+    const result = { ...defaultValue }
+    const paramData = deserializeParams(params)
+
+    result.text = paramData.text || defaultValue.text
+    result.salary = paramData.salary || defaultValue.salary
+    result.clearance = paramData.clearance || defaultValue.clearance
+    result.skills.include = paramData.skills?.include.length ? paramData.skills.include : defaultValue.skills.include
+    result.skills.exclude = paramData.skills?.exclude.length ? paramData.skills.exclude : defaultValue.skills.exclude
+    result.duties.include = paramData.duties?.include.length ? paramData.duties.include : defaultValue.duties.include
+    result.duties.exclude = paramData.duties?.exclude.length ? paramData.duties.exclude : defaultValue.duties.exclude
+
+    return result
 }
 
 /**
@@ -112,7 +127,7 @@ function deserializeParams(params: URLSearchParams): Partial<SearchFormData> {
             exclude: []
         }
 
-        data.duties.exclude = dutiesIncluded.map(value => ({ value }))
+        data.duties.include = dutiesIncluded.map(value => ({ value }))
     }
 
     return data
