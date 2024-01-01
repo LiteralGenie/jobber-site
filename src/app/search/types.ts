@@ -1,4 +1,4 @@
-interface SearchFormData {
+export interface SearchFormData {
     skills: {
         include: Array<{
             name: string
@@ -15,7 +15,7 @@ interface SearchFormData {
     clearance: "any" | "no" | "yes"
 }
 
-interface SearchParamsData {
+export interface SearchParamsData {
     text?: string
     clearance?: boolean,
     salary?: number

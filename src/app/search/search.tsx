@@ -1,18 +1,20 @@
 "use-client"
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { FormEvent, useEffect } from "react"
+import { FormEvent } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import styles from "./search.module.scss"
+import { SearchFormData } from "./types"
 import { useSearchForm } from "./useSearchForm"
 
 export default function Search() {
     const router = useRouter()
     const pathName = usePathname()
     const searchParams = useSearchParams()
-    const { formToParams, deserializeParams } = useSearchForm()
 
-    const { control, register, setValue } = useForm<SearchFormData>({
+    const { serializeForm, deserializeParams } = useSearchForm()
+
+    const { control, register, getValues } = useForm<SearchFormData>({
         defaultValues: {
             skills: {
                 include: [{ name: "", yoe: 0 }],
@@ -22,8 +24,12 @@ export default function Search() {
                 include: [{ value: "" }],
                 exclude: [{ value: "" }],
             },
+            text: "",
             salary: 0,
             clearance: "any",
+
+            // Initial values from query params
+            ...deserializeParams(searchParams),
         },
     })
 
@@ -39,50 +45,13 @@ export default function Search() {
         name: "duties.exclude",
     })
 
+    // POST form data and update query params
     function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
 
-        const paramString = formToParams(
-            new FormData(event.target as HTMLFormElement)
-        ).toString()
-
+        const paramString = serializeForm(getValues()).toString()
         router.push(`${pathName}?${paramString}`)
     }
-
-    // Load default values from query params
-    useEffect(() => {
-        const data = deserializeParams(searchParams)
-        console.log("data", data)
-
-        if (data.text) {
-            setValue("text", data.text)
-            console.log("set text")
-        }
-
-        if (data.salary) {
-            setValue("salary", data.salary)
-        }
-
-        if (data.clearance) {
-            setValue("clearance", data.clearance)
-        }
-
-        if (data.skills?.include.length) {
-            setValue("skills.include", data.skills.include)
-        }
-
-        if (data.skills?.exclude.length) {
-            setValue("skills.exclude", data.skills.exclude)
-        }
-
-        if (data.duties?.include.length) {
-            setValue("duties.include", data.duties.include)
-        }
-
-        if (data.duties?.exclude.length) {
-            setValue("duties.exclude", data.duties.exclude)
-        }
-    }, [])
 
     return (
         <form onSubmit={(ev) => onSubmit(ev)} className={styles["search-form"]}>
@@ -229,10 +198,10 @@ export default function Search() {
                             <h2>Salary</h2>
 
                             <input
-                                name="salary"
                                 type="number"
                                 placeholder="0"
                                 className="w-full"
+                                {...register("salary")}
                             />
                         </div>
 
@@ -241,31 +210,30 @@ export default function Search() {
 
                             <div>
                                 <input
-                                    name="clearance"
                                     id="clearance-any"
                                     type="radio"
-                                    value="0"
-                                    defaultChecked
+                                    value="any"
+                                    {...register("clearance")}
                                 />
                                 <label htmlFor="clearance-any">Any</label>
                             </div>
 
                             <div>
                                 <input
-                                    name="clearance"
                                     id="clearance-no"
                                     type="radio"
-                                    value="1"
+                                    value="no"
+                                    {...register("clearance")}
                                 />
                                 <label htmlFor="clearance-no">No</label>
                             </div>
 
                             <div>
                                 <input
-                                    name="clearance"
                                     id="clearance-yes"
                                     type="radio"
-                                    value="2"
+                                    value="yes"
+                                    {...register("clearance")}
                                 />
                                 <label htmlFor="clearance-yes">Yes</label>
                             </div>
