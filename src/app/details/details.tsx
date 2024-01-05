@@ -20,10 +20,8 @@ export default function Details({ data }: DetailsProps) {
                     ""
                 )}
 
-                {data.responsibilities.length ? (
-                    <Responsibilities
-                        responsibilities={data.responsibilities}
-                    />
+                {data.duties.length ? (
+                    <Responsibilities responsibilities={data.duties} />
                 ) : (
                     ""
                 )}

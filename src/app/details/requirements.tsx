@@ -9,10 +9,8 @@ export default function Requirements({ skills }: RequirementsProps) {
         <div>
             <p>Requirements</p>
             <ul>
-                {Object.entries(skills).map(([k, v]) => (
-                    <li key={k}>
-                        {k}: {v}+ years
-                    </li>
+                {skills.map((sk) => (
+                    <li key={sk}>{sk}</li>
                 ))}
             </ul>
         </div>

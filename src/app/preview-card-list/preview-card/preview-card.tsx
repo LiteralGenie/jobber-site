@@ -30,7 +30,7 @@ export default function PreviewCard({
                 <div className="flex flex-col">
                     <h1>{data.title}</h1>
                     <h2>{data.company}</h2>
-                    <h2>{data.time_updated}</h2>
+                    <h2>{data.time_created}</h2>
                 </div>
 
                 {/* Divider */}

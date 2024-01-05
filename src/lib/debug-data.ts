@@ -7,14 +7,14 @@ export const DEBUG_DATA: JobData[] = [
         clearance: false,
         company: "company",
         description: "description",
-        time_updated: "2023-12-05T15:31:28+0000",
+        time_created: "2023-12-05T15:31:28+0000",
         title: "job_1",
 
         location: null,
         salary: null,
 
-        responsibilities: [],
-        skills: {},
+        duties: [],
+        skills: [],
     },
     {
         id: "2",
@@ -22,7 +22,7 @@ export const DEBUG_DATA: JobData[] = [
         clearance: false,
         company: "company",
         description: "description",
-        time_updated: "2023-12-01T11:01:32+0000",
+        time_created: "2023-12-01T11:01:32+0000",
         title: "job_2",
 
         location: 'remote',
@@ -31,10 +31,8 @@ export const DEBUG_DATA: JobData[] = [
             max: 90000,
         },
 
-        responsibilities: [],
-        skills: {
-            "Python": 0
-        },
+        duties: [],
+        skills: ['Python']
     },
     {
         id: "3",
@@ -42,7 +40,7 @@ export const DEBUG_DATA: JobData[] = [
         clearance: false,
         company: "company",
         description: "description",
-        time_updated: "2022-01-23T16:15:54+0000",
+        time_created: "2022-01-23T16:15:54+0000",
         title: "job_3",
 
         location: 'on-site',
@@ -51,10 +49,7 @@ export const DEBUG_DATA: JobData[] = [
             max: 150000,
         },
 
-        responsibilities: [],
-        skills: {
-            "TypeScript": 0,
-            "Rust": 3,
-        },
+        duties: [],
+        skills: ['TypeScript', 'Rust']
     },
 ]

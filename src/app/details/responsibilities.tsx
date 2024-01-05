@@ -1,7 +1,7 @@
 import { JobData } from "@/lib/job-data"
 
 export interface ResponsibilitiesProps {
-    responsibilities: JobData["responsibilities"]
+    responsibilities: JobData["duties"]
 }
 
 export default function Responsibilities({

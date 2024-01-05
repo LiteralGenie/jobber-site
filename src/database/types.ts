@@ -35,7 +35,7 @@ export interface IndeedPostsTable {
 
     details_html: string
     preview_html: string
-    time_updated: number
+    time_created: number
 }
 
 export interface IndeedSkillLabelsTable {

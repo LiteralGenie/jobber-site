@@ -1,4 +1,5 @@
 import { db } from "@/database/db";
+import { JobData } from "@/lib/job-data";
 
 export async function GET() {
     const raw_data = await db
@@ -17,7 +18,13 @@ export async function GET() {
                 .groupBy('post.id')
                 .select(({ fn, val }) => fn.agg<string>("group_concat", ["sk.name", val(",")]).as("skills"))
                 .havingRef(eb => eb.fn.countAll(), '=', eb => eb.fn.count('label'))
-                .select(['post.id', 'post.title'])
+                .select([
+                    'post.id',
+                    'post.title',
+                    'post.text as description',
+                    'post.company',
+                    'post.time_created'
+                ])
         )
         // Create column with concat'd duties
         .with(
@@ -34,7 +41,14 @@ export async function GET() {
                 .groupBy('post.id')
                 .select(({ fn, val }) => fn.agg<string>("group_concat", ["dt.name", val(",")]).as("duties"))
                 .havingRef(eb => eb.fn.countAll(), '=', eb => eb.fn.count('label'))
-                .select(['post.id', 'post.title', 'post.skills'])
+                .select([
+                    'post.id',
+                    'post.title',
+                    'post.description',
+                    'post.company',
+                    'post.time_created',
+                    'post.skills'
+                ])
         )
         // Include salary / clearance labels
         .with(
@@ -42,7 +56,17 @@ export async function GET() {
             eb => eb
                 .selectFrom('with_duties as post')
                 .innerJoin('indeed_misc_labels as lbl', 'lbl.id_post', 'post.id')
-                .select(['post.id', 'post.title', 'post.skills', 'post.duties', 'lbl.salary', 'lbl.clearance'])
+                .select([
+                    'post.id',
+                    'post.title',
+                    'post.description',
+                    'post.company',
+                    'post.time_created',
+                    'post.skills',
+                    'post.duties',
+                    'lbl.salary',
+                    'lbl.clearance'
+                ])
         )
         .selectFrom(
             'with_misc as post'
@@ -54,9 +78,15 @@ export async function GET() {
     // Map skills / duties to string arrays
     const data = raw_data.map(d => ({
         ...d,
+        location: 'remote' as const,
+        time_created: new Date(d.time_created * 1000).toISOString(),
+        salary: {
+            min: d.salary,
+            max: 999999
+        },
         skills: d.skills.split(','),
         duties: d.duties.split(',')
-    }))
+    }) satisfies JobData)
 
     return Response.json(data)
 }
