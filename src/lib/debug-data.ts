@@ -25,14 +25,14 @@ export const DEBUG_DATA: JobData[] = [
         time_created: "2023-12-01T11:01:32+0000",
         title: "job_2",
 
-        location: 'remote',
+        location: "remote",
         salary: {
             min: 70000,
             max: 90000,
         },
 
         duties: [],
-        skills: ['Python']
+        skills: ["Python"],
     },
     {
         id: "3",
@@ -43,13 +43,13 @@ export const DEBUG_DATA: JobData[] = [
         time_created: "2022-01-23T16:15:54+0000",
         title: "job_3",
 
-        location: 'on-site',
+        location: "on-site",
         salary: {
             min: 50000,
             max: 150000,
         },
 
         duties: [],
-        skills: ['TypeScript', 'Rust']
+        skills: ["TypeScript", "Rust"],
     },
 ]

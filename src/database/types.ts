@@ -1,11 +1,7 @@
-import {
-    Generated,
-    Selectable
-} from 'kysely'
+import { Generated, Selectable } from "kysely"
 
 export interface Database {
-    skills: SkillsTable,
-    duties: DutiesTable
+    skills: SkillsTable
 
     indeed_posts: IndeedPostsTable
     indeed_skill_labels: IndeedSkillLabelsTable
@@ -17,13 +13,6 @@ export interface SkillsTable {
     id: Generated<number>
 
     name: string
-}
-
-export interface DutiesTable {
-    id: Generated<number>
-
-    name: string
-    prompt: string
 }
 
 export interface IndeedPostsTable {
@@ -39,7 +28,7 @@ export interface IndeedPostsTable {
 }
 
 export interface IndeedSkillLabelsTable {
-    id_skill: number,
+    id_skill: number
     id_post: string
 
     label: boolean
@@ -55,12 +44,13 @@ export interface IndeedDutyLabelsTable {
 export interface IndeedMiscLabelsTable {
     id_post: string
 
+    is_hybrid: boolean
+    is_remote: boolean
     salary: number
     clearance: boolean
 }
 
 export type Skill = Selectable<SkillsTable>
-export type Duty = Selectable<DutiesTable>
 export type IndeedPost = Selectable<IndeedPostsTable>
 export type IndeedSkillLabel = Selectable<IndeedSkillLabelsTable>
 export type IndeedDutyLabel = Selectable<IndeedDutyLabelsTable>

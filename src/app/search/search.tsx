@@ -29,7 +29,7 @@ export default function Search() {
                 salary: 0,
                 clearance: "any",
             },
-            searchParams
+            searchParams,
         ),
     })
 
@@ -81,7 +81,7 @@ export default function Search() {
                                     <select
                                         className="flex-1"
                                         {...register(
-                                            `skills.include.${idx}.name`
+                                            `skills.include.${idx}.name`,
                                         )}
                                     >
                                         <option value="">(empty)</option>
@@ -95,7 +95,7 @@ export default function Search() {
                                         className="flex-1"
                                         {...register(
                                             `skills.include.${idx}.yoe`,
-                                            { valueAsNumber: true }
+                                            { valueAsNumber: true },
                                         )}
                                     >
                                         <option value="0">0 years</option>
@@ -119,7 +119,7 @@ export default function Search() {
                                         key={field.id}
                                         className="flex-1"
                                         {...register(
-                                            `skills.exclude.${idx}.name`
+                                            `skills.exclude.${idx}.name`,
                                         )}
                                     >
                                         <option value="">(empty)</option>
@@ -150,7 +150,7 @@ export default function Search() {
                                     <select
                                         className="flex-1"
                                         {...register(
-                                            `duties.include.${idx}.value`
+                                            `duties.include.${idx}.value`,
                                         )}
                                     >
                                         <option value="">(empty)</option>
@@ -171,7 +171,7 @@ export default function Search() {
                                     <select
                                         className="flex-1"
                                         {...register(
-                                            `duties.exclude.${idx}.value`
+                                            `duties.exclude.${idx}.value`,
                                         )}
                                     >
                                         <option value="">(empty)</option>

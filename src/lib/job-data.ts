@@ -10,11 +10,13 @@ export interface JobData {
     title: string
 
     // optionals
-    location: null | 'remote' | 'hybrid' | 'on-site'
+    location: null | "remote" | "hybrid" | "on-site"
     salary: SalaryRange | null
 
-    duties: string[]
-    skills: string[]
+    skills: Array<{
+        id: number,
+        name: string,
+    }>
 }
 
 interface SalaryRange {

@@ -17,10 +17,10 @@ export interface SearchFormData {
 
 export interface SearchParamsData {
     text?: string
-    clearance?: boolean,
+    clearance?: boolean
     salary?: number
-    "skills-included"?: Array<{ name: string, yoe: number }>,
-    "skills-excluded"?: string[],
-    "duties-included"?: string[],
-    "duties-excluded"?: string[],
+    "skills-included"?: Array<{ name: string; yoe: number }>
+    "skills-excluded"?: string[]
+    "duties-included"?: string[]
+    "duties-excluded"?: string[]
 }

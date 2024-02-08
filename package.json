@@ -1,32 +1,32 @@
 {
-  "name": "jobber-site",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "better-sqlite3": "^9.2.2",
-    "kysely": "^0.27.1",
-    "next": "14.0.3",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-hook-form": "^7.48.2"
-  },
-  "devDependencies": {
-    "@types/better-sqlite3": "^7.6.8",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.3",
-    "postcss": "^8",
-    "sass": "^1.69.5",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5"
-  }
+    "name": "jobber-site",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "better-sqlite3": "^9.2.2",
+        "kysely": "^0.27.1",
+        "next": "14.0.3",
+        "react": "^18",
+        "react-dom": "^18",
+        "react-hook-form": "^7.48.2"
+    },
+    "devDependencies": {
+        "@types/better-sqlite3": "^7.6.8",
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "autoprefixer": "^10.0.1",
+        "eslint": "^8",
+        "eslint-config-next": "14.0.3",
+        "postcss": "^8",
+        "sass": "^1.69.5",
+        "tailwindcss": "^3.3.0",
+        "typescript": "^5"
+    }
 }
