@@ -4,13 +4,13 @@ import PreviewCard from "./preview-card/preview-card"
 export interface PreviewCardListProps {
     activeIndex: number
     setActiveIndex: (idx: number) => void
-    items: JobData[]
+    jobs: JobData[]
 }
 
 export default function PreviewCardList({
     activeIndex,
     setActiveIndex,
-    items,
+    jobs: items,
 }: PreviewCardListProps) {
     return (
         <section className="flex flex-col gap-4">

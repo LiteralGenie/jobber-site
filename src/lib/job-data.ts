@@ -10,13 +10,21 @@ export interface JobData {
     title: string
 
     // optionals
-    location: null | "remote" | "hybrid" | "on-site"
+    location_type: LocationType
     salary: SalaryRange | null
 
     skills: Array<{
-        id: number,
-        name: string,
+        id: number
+        name: string
     }>
+
+    duties: []
+}
+
+interface LocationType {
+    is_hybrid: boolean
+    is_onsite: boolean
+    is_remote: boolean
 }
 
 interface SalaryRange {

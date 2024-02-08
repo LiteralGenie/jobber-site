@@ -1,28 +1,10 @@
-"use client"
+import { getJobs } from "./api/jobs/route"
+import Home from "./home"
 
-import { DEBUG_DATA } from "@/lib/debug-data"
-import { useState } from "react"
-import Details from "./details/details"
-import PreviewCardList from "./preview-card-list/preview-card-list"
-import Search from "./search/search"
+export default async function HomeContainer() {
+    // SSR the initial data in this container
+    // because most everything else is a client component
+    const jobs = await getJobs()
 
-export default function Home() {
-    const [items, setItems] = useState(DEBUG_DATA)
-    const [activeIndex, setActiveIndex] = useState(0)
-
-    return (
-        <div className="flex justify-center h-full">
-            <div className="flex gap-16 p-8 w-full max-w-7xl">
-                <Search />
-                <PreviewCardList
-                    activeIndex={activeIndex}
-                    setActiveIndex={setActiveIndex}
-                    items={items}
-                />
-                <div className="grow flex flex-col items-center">
-                    <Details data={items[activeIndex]} />
-                </div>
-            </div>
-        </div>
-    )
+    return <Home jobsInit={jobs} />
 }

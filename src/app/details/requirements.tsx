@@ -10,7 +10,7 @@ export default function Requirements({ skills }: RequirementsProps) {
             <p>Requirements</p>
             <ul>
                 {skills.map((sk) => (
-                    <li key={sk}>{sk}</li>
+                    <li key={sk.id}>{sk.name}</li>
                 ))}
             </ul>
         </div>
