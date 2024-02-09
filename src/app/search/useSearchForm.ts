@@ -54,21 +54,21 @@ function serializeForm(data: SearchFormData): URLSearchParams {
     }
 
     data.skills.include
-        .filter(({ name }) => !!name)
-        .map(({ name, yoe }) => `${name},${yoe}`)
+        .filter(({ id }) => id !== "")
+        .map(({ id, yoe }) => `${id},${yoe}`)
         .forEach((text) => params.append("skills-included", text))
 
     data.skills.exclude
-        .filter(({ name }) => !!name)
-        .forEach(({ name }) => params.append("skills-included", name))
+        .filter(({ id }) => id !== "")
+        .forEach(({ id }) => params.append("skills-included", id.toString()))
 
     data.duties.include
-        .filter(({ value }) => !!value)
-        .forEach(({ value }) => params.append("duties-included", value))
+        .filter(({ id }) => id !== "")
+        .forEach(({ id }) => params.append("duties-included", id.toString()))
 
     data.duties.exclude
-        .filter(({ value }) => !!value)
-        .forEach(({ value }) => params.append("duties-excluded", value))
+        .filter(({ id }) => id !== "")
+        .forEach(({ id }) => params.append("duties-excluded", id.toString()))
 
     return params
 }
@@ -100,14 +100,19 @@ function deserializeParams(params: URLSearchParams): Partial<SearchFormData> {
         }
 
         data.skills.include = skillsIncluded.flatMap((text) => {
-            const [name, yoeRaw] = text.split(",")
+            const [idRaw, yoeRaw] = text.split(",")
+
+            const id = parseInt(idRaw)
+            if (isNaN(id)) {
+                return []
+            }
 
             const yoe = parseInt(yoeRaw)
             if (isNaN(yoe)) {
                 return []
             }
 
-            return { name, yoe }
+            return { id, yoe }
         })
     }
 
@@ -118,7 +123,14 @@ function deserializeParams(params: URLSearchParams): Partial<SearchFormData> {
             exclude: [],
         }
 
-        data.skills.exclude = skillsExcluded.map((name) => ({ name }))
+        data.skills.exclude = skillsExcluded.flatMap((idRaw) => {
+            const id = parseInt(idRaw)
+            if (isNaN(id)) {
+                return []
+            }
+
+            return { id }
+        })
     }
 
     const dutiesExcluded = params.getAll("duties-excluded")
@@ -128,7 +140,14 @@ function deserializeParams(params: URLSearchParams): Partial<SearchFormData> {
             exclude: [],
         }
 
-        data.duties.exclude = dutiesExcluded.map((value) => ({ value }))
+        data.duties.exclude = dutiesExcluded.flatMap((idRaw) => {
+            const id = parseInt(idRaw)
+            if (isNaN(id)) {
+                return []
+            }
+
+            return { id }
+        })
     }
 
     const dutiesIncluded = params.getAll("duties-included")
@@ -138,7 +157,14 @@ function deserializeParams(params: URLSearchParams): Partial<SearchFormData> {
             exclude: [],
         }
 
-        data.duties.include = dutiesIncluded.map((value) => ({ value }))
+        data.duties.include = dutiesIncluded.flatMap((idRaw) => {
+            const id = parseInt(idRaw)
+            if (isNaN(id)) {
+                return []
+            }
+
+            return { id }
+        })
     }
 
     return data

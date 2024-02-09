@@ -1,14 +1,14 @@
 export interface SearchFormData {
     skills: {
         include: Array<{
-            name: string
+            id: number | ""
             yoe: number
         }>
-        exclude: { name: string }[]
+        exclude: { id: number | "" }[]
     }
     duties: {
-        include: { value: string }[]
-        exclude: { value: string }[]
+        include: { id: number | "" }[]
+        exclude: { id: number | "" }[]
     }
     text: string
     salary: number
