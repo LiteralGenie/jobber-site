@@ -6,7 +6,7 @@ export function useSearchForm() {
 
 function getInitialValue(
     defaultValue: SearchFormData,
-    params: URLSearchParams,
+    params: URLSearchParams
 ): SearchFormData {
     const result = { ...defaultValue }
     const paramData = deserializeParams(params)
@@ -55,8 +55,7 @@ function serializeForm(data: SearchFormData): URLSearchParams {
 
     data.skills.include
         .filter(({ id }) => id !== "")
-        .map(({ id, yoe }) => `${id},${yoe}`)
-        .forEach((text) => params.append("skills-included", text))
+        .forEach(({ id }) => params.append("skills-included", id.toString()))
 
     data.skills.exclude
         .filter(({ id }) => id !== "")
@@ -73,8 +72,10 @@ function serializeForm(data: SearchFormData): URLSearchParams {
     return params
 }
 
-function deserializeParams(params: URLSearchParams): Partial<SearchFormData> {
-    const data: Partial<SearchFormData> = {}
+export function deserializeParams(
+    params: URLSearchParams
+): Partial<SearchFormData<never>> {
+    const data: Partial<SearchFormData<never>> = {}
 
     const text = params.get("text")
     if (text) {
@@ -99,20 +100,13 @@ function deserializeParams(params: URLSearchParams): Partial<SearchFormData> {
             exclude: [],
         }
 
-        data.skills.include = skillsIncluded.flatMap((text) => {
-            const [idRaw, yoeRaw] = text.split(",")
-
+        data.skills.include = skillsIncluded.flatMap((idRaw) => {
             const id = parseInt(idRaw)
             if (isNaN(id)) {
                 return []
             }
 
-            const yoe = parseInt(yoeRaw)
-            if (isNaN(yoe)) {
-                return []
-            }
-
-            return { id, yoe }
+            return { id }
         })
     }
 

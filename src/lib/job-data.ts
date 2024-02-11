@@ -18,7 +18,10 @@ export interface JobData {
         name: string
     }>
 
-    duties: []
+    duties: Array<{
+        id: number
+        name: string
+    }>
 }
 
 interface LocationType {

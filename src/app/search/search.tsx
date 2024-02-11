@@ -25,7 +25,7 @@ export default function Search({ duties, skills }: SearchProps) {
         defaultValues: getInitialValue(
             {
                 skills: {
-                    include: [{ id: "", yoe: 0 }],
+                    include: [{ id: "" }],
                     exclude: [{ id: "" }],
                 },
                 duties: {
@@ -100,10 +100,9 @@ export default function Search({ duties, skills }: SearchProps) {
                                     </select>
                                     <select
                                         className="flex-1"
-                                        {...register(
-                                            `skills.include.${idx}.yoe`,
-                                            { valueAsNumber: true }
-                                        )}
+                                        {...register(`skills.include.${idx}`, {
+                                            valueAsNumber: true,
+                                        })}
                                     >
                                         <option value="0">0 years</option>
                                     </select>

@@ -1,17 +1,12 @@
 import { db } from "@/database/db"
 
 export interface Skill {
-    id: number,
+    id: number
     name: string
 }
 
 export async function getSkills() {
-    const data = await db
-        .selectFrom("skills")
-        .select([
-            "id",
-            "name"
-        ]).execute()
+    const data = await db.selectFrom("skills").select(["id", "name"]).execute()
 
     return data
 }
