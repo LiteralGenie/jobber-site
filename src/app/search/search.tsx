@@ -103,24 +103,9 @@ export default function Search({ duties, skills }: SearchProps) {
                                             </option>
                                         ))}
                                     </select>
-                                    <select
-                                        className="flex-1"
-                                        {...register(`skills.include.${idx}`, {
-                                            valueAsNumber: true,
-                                        })}
-                                    >
-                                        <option value="0">0 years</option>
-                                    </select>
                                     <button>x</button>
                                 </div>
                             ))}
-
-                            <p className={styles.instructions}>
-                                "years" = years-of-experience
-                                <br />
-                                Listings requesting a greater amount will be
-                                excluded.
-                            </p>
                         </div>
                         <div>
                             <h2>Exclude</h2>
