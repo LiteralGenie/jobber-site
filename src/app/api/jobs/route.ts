@@ -2,6 +2,7 @@ import { SearchFormData } from "@/app/search/types"
 import { deserializeParams } from "@/app/search/useSearchForm"
 import { db } from "@/database/db"
 import { JobData } from "@/lib/job-data"
+import { fromSqliteBool, toSqliteBool } from "@/lib/sql-utils"
 import { sql } from "kysely"
 import { NextRequest } from "next/server"
 
@@ -130,7 +131,8 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
     }
 
     if (filters.clearance === "no" || filters.clearance === "yes") {
-        query = query.where("post.clearance", "=", filters.clearance === "yes")
+        const val = toSqliteBool(filters.clearance === "yes")
+        query = query.where("post.clearance", "=", val)
     }
 
     const locations: Array<"hybrid" | "remote" | "onsite"> = []
@@ -142,26 +144,27 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
         } as const
 
         query = query.where((eb) =>
-            eb.or(locations.map((loc) => eb(LOCATION_MAP[loc], "=", true)))
+            eb.or(locations.map((loc) => eb(LOCATION_MAP[loc], "=", "1")))
         )
     }
 
-    // console.log("jobs query\n", query.compile().sql)
+    console.log("jobs query\n\n", query.compile().sql)
+    console.log("params\n\n", query.compile().parameters)
     const rows = await query.execute()
 
     const data = rows.map(
         (d) =>
             ({
                 id: d.id,
-                clearance: d.clearance,
+                clearance: fromSqliteBool(d.clearance),
                 description: d.text,
                 company: d.company,
                 title: d.title,
 
                 location_type: {
-                    is_hybrid: d.is_hybrid,
-                    is_onsite: d.is_onsite,
-                    is_remote: d.is_remote,
+                    is_hybrid: fromSqliteBool(d.is_hybrid),
+                    is_onsite: fromSqliteBool(d.is_onsite),
+                    is_remote: fromSqliteBool(d.is_remote),
                 },
 
                 time_created: new Date(d.time_created * 1000).toISOString(),
