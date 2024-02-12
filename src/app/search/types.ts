@@ -7,6 +7,11 @@ export interface SearchFormData<NullType = ""> {
         include: { id: number | NullType }[]
         exclude: { id: number | NullType }[]
     }
+    locations: {
+        hybrid: boolean
+        onsite: boolean
+        remote: boolean
+    }
     text: string
     salary: number
     clearance: "any" | "no" | "yes"

@@ -4,6 +4,9 @@ export function useSearchForm() {
     return { getInitialValue, serializeForm }
 }
 
+/**
+ * Load form data from url params
+ */
 function getInitialValue(
     defaultValue: SearchFormData,
     params: URLSearchParams
@@ -14,6 +17,7 @@ function getInitialValue(
     result.text = paramData.text || defaultValue.text
     result.salary = paramData.salary || defaultValue.salary
     result.clearance = paramData.clearance || defaultValue.clearance
+    result.locations = paramData.locations || defaultValue.locations
     result.skills.include = paramData.skills?.include.length
         ? paramData.skills.include
         : defaultValue.skills.include
@@ -52,6 +56,10 @@ function serializeForm(data: SearchFormData): URLSearchParams {
     if (data.salary > 0) {
         params.set("salary", data.salary.toString())
     }
+
+    if (data.locations.hybrid) params.append("locations", "hybrid")
+    if (data.locations.onsite) params.append("locations", "onsite")
+    if (data.locations.remote) params.append("locations", "remote")
 
     data.skills.include
         .filter(({ id }) => id !== "")
@@ -92,6 +100,12 @@ export function deserializeParams(
     if (["no", "yes"].includes(clearance)) {
         data["clearance"] = clearance
     }
+
+    const locations = params.getAll("locations")
+    data.locations = { hybrid: false, onsite: false, remote: false }
+    ;(["hybrid", "onsite", "remote"] as const).forEach((key) => {
+        data.locations![key] = locations.includes(key)
+    })
 
     const skillsIncluded = params.getAll("skills-included")
     if (skillsIncluded.length) {

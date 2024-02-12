@@ -32,6 +32,11 @@ export default function Search({ duties, skills }: SearchProps) {
                     include: [{ id: "" }],
                     exclude: [{ id: "" }],
                 },
+                locations: {
+                    hybrid: false,
+                    onsite: false,
+                    remote: false,
+                },
                 text: "",
                 salary: 0,
                 clearance: "any",
@@ -199,7 +204,7 @@ export default function Search({ duties, skills }: SearchProps) {
 
                 {/* Miscellaenous */}
                 <section className="flex flex-col">
-                    <h1>Miscellaneous</h1>
+                    {/* <h1>Miscellaneous</h1> */}
 
                     <div className="flex flex-col gap-4">
                         <div className="flex gap-2">
@@ -211,6 +216,37 @@ export default function Search({ duties, skills }: SearchProps) {
                                 className="w-full"
                                 {...register("salary")}
                             />
+                        </div>
+
+                        <div>
+                            <h2>Location</h2>
+
+                            <div>
+                                <input
+                                    id="location-onsite"
+                                    type="checkbox"
+                                    {...register("locations.onsite")}
+                                />
+                                <label htmlFor="location-onsite">On-site</label>
+                            </div>
+
+                            <div>
+                                <input
+                                    id="location-hybrid"
+                                    type="checkbox"
+                                    {...register("locations.hybrid")}
+                                />
+                                <label htmlFor="location-hybrid">Hybrid</label>
+                            </div>
+
+                            <div>
+                                <input
+                                    id="location-remote"
+                                    type="checkbox"
+                                    {...register("locations.remote")}
+                                />
+                                <label htmlFor="location-remote">Remote</label>
+                            </div>
                         </div>
 
                         <div>
