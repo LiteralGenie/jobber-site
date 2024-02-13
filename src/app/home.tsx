@@ -1,6 +1,8 @@
 "use client"
 
 import { JobData } from "@/lib/job-data"
+import { useQuery } from "@tanstack/react-query"
+import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { Duty } from "./api/duties/route"
 import { Skill } from "./api/skills/route"
@@ -15,7 +17,17 @@ export interface HomeProps {
 }
 
 export default function Home({ jobsInit, duties, skills }: HomeProps) {
-    const [jobs, setJobs] = useState(jobsInit)
+    const queryKey = useSearchParams().toString()
+
+    const { data: jobs } = useQuery({
+        queryKey: [queryKey],
+        queryFn: async () => {
+            const resp = await fetch("/api/jobs")
+            const update = (await resp.json()) as JobData[]
+            return update
+        },
+        initialData: jobsInit,
+    })
     const [activeIndex, setActiveIndex] = useState(0)
 
     return (

@@ -148,8 +148,8 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
         )
     }
 
-    console.log("jobs query\n\n", query.compile().sql)
-    console.log("params\n\n", query.compile().parameters)
+    // console.log("jobs query\n\n", query.compile().sql)
+    // console.log("params\n\n", query.compile().parameters)
     const rows = await query.execute()
 
     const data = rows.map(
@@ -210,23 +210,4 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
 export async function GET(request: NextRequest) {
     const filters = deserializeParams(request.nextUrl.searchParams)
     return Response.json(await getJobs(filters))
-}
-
-function toRegexp(patt: string, flags: string = ""): RegExp | null {
-    // Strings must start / end with a forward slash to be considered a regex patt
-    const regexPatt = /^\/.*\/\w*$/
-    if (!patt.search(regexPatt)) {
-        return null
-    }
-
-    try {
-        return new RegExp(patt, flags)
-    } catch {
-        return null
-    }
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions
-function escapeRegExp(patt: string) {
-    return patt.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // $& means the whole matched string
 }

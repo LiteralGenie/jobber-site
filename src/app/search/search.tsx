@@ -58,15 +58,18 @@ export default function Search({ duties, skills }: SearchProps) {
     })
 
     // POST form data and update query params
-    function onSubmit(event: FormEvent<HTMLFormElement>) {
+    function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
 
-        const paramString = serializeForm(getValues()).toString()
-        router.push(`${pathName}?${paramString}`)
+        const params = serializeForm(getValues())
+        router.push(`${pathName}?${params}`)
     }
 
     return (
-        <form onSubmit={(ev) => onSubmit(ev)} className={styles["search-form"]}>
+        <form
+            onSubmit={(ev) => handleSubmit(ev)}
+            className={styles["search-form"]}
+        >
             {/* Query text */}
             <section>
                 <input

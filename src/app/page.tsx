@@ -1,18 +1,18 @@
 import { getDuties } from "./api/duties/route"
 import { getJobs } from "./api/jobs/route"
 import { getSkills } from "./api/skills/route"
-import Home from "./home"
+import { HomeContainer } from "./home-container"
 import { deserializeParams } from "./search/useSearchForm"
 import { PageProps } from "./types"
 
-export default async function HomeContainer({ searchParams }: PageProps) {
+export default async function Page({ searchParams }: PageProps) {
     const filters = deserializeParams(pageParamsToUrlParams(searchParams))
     const jobs = await getJobs(filters)
 
     const duties = await getDuties()
     const skills = await getSkills()
 
-    return <Home jobsInit={jobs} duties={duties} skills={skills} />
+    return <HomeContainer jobsInit={jobs} duties={duties} skills={skills} />
 }
 
 function pageParamsToUrlParams(
