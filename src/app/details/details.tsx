@@ -8,7 +8,7 @@ export interface DetailsProps {
 
 export default function Details({ data }: DetailsProps) {
     return (
-        <section className="border-2 rounded-md h-full w-full p-4 overflow-auto">
+        <section className="border-2 rounded-md p-4 h-full overflow-auto">
             <section>
                 <p>{`Location: ${humanizeLocationType(data.location_type)}`}</p>
                 <p>{`Salary: ${humanizeSalary(data.salary)}`}</p>
