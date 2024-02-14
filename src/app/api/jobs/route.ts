@@ -135,21 +135,24 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
         query = query.where("post.clearance", "=", val)
     }
 
-    const locations: Array<"hybrid" | "remote" | "onsite"> = []
-    if (locations?.length) {
-        const LOCATION_MAP = {
-            hybrid: "is_hybrid",
-            onsite: "is_onsite",
-            remote: "is_remote",
-        } as const
-
+    const locFilters: Array<"is_hybrid" | "is_onsite" | "is_remote"> = []
+    if (filters.locations?.hybrid) {
+        locFilters.push("is_hybrid")
+    }
+    if (filters.locations?.onsite) {
+        locFilters.push("is_onsite")
+    }
+    if (filters.locations?.remote) {
+        locFilters.push("is_remote")
+    }
+    if (locFilters.length) {
         query = query.where((eb) =>
-            eb.or(locations.map((loc) => eb(LOCATION_MAP[loc], "=", "1")))
+            eb.or(locFilters.map((loc) => eb(loc, "=", 1)))
         )
     }
 
-    console.log("jobs query\n\n", query.compile().sql)
-    console.log("params\n\n", query.compile().parameters)
+    // console.log("jobs query\n\n", query.compile().sql)
+    // console.log("params\n\n", query.compile().parameters)
     const rows = await query.execute()
 
     const data = rows.map(

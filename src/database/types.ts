@@ -1,6 +1,6 @@
 import { Generated, Selectable } from "kysely"
 
-export type SqliteBool = "1" | "0"
+export type SqliteBool = 1 | 0
 
 export interface Database {
     duties: DutiesTable
