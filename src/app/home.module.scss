@@ -4,7 +4,7 @@
     @apply grid gap-16 justify-center h-full w-full overflow-auto;
 
     padding: var(--padding);
-    grid-template-columns: max-content 400px max-content;
+    grid-template-columns: max-content 416px max-content;
 }
 
 /* Filters / details should not scroll, only preview card list */
