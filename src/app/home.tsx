@@ -23,7 +23,7 @@ export default function Home({ jobsInit, duties, skills }: HomeProps) {
     const { data: jobs } = useQuery({
         queryKey: [queryKey],
         queryFn: async () => {
-            const resp = await fetch("/api/jobs")
+            const resp = await fetch(`/api/jobs?${queryKey}`)
             const update = (await resp.json()) as JobData[]
             return update
         },

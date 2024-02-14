@@ -148,8 +148,8 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
         )
     }
 
-    // console.log("jobs query\n\n", query.compile().sql)
-    // console.log("params\n\n", query.compile().parameters)
+    console.log("jobs query\n\n", query.compile().sql)
+    console.log("params\n\n", query.compile().parameters)
     const rows = await query.execute()
 
     const data = rows.map(
@@ -183,10 +183,12 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
                             return []
                         }
 
-                        return {
-                            id: parseInt(id),
-                            name,
-                        }
+                        return [
+                            {
+                                id: parseInt(id),
+                                name,
+                            },
+                        ]
                     }),
                 duties: d.duties
                     .split(",")
@@ -196,10 +198,12 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
                             return []
                         }
 
-                        return {
-                            id: parseInt(id),
-                            name,
-                        }
+                        return [
+                            {
+                                id: parseInt(id),
+                                name,
+                            },
+                        ]
                     }),
             } satisfies JobData)
     )
