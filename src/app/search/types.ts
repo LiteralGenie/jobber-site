@@ -1,14 +1,16 @@
-export interface SearchFormData {
+export interface SearchFormData<NullType = ""> {
     skills: {
-        include: Array<{
-            name: string
-            yoe: number
-        }>
-        exclude: { name: string }[]
+        include: { id: number | NullType }[]
+        exclude: { id: number | NullType }[]
     }
     duties: {
-        include: { value: string }[]
-        exclude: { value: string }[]
+        include: { id: number | NullType }[]
+        exclude: { id: number | NullType }[]
+    }
+    locations: {
+        hybrid: boolean
+        onsite: boolean
+        remote: boolean
     }
     text: string
     salary: number
@@ -19,7 +21,7 @@ export interface SearchParamsData {
     text?: string
     clearance?: boolean
     salary?: number
-    "skills-included"?: Array<{ name: string; yoe: number }>
+    "skills-included"?: string[]
     "skills-excluded"?: string[]
     "duties-included"?: string[]
     "duties-excluded"?: string[]

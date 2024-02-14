@@ -3,11 +3,18 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { FormEvent } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
+import { Duty } from "../api/duties/route"
+import { Skill } from "../api/skills/route"
 import styles from "./search.module.scss"
 import { SearchFormData } from "./types"
 import { useSearchForm } from "./useSearchForm"
 
-export default function Search() {
+export interface SearchProps {
+    duties: Duty[]
+    skills: Skill[]
+}
+
+export default function Search({ duties, skills }: SearchProps) {
     const router = useRouter()
     const pathName = usePathname()
     const searchParams = useSearchParams()
@@ -18,18 +25,23 @@ export default function Search() {
         defaultValues: getInitialValue(
             {
                 skills: {
-                    include: [{ name: "", yoe: 0 }],
-                    exclude: [{ name: "" }],
+                    include: [{ id: "" }],
+                    exclude: [{ id: "" }],
                 },
                 duties: {
-                    include: [{ value: "" }],
-                    exclude: [{ value: "" }],
+                    include: [{ id: "" }],
+                    exclude: [{ id: "" }],
+                },
+                locations: {
+                    hybrid: false,
+                    onsite: false,
+                    remote: false,
                 },
                 text: "",
                 salary: 0,
                 clearance: "any",
             },
-            searchParams,
+            searchParams
         ),
     })
 
@@ -46,15 +58,18 @@ export default function Search() {
     })
 
     // POST form data and update query params
-    function onSubmit(event: FormEvent<HTMLFormElement>) {
+    function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
 
-        const paramString = serializeForm(getValues()).toString()
-        router.push(`${pathName}?${paramString}`)
+        const params = serializeForm(getValues())
+        router.push(`${pathName}?${params}`)
     }
 
     return (
-        <form onSubmit={(ev) => onSubmit(ev)} className={styles["search-form"]}>
+        <form
+            onSubmit={(ev) => handleSubmit(ev)}
+            className={styles["search-form"]}
+        >
             {/* Query text */}
             <section>
                 <input
@@ -81,35 +96,19 @@ export default function Search() {
                                     <select
                                         className="flex-1"
                                         {...register(
-                                            `skills.include.${idx}.name`,
+                                            `skills.include.${idx}.id`
                                         )}
                                     >
                                         <option value="">(empty)</option>
-                                        <option value="python">Python</option>
-                                        <option value="typescript">
-                                            TypeScript
-                                        </option>
-                                        <option value="rust">Rust</option>
-                                    </select>
-                                    <select
-                                        className="flex-1"
-                                        {...register(
-                                            `skills.include.${idx}.yoe`,
-                                            { valueAsNumber: true },
-                                        )}
-                                    >
-                                        <option value="0">0 years</option>
+                                        {skills.map((sk) => (
+                                            <option value={sk.id} key={sk.id}>
+                                                {sk.name}
+                                            </option>
+                                        ))}
                                     </select>
                                     <button>x</button>
                                 </div>
                             ))}
-
-                            <p className={styles.instructions}>
-                                "years" = years-of-experience
-                                <br />
-                                Listings requesting a greater amount will be
-                                excluded.
-                            </p>
                         </div>
                         <div>
                             <h2>Exclude</h2>
@@ -119,15 +118,15 @@ export default function Search() {
                                         key={field.id}
                                         className="flex-1"
                                         {...register(
-                                            `skills.exclude.${idx}.name`,
+                                            `skills.exclude.${idx}.id`
                                         )}
                                     >
                                         <option value="">(empty)</option>
-                                        <option value="python">Python</option>
-                                        <option value="typescript">
-                                            TypeScript
-                                        </option>
-                                        <option value="rust">Rust</option>
+                                        {skills.map((sk) => (
+                                            <option value={sk.id} key={sk.id}>
+                                                {sk.name}
+                                            </option>
+                                        ))}
                                     </select>
                                     <button>x</button>
                                 </div>
@@ -150,14 +149,15 @@ export default function Search() {
                                     <select
                                         className="flex-1"
                                         {...register(
-                                            `duties.include.${idx}.value`,
+                                            `duties.include.${idx}.id`
                                         )}
                                     >
                                         <option value="">(empty)</option>
-                                        <option value="oncall">On-call</option>
-                                        <option value="design">
-                                            UI Design
-                                        </option>
+                                        {duties.map((dt) => (
+                                            <option value={dt.id} key={dt.id}>
+                                                {dt.name}
+                                            </option>
+                                        ))}
                                     </select>
                                     <button>x</button>
                                 </div>
@@ -171,14 +171,15 @@ export default function Search() {
                                     <select
                                         className="flex-1"
                                         {...register(
-                                            `duties.exclude.${idx}.value`,
+                                            `duties.exclude.${idx}.id`
                                         )}
                                     >
                                         <option value="">(empty)</option>
-                                        <option value="oncall">On-call</option>
-                                        <option value="design">
-                                            UI Design
-                                        </option>
+                                        {duties.map((dt) => (
+                                            <option value={dt.id} key={dt.id}>
+                                                {dt.name}
+                                            </option>
+                                        ))}
                                     </select>
                                     <button>x</button>
                                 </div>
@@ -191,7 +192,7 @@ export default function Search() {
 
                 {/* Miscellaenous */}
                 <section className="flex flex-col">
-                    <h1>Miscellaneous</h1>
+                    {/* <h1>Miscellaneous</h1> */}
 
                     <div className="flex flex-col gap-4">
                         <div className="flex gap-2">
@@ -203,6 +204,37 @@ export default function Search() {
                                 className="w-full"
                                 {...register("salary")}
                             />
+                        </div>
+
+                        <div>
+                            <h2>Location</h2>
+
+                            <div>
+                                <input
+                                    id="location-onsite"
+                                    type="checkbox"
+                                    {...register("locations.onsite")}
+                                />
+                                <label htmlFor="location-onsite">On-site</label>
+                            </div>
+
+                            <div>
+                                <input
+                                    id="location-hybrid"
+                                    type="checkbox"
+                                    {...register("locations.hybrid")}
+                                />
+                                <label htmlFor="location-hybrid">Hybrid</label>
+                            </div>
+
+                            <div>
+                                <input
+                                    id="location-remote"
+                                    type="checkbox"
+                                    {...register("locations.remote")}
+                                />
+                                <label htmlFor="location-remote">Remote</label>
+                            </div>
                         </div>
 
                         <div>

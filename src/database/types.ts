@@ -1,5 +1,7 @@
 import { Generated, Selectable } from "kysely"
 
+export type SqliteBool = 1 | 0
+
 export interface Database {
     duties: DutiesTable
     skills: SkillsTable
@@ -38,24 +40,24 @@ export interface IndeedSkillLabelsTable {
     id_skill: number
     id_post: string
 
-    label: boolean
+    label: SqliteBool
 }
 
 export interface IndeedDutyLabelsTable {
     id_duty: number
     id_post: string
 
-    label: boolean
+    label: SqliteBool
 }
 
 export interface IndeedMiscLabelsTable {
     id_post: string
 
-    is_hybrid: boolean
-    is_onsite: boolean
-    is_remote: boolean
+    is_hybrid: SqliteBool
+    is_onsite: SqliteBool
+    is_remote: SqliteBool
     salary: number
-    clearance: boolean
+    clearance: SqliteBool
 }
 
 export type Skill = Selectable<SkillsTable>
