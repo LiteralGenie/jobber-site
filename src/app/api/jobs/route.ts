@@ -7,11 +7,35 @@ import { sql } from "kysely"
 import { NextRequest } from "next/server"
 
 export async function getJobs(filters: Partial<SearchFormData<never>>) {
+    let afterId: number | null = null
+    if (filters.after) {
+        const row = await db
+            .selectFrom("indeed_posts")
+            .select("rowid")
+            .where("id", "=", filters.after)
+            .executeTakeFirst()
+        if (row) {
+            afterId = row.rowid
+        }
+    }
+
     let query = db
+        .with("posts_ordered", (eb) => {
+            let query = eb
+                .selectFrom("indeed_posts as post")
+                .selectAll()
+                .select("rowid")
+
+            if (afterId !== null) {
+                query = query.where("rowid", ">", afterId)
+            }
+
+            return query
+        })
         // Create column with skill array
         .with("with_skills", (eb) => {
             let query = eb
-                .selectFrom("indeed_posts as post")
+                .selectFrom("posts_ordered as post")
                 .innerJoin("skills as sk", (join) => join.onTrue())
                 .leftJoin("indeed_skill_labels as lbl", (join) =>
                     join
@@ -30,6 +54,7 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
                     (eb) => eb.fn.count("label")
                 )
                 .select([
+                    "post.rowid",
                     "post.id",
                     "post.title",
                     "post.text",
@@ -117,6 +142,7 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
         .selectFrom("with_misc as post")
         .selectAll()
         .limit(100)
+        .orderBy("rowid")
 
     if (filters.text) {
         query = query.where(

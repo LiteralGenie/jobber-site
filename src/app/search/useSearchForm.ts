@@ -30,6 +30,7 @@ function getInitialValue(
     result.duties.exclude = paramData.duties?.exclude.length
         ? paramData.duties.exclude
         : defaultValue.duties.exclude
+    result.after = paramData.after || defaultValue.after
 
     return result
 }
@@ -39,6 +40,10 @@ function getInitialValue(
  */
 function serializeForm(data: SearchFormData): URLSearchParams {
     const params = new URLSearchParams()
+
+    if (data.after) {
+        params.set("after", data.after)
+    }
 
     if (data.text) {
         params.set("text", data.text)
@@ -84,6 +89,11 @@ export function deserializeParams(
     params: URLSearchParams
 ): Partial<SearchFormData<never>> {
     const data: Partial<SearchFormData<never>> = {}
+
+    const after = params.get("after")
+    if (after) {
+        data["after"] = after
+    }
 
     const text = params.get("text")
     if (text) {

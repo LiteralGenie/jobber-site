@@ -25,6 +25,7 @@ export interface SkillsTable {
 }
 
 export interface IndeedPostsTable {
+    rowid: number
     id: string
 
     company: string

@@ -12,9 +12,10 @@ import { useSearchForm } from "./useSearchForm"
 export interface SearchProps {
     duties: Duty[]
     skills: Skill[]
+    cursor: string
 }
 
-export default function Search({ duties, skills }: SearchProps) {
+export default function Search({ duties, skills, cursor }: SearchProps) {
     const router = useRouter()
     const pathName = usePathname()
     const searchParams = useSearchParams()
@@ -40,6 +41,7 @@ export default function Search({ duties, skills }: SearchProps) {
                 text: "",
                 salary: 0,
                 clearance: "any",
+                after: cursor,
             },
             searchParams
         ),
