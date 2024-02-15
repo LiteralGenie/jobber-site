@@ -182,7 +182,6 @@ export async function getJobs(
         (d) =>
             ({
                 id: d.id,
-                rowid: d.rowid,
 
                 clearance: fromSqliteBool(d.clearance),
                 description: d.text,

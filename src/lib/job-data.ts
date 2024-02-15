@@ -2,7 +2,6 @@ type IsoDate = string
 
 export interface JobData {
     id: string
-    rowid: number
 
     clearance: boolean
     company: string
