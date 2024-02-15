@@ -31,18 +31,26 @@ export default function PreviewCardList({
     }
 
     return (
-        <section className="flex flex-col">
-            <div className="flex flex-col gap-4">
+        <section className="min-h-0 flex flex-col">
+            {/* Card list */}
+            <div className="border rounded-md min-h-0 overflow-auto flex flex-col">
                 {items.map((item, idx) => (
-                    <PreviewCard
-                        data={item}
-                        isActive={idx === activeIndex}
-                        onClick={() => setActiveIndex(idx)}
-                        key={item.id}
-                    />
+                    <div className="rounded-md">
+                        <PreviewCard
+                            key={item.id}
+                            data={item}
+                            onClick={() => setActiveIndex(idx)}
+                            isActive={idx === activeIndex}
+                            isFirst={idx === 0}
+                            isLast={idx === items.length - 1}
+                        />
+
+                        {idx == items.length - 1 ? "" : <hr />}
+                    </div>
                 ))}
             </div>
 
+            {/* Paginator */}
             <div className="mt-4 grid grid-cols-2 gap-4">
                 <button
                     className="border rounded-md h-12"

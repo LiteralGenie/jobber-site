@@ -46,9 +46,7 @@ export default function Home({ jobsInit, duties, skills }: HomeProps) {
                     nextPageCursor={data.nextPageCursor}
                 />
 
-                <div className={styles["details-container"]}>
-                    <Details data={data.jobs[activeIndex]} />
-                </div>
+                <Details data={data.jobs[activeIndex]} />
             </div>
         </div>
     )

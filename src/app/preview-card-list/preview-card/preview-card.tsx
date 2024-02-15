@@ -2,28 +2,28 @@ import { JobData } from "@/lib/job-data"
 
 export interface PreviewCardProps {
     data: JobData
-    isActive: boolean
     onClick: () => void
+
+    isActive: boolean
+    isFirst: boolean
+    isLast: boolean
 }
 
 export default function PreviewCard({
     data,
-    isActive,
     onClick,
+    isActive,
+    isFirst,
+    isLast,
 }: PreviewCardProps) {
     return (
-        // Active cards have a thicker border
-        // Inactive cards have an additional invisible outer border to prevent jittering
-        <button
-            className={`${
-                isActive ? "" : "border border-transparent border-1"
-            }`}
-            disabled={isActive}
-        >
+        <button disabled={isActive} className="w-full">
             <div
                 onClick={onClick}
-                className={`flex border p-4 rounded-md h-full ${
-                    isActive ? "border-2" : ""
+                className={`flex p-4 h-full border-2 ${
+                    isActive ? "" : "border-transparent"
+                } ${isFirst ? "rounded-tl-md" : ""} ${
+                    isLast ? "rounded-bl-md" : ""
                 }`}
             >
                 {/* Name */}

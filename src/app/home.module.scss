@@ -4,16 +4,5 @@
     @apply grid gap-16 justify-center h-full w-full overflow-auto;
 
     padding: var(--padding);
-    grid-template-columns: max-content 416px max-content;
-}
-
-/* Filters / details should not scroll, only preview card list */
-.search-container,
-.details-container {
-    @apply sticky top-0;
-    height: calc(100vh - 2 * var(--padding));
-}
-
-.details-container {
-    @apply flex flex-col items-center max-w-2xl;
+    grid-template-columns: max-content 416px 1fr;
 }
