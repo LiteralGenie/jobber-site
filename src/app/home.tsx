@@ -18,38 +18,18 @@ export interface HomeProps {
 }
 
 export default function Home({ jobsInit, duties, skills }: HomeProps) {
-    const queryParams = useQueryParams()
+    const queryKey = useQueryParams().get().toString()
 
     const { data } = useQuery({
-        queryKey: [queryParams.get().toString()],
+        queryKey: [queryKey],
         queryFn: async () => {
-            const resp = await fetch(`/api/jobs?${queryParams.get()}`)
+            const resp = await fetch(`/api/jobs?${queryKey}`)
             const update = (await resp.json()) as GetJobsData
             return update
         },
         initialData: jobsInit,
     })
     const [activeIndex, setActiveIndex] = useState(0)
-
-    function nextPage() {
-        if (data.nextPageCursor === null) {
-            return
-        }
-
-        const update = queryParams.get()
-        update.set("after", data.nextPageCursor.toString())
-        queryParams.set(update)
-    }
-
-    function prevPage() {
-        if (data.prevPageCursor === null) {
-            return
-        }
-
-        const update = queryParams.get()
-        update.set("after", data.prevPageCursor.toString())
-        queryParams.set(update)
-    }
 
     return (
         <div className="flex justify-center h-full">
@@ -62,8 +42,8 @@ export default function Home({ jobsInit, duties, skills }: HomeProps) {
                     activeIndex={activeIndex}
                     setActiveIndex={setActiveIndex}
                     jobs={data.jobs}
-                    onPrev={prevPage}
-                    onNext={nextPage}
+                    prevPageCursor={data.prevPageCursor}
+                    nextPageCursor={data.nextPageCursor}
                 />
 
                 <div className={styles["details-container"]}>
