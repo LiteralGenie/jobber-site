@@ -40,11 +40,11 @@ export default function PreviewCardList({
     const pageSize = items.length
 
     return (
-        <section className="min-h-0 flex flex-col">
+        <section className="min-h-0 h-full flex flex-col">
             {/* Card list */}
             <Paper
                 variant="outlined"
-                className="min-h-0 overflow-auto flex flex-col"
+                className="min-h-0 h-full overflow-auto flex flex-col"
             >
                 {items.map((item, idx) => (
                     <div key={item.id} className="rounded-md">

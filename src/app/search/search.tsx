@@ -1,10 +1,11 @@
 "use-client"
 
 import { FormEvent } from "react"
-import { useFieldArray, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { Duty } from "../api/duties/route"
 import { Skill } from "../api/skills/route"
 import { useQueryParams } from "../useQueryParams"
+import MultiSelect from "./multi-select"
 import styles from "./search.module.scss"
 import { SearchFormData } from "./types"
 import { deserializeParams, useSearchForm } from "./useSearchForm"
@@ -19,41 +20,36 @@ export default function Search({ duties, skills }: SearchProps) {
 
     const { getInitialValue, serializeForm } = useSearchForm()
 
-    const { control, register, getValues } = useForm<SearchFormData>({
-        defaultValues: getInitialValue(
-            {
-                skills: {
-                    include: [{ id: "" }],
-                    exclude: [{ id: "" }],
+    const { control, register, getValues, watch, setValue } =
+        useForm<SearchFormData>({
+            defaultValues: getInitialValue(
+                {
+                    skills: {
+                        include: [],
+                        exclude: [],
+                    },
+                    duties: {
+                        include: [],
+                        exclude: [],
+                    },
+                    locations: {
+                        hybrid: false,
+                        onsite: false,
+                        remote: false,
+                    },
+                    text: "",
+                    salary: 0,
+                    clearance: "any",
                 },
-                duties: {
-                    include: [{ id: "" }],
-                    exclude: [{ id: "" }],
-                },
-                locations: {
-                    hybrid: false,
-                    onsite: false,
-                    remote: false,
-                },
-                text: "",
-                salary: 0,
-                clearance: "any",
-            },
-            deserializeParams(queryParams.get())
-        ),
-    })
+                deserializeParams(queryParams.get())
+            ),
+        })
 
-    const skillsIncluded = useFieldArray({ control, name: "skills.include" })
-    const skillsExcluded = useFieldArray({ control, name: "skills.exclude" })
+    const skillsIncluded = watch("skills.include")
+    const skillsExcluded = watch("skills.exclude")
 
-    const respsIncluded = useFieldArray({
-        control,
-        name: "duties.include",
-    })
-    const respsExcluded = useFieldArray({
-        control,
-        name: "duties.exclude",
-    })
+    const dutiesIncluded = watch("duties.include")
+    const dutiesExcluded = watch("duties.exclude")
 
     // POST form data and update query params
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -87,50 +83,54 @@ export default function Search({ duties, skills }: SearchProps) {
                 <section>
                     <h1>Skills</h1>
 
-                    <div className="flex flex-col gap-2">
-                        <div>
-                            <h2>Include</h2>
-                            {skillsIncluded.fields.map((field, idx) => (
-                                <div key={field.id} className="flex gap-2">
-                                    <select
-                                        className="flex-1"
-                                        {...register(
-                                            `skills.include.${idx}.id`
-                                        )}
-                                    >
-                                        <option value="">(empty)</option>
-                                        {skills.map((sk) => (
-                                            <option value={sk.id} key={sk.id}>
-                                                {sk.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <button>x</button>
-                                </div>
-                            ))}
-                        </div>
-                        <div>
-                            <h2>Exclude</h2>
-                            {...skillsExcluded.fields.map((field, idx) => (
-                                <div className="flex gap-2">
-                                    <select
-                                        key={field.id}
-                                        className="flex-1"
-                                        {...register(
-                                            `skills.exclude.${idx}.id`
-                                        )}
-                                    >
-                                        <option value="">(empty)</option>
-                                        {skills.map((sk) => (
-                                            <option value={sk.id} key={sk.id}>
-                                                {sk.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <button>x</button>
-                                </div>
-                            ))}
-                        </div>
+                    <div className="flex flex-col gap-6">
+                        <MultiSelect
+                            id="skills-included"
+                            options={skills.map(({ id, name }) => ({
+                                value: id.toString(),
+                                name,
+                            }))}
+                            disabledOptions={skillsExcluded.map((v) =>
+                                v.id.toString()
+                            )}
+                            initialValue={skillsIncluded.map((v) =>
+                                v.id.toString()
+                            )}
+                            label="Included"
+                            ariaLabel="Skills Included"
+                            onChange={(vals) =>
+                                setValue(
+                                    "skills.include",
+                                    vals.map((v) => ({
+                                        id: parseInt(v),
+                                    }))
+                                )
+                            }
+                        />
+
+                        <MultiSelect
+                            id="skills-excluded"
+                            options={skills.map(({ id, name }) => ({
+                                value: id.toString(),
+                                name,
+                            }))}
+                            disabledOptions={skillsIncluded.map((v) =>
+                                v.id.toString()
+                            )}
+                            initialValue={skillsExcluded.map((v) =>
+                                v.id.toString()
+                            )}
+                            label="Excluded"
+                            ariaLabel="Skills Excluded"
+                            onChange={(vals) =>
+                                setValue(
+                                    "skills.exclude",
+                                    vals.map((v) => ({
+                                        id: parseInt(v),
+                                    }))
+                                )
+                            }
+                        />
                     </div>
                 </section>
 
@@ -140,50 +140,54 @@ export default function Search({ duties, skills }: SearchProps) {
                 <section>
                     <h1>Responsibilities</h1>
 
-                    <div className="flex flex-col gap-2">
-                        <div>
-                            <h2>Include</h2>
-                            {...respsIncluded.fields.map((field, idx) => (
-                                <div key={field.id} className="flex gap-2">
-                                    <select
-                                        className="flex-1"
-                                        {...register(
-                                            `duties.include.${idx}.id`
-                                        )}
-                                    >
-                                        <option value="">(empty)</option>
-                                        {duties.map((dt) => (
-                                            <option value={dt.id} key={dt.id}>
-                                                {dt.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <button>x</button>
-                                </div>
-                            ))}
-                        </div>
-                        <div>
-                            <h2>Exclude</h2>
+                    <div className="flex flex-col gap-6">
+                        <MultiSelect
+                            id="duties-included"
+                            options={duties.map(({ id, name }) => ({
+                                value: id.toString(),
+                                name,
+                            }))}
+                            disabledOptions={dutiesExcluded.map((v) =>
+                                v.id.toString()
+                            )}
+                            initialValue={dutiesIncluded.map((v) =>
+                                v.id.toString()
+                            )}
+                            label="Included"
+                            ariaLabel="Responsibilities Included"
+                            onChange={(vals) =>
+                                setValue(
+                                    "duties.include",
+                                    vals.map((v) => ({
+                                        id: parseInt(v),
+                                    }))
+                                )
+                            }
+                        />
 
-                            {...respsExcluded.fields.map((field, idx) => (
-                                <div key={field.id} className="flex gap-2">
-                                    <select
-                                        className="flex-1"
-                                        {...register(
-                                            `duties.exclude.${idx}.id`
-                                        )}
-                                    >
-                                        <option value="">(empty)</option>
-                                        {duties.map((dt) => (
-                                            <option value={dt.id} key={dt.id}>
-                                                {dt.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <button>x</button>
-                                </div>
-                            ))}
-                        </div>
+                        <MultiSelect
+                            id="duties-excluded"
+                            options={duties.map(({ id, name }) => ({
+                                value: id.toString(),
+                                name,
+                            }))}
+                            disabledOptions={dutiesIncluded.map((v) =>
+                                v.id.toString()
+                            )}
+                            initialValue={dutiesExcluded.map((v) =>
+                                v.id.toString()
+                            )}
+                            label="Excluded"
+                            ariaLabel="Responsibilities Excluded"
+                            onChange={(vals) =>
+                                setValue(
+                                    "duties.exclude",
+                                    vals.map((v) => ({
+                                        id: parseInt(v),
+                                    }))
+                                )
+                            }
+                        />
                     </div>
                 </section>
 
@@ -237,7 +241,7 @@ export default function Search({ duties, skills }: SearchProps) {
                         </div>
 
                         <div>
-                            <h2>Clearance Requirements</h2>
+                            <h2>Clearance</h2>
 
                             <div>
                                 <input
@@ -256,7 +260,9 @@ export default function Search({ duties, skills }: SearchProps) {
                                     value="no"
                                     {...register("clearance")}
                                 />
-                                <label htmlFor="clearance-no">No</label>
+                                <label htmlFor="clearance-no">
+                                    Not required
+                                </label>
                             </div>
 
                             <div>
@@ -266,7 +272,7 @@ export default function Search({ duties, skills }: SearchProps) {
                                     value="yes"
                                     {...register("clearance")}
                                 />
-                                <label htmlFor="clearance-yes">Yes</label>
+                                <label htmlFor="clearance-yes">Required</label>
                             </div>
                         </div>
                     </div>

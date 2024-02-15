@@ -1,11 +1,11 @@
 export interface SearchFormData<NullType = ""> {
     skills: {
-        include: { id: number | NullType }[]
-        exclude: { id: number | NullType }[]
+        include: { id: number }[]
+        exclude: { id: number }[]
     }
     duties: {
-        include: { id: number | NullType }[]
-        exclude: { id: number | NullType }[]
+        include: { id: number }[]
+        exclude: { id: number }[]
     }
     locations: {
         hybrid: boolean
