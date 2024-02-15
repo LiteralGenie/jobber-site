@@ -1,4 +1,8 @@
 import { JobData } from "@/lib/job-data"
+import { FirstPage, LastPage } from "@mui/icons-material"
+import ChevronLeft from "@mui/icons-material/ChevronLeft"
+import ChevronRight from "@mui/icons-material/ChevronRight"
+import { Button, Divider, Paper } from "@mui/material"
 import { useQueryParams } from "../useQueryParams"
 import PreviewCard from "./preview-card/preview-card"
 
@@ -20,51 +24,75 @@ export default function PreviewCardList({
     const queryParams = useQueryParams()
 
     function onPageChange(cursor: number | null) {
+        const update = queryParams.get()
+
         if (cursor === null) {
-            console.error("page cursor is null")
-            return
+            update.delete("after")
+        } else {
+            update.set("after", cursor.toString())
         }
 
-        const update = queryParams.get()
-        update.set("after", cursor.toString())
         queryParams.set(update)
     }
+
+    // This can be smaller for last page
+    // but the last-page button that uses this will be disabled in that case anyways
+    const pageSize = items.length
 
     return (
         <section className="min-h-0 flex flex-col">
             {/* Card list */}
-            <div className="border rounded-md min-h-0 overflow-auto flex flex-col">
+            <Paper
+                variant="outlined"
+                className="min-h-0 overflow-auto flex flex-col"
+            >
                 {items.map((item, idx) => (
                     <div key={item.id} className="rounded-md">
                         <PreviewCard
                             data={item}
                             onClick={() => setActiveIndex(idx)}
                             isActive={idx === activeIndex}
-                            isFirst={idx === 0}
-                            isLast={idx === items.length - 1}
                         />
 
-                        {idx == items.length - 1 ? "" : <hr />}
+                        {idx == items.length - 1 ? "" : <Divider />}
                     </div>
                 ))}
-            </div>
+            </Paper>
 
             {/* Paginator */}
-            <div className="mt-4 grid grid-cols-2 gap-4">
-                <button
+            <div className="mt-4 grid grid-cols-4 gap-4">
+                <Button
+                    variant="outlined"
+                    className="border rounded-md h-12"
+                    onClick={() => onPageChange(null)}
+                    disabled={prevPageCursor === null}
+                >
+                    <FirstPage />
+                </Button>
+                <Button
+                    variant="outlined"
                     className="border rounded-md h-12"
                     onClick={() => onPageChange(prevPageCursor)}
                     disabled={prevPageCursor === null}
                 >
-                    {"< Previous"}
-                </button>
-                <button
+                    <ChevronLeft />
+                </Button>
+                <Button
+                    variant="outlined"
                     className="border rounded-md h-12"
                     onClick={() => onPageChange(nextPageCursor)}
                     disabled={nextPageCursor === null}
                 >
-                    {"Next >"}
-                </button>
+                    <ChevronRight />
+                </Button>
+                <Button
+                    variant="outlined"
+                    className="border rounded-md h-12"
+                    onClick={() => onPageChange(pageSize)}
+                    disabled={nextPageCursor === null}
+                >
+                    <LastPage />
+                </Button>
             </div>
         </section>
     )
