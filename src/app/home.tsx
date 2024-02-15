@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { Duty } from "./api/duties/route"
-import { GetJobsData } from "./api/jobs/route"
+import { JobsDto } from "./api/jobs/route"
 import { Skill } from "./api/skills/route"
 import Details from "./details/details"
 import styles from "./home.module.scss"
@@ -12,7 +12,7 @@ import Search from "./search/search"
 import { useQueryParams } from "./useQueryParams"
 
 export interface HomeProps {
-    jobsInit: GetJobsData
+    jobsInit: JobsDto
     duties: Duty[]
     skills: Skill[]
 }
@@ -24,7 +24,7 @@ export default function Home({ jobsInit, duties, skills }: HomeProps) {
         queryKey: [queryKey],
         queryFn: async () => {
             const resp = await fetch(`/api/jobs?${queryKey}`)
-            const update = (await resp.json()) as GetJobsData
+            const update = (await resp.json()) as JobsDto
             return update
         },
         initialData: jobsInit,

@@ -35,9 +35,8 @@ export default function PreviewCardList({
             {/* Card list */}
             <div className="border rounded-md min-h-0 overflow-auto flex flex-col">
                 {items.map((item, idx) => (
-                    <div className="rounded-md">
+                    <div key={item.id} className="rounded-md">
                         <PreviewCard
-                            key={item.id}
                             data={item}
                             onClick={() => setActiveIndex(idx)}
                             isActive={idx === activeIndex}

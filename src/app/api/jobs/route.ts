@@ -6,7 +6,7 @@ import { fromSqliteBool, toSqliteBool } from "@/lib/sql-utils"
 import { sql } from "kysely"
 import { NextRequest } from "next/server"
 
-export interface GetJobsData {
+export interface JobsDto {
     jobs: JobData[]
     prevPageCursor: number | null
     nextPageCursor: number | null
@@ -16,20 +16,12 @@ const PAGE_SIZE = 10
 
 export async function getJobs(
     filters: Partial<SearchFormData<never>>
-): Promise<GetJobsData> {
+): Promise<JobsDto> {
     let query = db
-        .with("posts_ordered", (eb) => {
-            let query = eb
-                .selectFrom("indeed_posts as post")
-                .selectAll()
-                .select("rowid")
-
-            return query
-        })
         // Create column with skill array
         .with("with_skills", (eb) => {
             let query = eb
-                .selectFrom("posts_ordered as post")
+                .selectFrom("indeed_posts as post")
                 .innerJoin("skills as sk", (join) => join.onTrue())
                 .leftJoin("indeed_skill_labels as lbl", (join) =>
                     join
