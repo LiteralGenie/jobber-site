@@ -6,29 +6,23 @@ import { fromSqliteBool, toSqliteBool } from "@/lib/sql-utils"
 import { sql } from "kysely"
 import { NextRequest } from "next/server"
 
-export async function getJobs(filters: Partial<SearchFormData<never>>) {
-    let afterId: number | null = null
-    if (filters.after) {
-        const row = await db
-            .selectFrom("indeed_posts")
-            .select("rowid")
-            .where("id", "=", filters.after)
-            .executeTakeFirst()
-        if (row) {
-            afterId = row.rowid
-        }
-    }
+export interface GetJobsData {
+    jobs: JobData[]
+    prevPageCursor: number | null
+    nextPageCursor: number | null
+}
 
+const PAGE_SIZE = 10
+
+export async function getJobs(
+    filters: Partial<SearchFormData<never>>
+): Promise<GetJobsData> {
     let query = db
         .with("posts_ordered", (eb) => {
             let query = eb
                 .selectFrom("indeed_posts as post")
                 .selectAll()
                 .select("rowid")
-
-            if (afterId !== null) {
-                query = query.where("rowid", ">", afterId)
-            }
 
             return query
         })
@@ -141,8 +135,6 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
         )
         .selectFrom("with_misc as post")
         .selectAll()
-        .limit(100)
-        .orderBy("rowid")
 
     if (filters.text) {
         query = query.where(
@@ -177,14 +169,21 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
         )
     }
 
-    // console.log("jobs query\n\n", query.compile().sql)
-    // console.log("params\n\n", query.compile().parameters)
-    const rows = await query.execute()
+    // Take the newest N+1 rows
+    // where the +1 is the cursor for next page
+    let queryAfter = query.orderBy("rowid", "desc").limit(PAGE_SIZE + 1)
+    if (filters.after !== undefined) {
+        queryAfter = queryAfter.where("rowid", "<=", filters.after)
+    }
 
-    const data = rows.map(
+    const rowsAfter = await queryAfter.execute()
+
+    const jobs = rowsAfter.slice(0, PAGE_SIZE).map(
         (d) =>
             ({
                 id: d.id,
+                rowid: d.rowid,
+
                 clearance: fromSqliteBool(d.clearance),
                 description: d.text,
                 company: d.company,
@@ -237,7 +236,27 @@ export async function getJobs(filters: Partial<SearchFormData<never>>) {
             } satisfies JobData)
     )
 
-    return data
+    let nextPageCursor: number | null = null
+    if (rowsAfter[PAGE_SIZE]) {
+        nextPageCursor = rowsAfter[PAGE_SIZE].rowid
+    }
+
+    let prevPageCursor: number | null = null
+    if (filters.after) {
+        const queryBefore = query
+            .where("rowid", ">", filters.after)
+            .orderBy("rowid", "asc")
+            .limit(PAGE_SIZE)
+
+        const rowsBefore = await queryBefore.execute()
+
+        if (rowsBefore.length) {
+            const idxLast = rowsBefore.length - 1
+            prevPageCursor = rowsBefore[idxLast].rowid
+        }
+    }
+
+    return { jobs, prevPageCursor, nextPageCursor }
 }
 
 export async function GET(request: NextRequest) {

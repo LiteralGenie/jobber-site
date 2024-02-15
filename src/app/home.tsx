@@ -1,35 +1,55 @@
 "use client"
 
-import { JobData } from "@/lib/job-data"
 import { useQuery } from "@tanstack/react-query"
-import { useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { Duty } from "./api/duties/route"
+import { GetJobsData } from "./api/jobs/route"
 import { Skill } from "./api/skills/route"
 import Details from "./details/details"
 import styles from "./home.module.scss"
 import PreviewCardList from "./preview-card-list/preview-card-list"
 import Search from "./search/search"
+import { useQueryParams } from "./useQueryParams"
 
 export interface HomeProps {
-    jobsInit: JobData[]
+    jobsInit: GetJobsData
     duties: Duty[]
     skills: Skill[]
 }
 
 export default function Home({ jobsInit, duties, skills }: HomeProps) {
-    const queryKey = useSearchParams().toString()
+    const queryParams = useQueryParams()
 
-    const { data: jobs } = useQuery({
-        queryKey: [queryKey],
+    const { data } = useQuery({
+        queryKey: [queryParams.get().toString()],
         queryFn: async () => {
-            const resp = await fetch(`/api/jobs?${queryKey}`)
-            const update = (await resp.json()) as JobData[]
+            const resp = await fetch(`/api/jobs?${queryParams.get()}`)
+            const update = (await resp.json()) as GetJobsData
             return update
         },
         initialData: jobsInit,
     })
     const [activeIndex, setActiveIndex] = useState(0)
+
+    function nextPage() {
+        if (data.nextPageCursor === null) {
+            return
+        }
+
+        const update = queryParams.get()
+        update.set("after", data.nextPageCursor.toString())
+        queryParams.set(update)
+    }
+
+    function prevPage() {
+        if (data.prevPageCursor === null) {
+            return
+        }
+
+        const update = queryParams.get()
+        update.set("after", data.prevPageCursor.toString())
+        queryParams.set(update)
+    }
 
     return (
         <div className="flex justify-center h-full">
@@ -41,11 +61,13 @@ export default function Home({ jobsInit, duties, skills }: HomeProps) {
                 <PreviewCardList
                     activeIndex={activeIndex}
                     setActiveIndex={setActiveIndex}
-                    jobs={jobs}
+                    jobs={data.jobs}
+                    onPrev={prevPage}
+                    onNext={nextPage}
                 />
 
                 <div className={styles["details-container"]}>
-                    <Details data={jobs[activeIndex]} />
+                    <Details data={data.jobs[activeIndex]} />
                 </div>
             </div>
         </div>

@@ -15,7 +15,7 @@ export interface SearchFormData<NullType = ""> {
     text: string
     salary: number
     clearance: "any" | "no" | "yes"
-    after: string
+    after: number | NullType
 }
 
 export interface SearchParamsData {

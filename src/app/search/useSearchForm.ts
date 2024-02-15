@@ -8,29 +8,27 @@ export function useSearchForm() {
  * Load form data from url params
  */
 function getInitialValue(
-    defaultValue: SearchFormData,
-    params: URLSearchParams
+    defaultValue: Omit<SearchFormData, "after">,
+    currentValue: Partial<SearchFormData<never>>
 ): SearchFormData {
-    const result = { ...defaultValue }
-    const paramData = deserializeParams(params)
+    const result = { ...defaultValue, after: "" } satisfies SearchFormData
 
-    result.text = paramData.text || defaultValue.text
-    result.salary = paramData.salary || defaultValue.salary
-    result.clearance = paramData.clearance || defaultValue.clearance
-    result.locations = paramData.locations || defaultValue.locations
-    result.skills.include = paramData.skills?.include.length
-        ? paramData.skills.include
+    result.text = currentValue.text || defaultValue.text
+    result.salary = currentValue.salary || defaultValue.salary
+    result.clearance = currentValue.clearance || defaultValue.clearance
+    result.locations = currentValue.locations || defaultValue.locations
+    result.skills.include = currentValue.skills?.include.length
+        ? currentValue.skills.include
         : defaultValue.skills.include
-    result.skills.exclude = paramData.skills?.exclude.length
-        ? paramData.skills.exclude
+    result.skills.exclude = currentValue.skills?.exclude.length
+        ? currentValue.skills.exclude
         : defaultValue.skills.exclude
-    result.duties.include = paramData.duties?.include.length
-        ? paramData.duties.include
+    result.duties.include = currentValue.duties?.include.length
+        ? currentValue.duties.include
         : defaultValue.duties.include
-    result.duties.exclude = paramData.duties?.exclude.length
-        ? paramData.duties.exclude
+    result.duties.exclude = currentValue.duties?.exclude.length
+        ? currentValue.duties.exclude
         : defaultValue.duties.exclude
-    result.after = paramData.after || defaultValue.after
 
     return result
 }
@@ -41,9 +39,7 @@ function getInitialValue(
 function serializeForm(data: SearchFormData): URLSearchParams {
     const params = new URLSearchParams()
 
-    if (data.after) {
-        params.set("after", data.after)
-    }
+    params.set("after", data.after.toString())
 
     if (data.text) {
         params.set("text", data.text)
@@ -90,8 +86,9 @@ export function deserializeParams(
 ): Partial<SearchFormData<never>> {
     const data: Partial<SearchFormData<never>> = {}
 
-    const after = params.get("after")
-    if (after) {
+    const afterRaw = params.get("after")
+    const after = afterRaw ? parseInt(afterRaw) : NaN
+    if (!isNaN(after)) {
         data["after"] = after
     }
 

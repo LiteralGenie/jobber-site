@@ -1,17 +1,20 @@
 import { JobData } from "@/lib/job-data"
-import { Pagination } from "@mui/material"
 import PreviewCard from "./preview-card/preview-card"
 
 export interface PreviewCardListProps {
     activeIndex: number
     setActiveIndex: (idx: number) => void
     jobs: JobData[]
+    onPrev: () => void
+    onNext: () => void
 }
 
 export default function PreviewCardList({
     activeIndex,
     setActiveIndex,
     jobs: items,
+    onPrev,
+    onNext,
 }: PreviewCardListProps) {
     return (
         <section className="flex flex-col">
@@ -26,8 +29,13 @@ export default function PreviewCardList({
                 ))}
             </div>
 
-            <div className="border mt-4 rounded-md w-full flex justify-center">
-                <Pagination count={10} shape="rounded" size="large" />
+            <div className="mt-4 grid grid-cols-2 gap-4">
+                <button className="border rounded-md h-12" onClick={onPrev}>
+                    {"< Previous"}
+                </button>
+                <button className="border rounded-md h-12" onClick={onNext}>
+                    {"Next >"}
+                </button>
             </div>
         </section>
     )

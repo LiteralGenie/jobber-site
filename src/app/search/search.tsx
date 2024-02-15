@@ -1,24 +1,21 @@
 "use-client"
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { FormEvent } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
 import { Duty } from "../api/duties/route"
 import { Skill } from "../api/skills/route"
+import { useQueryParams } from "../useQueryParams"
 import styles from "./search.module.scss"
 import { SearchFormData } from "./types"
-import { useSearchForm } from "./useSearchForm"
+import { deserializeParams, useSearchForm } from "./useSearchForm"
 
 export interface SearchProps {
     duties: Duty[]
     skills: Skill[]
-    cursor: string
 }
 
-export default function Search({ duties, skills, cursor }: SearchProps) {
-    const router = useRouter()
-    const pathName = usePathname()
-    const searchParams = useSearchParams()
+export default function Search({ duties, skills }: SearchProps) {
+    const queryParams = useQueryParams()
 
     const { getInitialValue, serializeForm } = useSearchForm()
 
@@ -41,9 +38,8 @@ export default function Search({ duties, skills, cursor }: SearchProps) {
                 text: "",
                 salary: 0,
                 clearance: "any",
-                after: cursor,
             },
-            searchParams
+            deserializeParams(queryParams.get())
         ),
     })
 
@@ -63,8 +59,9 @@ export default function Search({ duties, skills, cursor }: SearchProps) {
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
 
-        const params = serializeForm(getValues())
-        router.push(`${pathName}?${params}`)
+        const update = serializeForm(getValues())
+        update.delete("after")
+        queryParams.set(update)
     }
 
     return (
