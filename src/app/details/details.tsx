@@ -1,4 +1,5 @@
 import { JobData } from "@/lib/job-data"
+import { Card, CardContent, Divider } from "@mui/material"
 import Requirements from "./requirements"
 import Responsibilities from "./responsibilities"
 
@@ -8,31 +9,37 @@ export interface DetailsProps {
 
 export default function Details({ data }: DetailsProps) {
     return (
-        <section className="border-2 rounded-md p-4 h-full overflow-auto">
-            <section>
-                <p>{`Location: ${humanizeLocationType(data.location_type)}`}</p>
-                <p>{`Salary: ${humanizeSalary(data.salary)}`}</p>
-                <p>Clearance required: {data.clearance ? " Yes" : " No"}</p>
+        <article className="h-full overflow-auto">
+            <Card variant="outlined" className="p-4">
+                <header>
+                    <p>{`Location: ${humanizeLocationType(
+                        data.location_type
+                    )}`}</p>
+                    <p>{`Salary: ${humanizeSalary(data.salary)}`}</p>
+                    <p>Clearance required: {data.clearance ? " Yes" : " No"}</p>
 
-                {Object.keys(data.skills).length ? (
-                    <Requirements skills={data.skills} />
-                ) : (
-                    ""
-                )}
+                    {Object.keys(data.skills).length ? (
+                        <Requirements skills={data.skills} />
+                    ) : (
+                        ""
+                    )}
 
-                {data.duties.length ? (
-                    <Responsibilities responsibilities={data.duties} />
-                ) : (
-                    ""
-                )}
-            </section>
+                    {data.duties.length ? (
+                        <Responsibilities responsibilities={data.duties} />
+                    ) : (
+                        ""
+                    )}
+                </header>
 
-            <hr className="my-4" />
+                <Divider className="mt-4 " />
 
-            <section className="whitespace-pre-wrap">
-                {humanizeDescription(data.description)}
-            </section>
-        </section>
+                <CardContent>
+                    <section className="whitespace-pre-wrap">
+                        {humanizeDescription(data.description)}
+                    </section>
+                </CardContent>
+            </Card>
+        </article>
     )
 }
 

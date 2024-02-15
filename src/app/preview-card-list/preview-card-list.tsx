@@ -60,7 +60,7 @@ export default function PreviewCardList({
             </Paper>
 
             {/* Paginator */}
-            <div className="mt-4 grid grid-cols-4 gap-4">
+            <nav className="mt-4 grid grid-cols-4 gap-4">
                 <Button
                     variant="outlined"
                     className="border rounded-md h-12"
@@ -93,7 +93,7 @@ export default function PreviewCardList({
                 >
                     <LastPage />
                 </Button>
-            </div>
+            </nav>
         </section>
     )
 }
