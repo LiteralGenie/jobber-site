@@ -16,7 +16,15 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={inter.className}>{children}</body>
+            <body id="app" className={inter.className}>
+                {/* <StyledEngineProvider injectFirst>
+                    <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+                        <ThemeProvider theme={DarkTheme}> */}
+                {children}
+                {/* </ThemeProvider>
+                    </AppRouterCacheProvider>
+                </StyledEngineProvider> */}
+            </body>
         </html>
     )
 }

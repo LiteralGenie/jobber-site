@@ -1,4 +1,5 @@
 import { JobData } from "@/lib/job-data"
+import { Button } from "@mui/material"
 import styles from "./preview-card.module.scss"
 
 export interface PreviewCardProps {
@@ -14,16 +15,16 @@ export default function PreviewCard({
     isActive,
 }: PreviewCardProps) {
     return (
-        <button
+        <Button
             disabled={isActive}
-            className={`flex flex-col w-full p-4 h-full w-full border-2 text-start overflow-hidden ${
+            className={`flex flex-col p-4 h-full w-full border-2 text-start overflow-hidden ${
                 isActive ? "" : "border-transparent"
             }`}
             onClick={onClick}
         >
-            <h1 className={`${styles.ellipsed}`}>{data.title}</h1>
-            <h2 className={`${styles.ellipsed}`}>{data.company}</h2>
-            <h2>{data.time_created}</h2>
-        </button>
+            <span className={`${styles.ellipsed}`}>{data.title}</span>
+            <span className={`${styles.ellipsed}`}>{data.company}</span>
+            <span>{data.time_created}</span>
+        </Button>
     )
 }
