@@ -1,5 +1,16 @@
 "use-client"
 
+import {
+    Button,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    FormLabel,
+    Radio,
+    RadioGroup,
+    TextField,
+} from "@mui/material"
 import { FormEvent } from "react"
 import { useForm } from "react-hook-form"
 import { Duty } from "../api/duties/route"
@@ -67,10 +78,11 @@ export default function Search({ duties, skills }: SearchProps) {
         >
             {/* Query text */}
             <section>
-                <input
+                <TextField
+                    label="Text"
+                    variant="standard"
                     type="text"
                     placeholder="software (developer|engineer)"
-                    className="w-full"
                     {...register("text")}
                 />
             </section>
@@ -195,92 +207,92 @@ export default function Search({ duties, skills }: SearchProps) {
 
                 {/* Miscellaenous */}
                 <section className="flex flex-col">
-                    {/* <h1>Miscellaneous</h1> */}
-
                     <div className="flex flex-col gap-4">
-                        <div className="flex gap-2">
-                            <h2>Salary</h2>
+                        <TextField
+                            label="Salary"
+                            variant="standard"
+                            type="number"
+                            {...register("salary")}
+                        />
 
-                            <input
-                                type="number"
-                                placeholder="0"
-                                className="w-full"
-                                {...register("salary")}
+                        <FormGroup>
+                            <FormLabel id="location">Location</FormLabel>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        className="py-1"
+                                        {...register("locations.onsite")}
+                                    />
+                                }
+                                label="On-site"
                             />
-                        </div>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        className="py-1"
+                                        {...register("locations.hybrid")}
+                                    />
+                                }
+                                label="Hybrid"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        className="py-1"
+                                        {...register("locations.remote")}
+                                    />
+                                }
+                                label="Remote"
+                            />
+                        </FormGroup>
 
-                        <div>
-                            <h2>Location</h2>
-
-                            <div>
-                                <input
-                                    id="location-onsite"
-                                    type="checkbox"
-                                    {...register("locations.onsite")}
-                                />
-                                <label htmlFor="location-onsite">On-site</label>
-                            </div>
-
-                            <div>
-                                <input
-                                    id="location-hybrid"
-                                    type="checkbox"
-                                    {...register("locations.hybrid")}
-                                />
-                                <label htmlFor="location-hybrid">Hybrid</label>
-                            </div>
-
-                            <div>
-                                <input
-                                    id="location-remote"
-                                    type="checkbox"
-                                    {...register("locations.remote")}
-                                />
-                                <label htmlFor="location-remote">Remote</label>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h2>Clearance</h2>
-
-                            <div>
-                                <input
-                                    id="clearance-any"
-                                    type="radio"
+                        <FormControl>
+                            <FormLabel id="clearance">Clearance</FormLabel>
+                            <RadioGroup
+                                aria-labelledby="clearance"
+                                defaultValue="any"
+                            >
+                                <FormControlLabel
                                     value="any"
-                                    {...register("clearance")}
+                                    control={
+                                        <Radio
+                                            className="py-1"
+                                            {...register("clearance")}
+                                        />
+                                    }
+                                    label="Any"
                                 />
-                                <label htmlFor="clearance-any">Any</label>
-                            </div>
-
-                            <div>
-                                <input
-                                    id="clearance-no"
-                                    type="radio"
+                                <FormControlLabel
                                     value="no"
-                                    {...register("clearance")}
+                                    control={
+                                        <Radio
+                                            className="py-1"
+                                            {...register("clearance")}
+                                        />
+                                    }
+                                    label="Not required"
                                 />
-                                <label htmlFor="clearance-no">
-                                    Not required
-                                </label>
-                            </div>
-
-                            <div>
-                                <input
-                                    id="clearance-yes"
-                                    type="radio"
+                                <FormControlLabel
                                     value="yes"
-                                    {...register("clearance")}
+                                    control={
+                                        <Radio
+                                            className="py-1"
+                                            {...register("clearance")}
+                                        />
+                                    }
+                                    label="Required"
                                 />
-                                <label htmlFor="clearance-yes">Required</label>
-                            </div>
-                        </div>
+                            </RadioGroup>
+                        </FormControl>
                     </div>
                 </section>
             </section>
 
             <div className="flex justify-end py-4">
-                <button type="submit">Submit</button>
+                <Button variant="outlined">Reset</Button>
+                <Button variant="contained" type="submit">
+                    Submit
+                </Button>
             </div>
         </form>
     )
