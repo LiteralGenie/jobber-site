@@ -10,34 +10,33 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useState } from "react"
 import Home, { HomeProps } from "./home"
 
-const rootElement = document.getElementById("app")
-// const root = createRoot(rootElement as any)
+// const rootElement = document.getElementById("app")
 
 const darkTheme = createTheme({
     palette: {
         mode: "dark",
     },
     components: {
-        MuiPopover: {
-            defaultProps: {
-                container: rootElement,
-            },
-        },
-        MuiPopper: {
-            defaultProps: {
-                container: rootElement,
-            },
-        },
-        MuiDialog: {
-            defaultProps: {
-                container: rootElement,
-            },
-        },
-        MuiModal: {
-            defaultProps: {
-                container: rootElement,
-            },
-        },
+        // MuiPopover: {
+        //     defaultProps: {
+        //         container: rootElement,
+        //     },
+        // },
+        // MuiPopper: {
+        //     defaultProps: {
+        //         container: rootElement,
+        //     },
+        // },
+        // MuiDialog: {
+        //     defaultProps: {
+        //         container: rootElement,
+        //     },
+        // },
+        // MuiModal: {
+        //     defaultProps: {
+        //         container: rootElement,
+        //     },
+        // },
     },
 })
 

@@ -14,17 +14,18 @@ import {
 } from "@mui/material"
 import { FormEvent } from "react"
 import { useForm } from "react-hook-form"
-import { Duty } from "../api/duties/route"
-import { Skill } from "../api/skills/route"
+import { DutyDto } from "../api/duties/route"
+import { SkillDto } from "../api/skills/route"
 import { useQueryParams } from "../useQueryParams"
 import MultiSelect from "./multi-select"
 import styles from "./search.module.scss"
+import { SkillFilter } from "./skill-filter"
 import { SearchFormData } from "./types"
 import { useSearchForm } from "./useSearchForm"
 
 export interface SearchProps {
-    duties: Duty[]
-    skills: Skill[]
+    duties: DutyDto[]
+    skills: SkillDto[]
 }
 
 export default function Search({ duties, skills }: SearchProps) {
@@ -32,13 +33,10 @@ export default function Search({ duties, skills }: SearchProps) {
 
     const { getDefaultFromUrl, serializeForm } = useSearchForm()
 
-    const { register, getValues, watch, setValue, reset } =
-        useForm<SearchFormData>({
-            defaultValues: getDefaultFromUrl(),
-        })
-
-    const skillsIncluded = watch("skills.include")
-    const skillsExcluded = watch("skills.exclude")
+    const form = useForm<SearchFormData>({
+        defaultValues: getDefaultFromUrl(),
+    })
+    const { register, getValues, watch, setValue, reset } = form
 
     const dutiesIncluded = watch("duties.include")
     const dutiesExcluded = watch("duties.exclude")
@@ -53,7 +51,7 @@ export default function Search({ duties, skills }: SearchProps) {
     }
 
     function handleReset() {
-        reset(getDefaultFromUrl())
+        reset()
     }
 
     return (
@@ -77,59 +75,7 @@ export default function Search({ duties, skills }: SearchProps) {
             {/* Filters */}
             <section>
                 {/* Skills */}
-                <section>
-                    <h1>Skills</h1>
-
-                    <div className="flex flex-col gap-6">
-                        <MultiSelect
-                            id="skills-included"
-                            options={skills.map(({ id, name }) => ({
-                                value: id.toString(),
-                                name,
-                            }))}
-                            disabledOptions={skillsExcluded.map((v) =>
-                                v.id.toString()
-                            )}
-                            initialValue={skillsIncluded.map((v) =>
-                                v.id.toString()
-                            )}
-                            label="Included"
-                            ariaLabel="Skills Included"
-                            onChange={(vals) =>
-                                setValue(
-                                    "skills.include",
-                                    vals.map((v) => ({
-                                        id: parseInt(v),
-                                    }))
-                                )
-                            }
-                        />
-
-                        <MultiSelect
-                            id="skills-excluded"
-                            options={skills.map(({ id, name }) => ({
-                                value: id.toString(),
-                                name,
-                            }))}
-                            disabledOptions={skillsIncluded.map((v) =>
-                                v.id.toString()
-                            )}
-                            initialValue={skillsExcluded.map((v) =>
-                                v.id.toString()
-                            )}
-                            label="Excluded"
-                            ariaLabel="Skills Excluded"
-                            onChange={(vals) =>
-                                setValue(
-                                    "skills.exclude",
-                                    vals.map((v) => ({
-                                        id: parseInt(v),
-                                    }))
-                                )
-                            }
-                        />
-                    </div>
-                </section>
+                <SkillFilter skills={skills} form={form} />
 
                 <Divider />
 
@@ -147,9 +93,7 @@ export default function Search({ duties, skills }: SearchProps) {
                             disabledOptions={dutiesExcluded.map((v) =>
                                 v.id.toString()
                             )}
-                            initialValue={dutiesIncluded.map((v) =>
-                                v.id.toString()
-                            )}
+                            value={dutiesIncluded.map((v) => v.id.toString())}
                             label="Included"
                             ariaLabel="Responsibilities Included"
                             onChange={(vals) =>
@@ -171,9 +115,7 @@ export default function Search({ duties, skills }: SearchProps) {
                             disabledOptions={dutiesIncluded.map((v) =>
                                 v.id.toString()
                             )}
-                            initialValue={dutiesExcluded.map((v) =>
-                                v.id.toString()
-                            )}
+                            value={dutiesExcluded.map((v) => v.id.toString())}
                             label="Excluded"
                             ariaLabel="Responsibilities Excluded"
                             onChange={(vals) =>

@@ -2,9 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
-import { Duty } from "./api/duties/route"
+import { DutyDto } from "./api/duties/route"
 import { JobsDto } from "./api/jobs/route"
-import { Skill } from "./api/skills/route"
+import { SkillDto } from "./api/skills/route"
 import Details from "./details/details"
 import styles from "./home.module.scss"
 import PreviewCardList from "./preview-card-list/preview-card-list"
@@ -13,8 +13,8 @@ import { useQueryParams } from "./useQueryParams"
 
 export interface HomeProps {
     jobsInit: JobsDto
-    duties: Duty[]
-    skills: Skill[]
+    duties: DutyDto[]
+    skills: SkillDto[]
 }
 
 export default function Home({ jobsInit, duties, skills }: HomeProps) {

@@ -88,7 +88,7 @@ function serializeForm(data: SearchFormData): URLSearchParams {
     )
 
     data.skills.exclude.forEach(({ id }) =>
-        params.append("skills-included", id.toString())
+        params.append("skills-excluded", id.toString())
     )
 
     data.duties.include.forEach(({ id }) =>

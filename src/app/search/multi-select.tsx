@@ -7,13 +7,13 @@ import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import OutlinedInput from "@mui/material/OutlinedInput"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 
 export interface MultiSelectProps {
     id: string
     options: { value: string; name: string }[]
     disabledOptions: string[]
-    initialValue: string[]
+    value: string[]
     label: string
     ariaLabel: string
     onChange: (selected: string[]) => void
@@ -34,13 +34,11 @@ export default function MultiSelect({
     id,
     options,
     disabledOptions,
-    initialValue,
+    value,
     label,
     ariaLabel,
     onChange,
 }: MultiSelectProps) {
-    const [selected, setSelected] = useState(initialValue)
-
     const valueNameMap = useMemo(
         () =>
             options.reduce(
@@ -56,7 +54,6 @@ export default function MultiSelect({
         } = event
 
         const update = typeof value === "string" ? value.split(",") : value
-        setSelected(update)
         onChange(update)
     }
 
@@ -66,7 +63,7 @@ export default function MultiSelect({
             <Select
                 labelId={id}
                 multiple
-                value={selected}
+                value={value}
                 onChange={handleChange}
                 input={<OutlinedInput label={label} />}
                 renderValue={(sel) => (
