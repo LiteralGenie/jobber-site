@@ -20,13 +20,22 @@ export default function PreviewCard({
                 variant="body1"
                 className={`${styles.text} ${styles.title}`}
                 fontWeight="inherit"
+                title={data.title}
             >
                 {data.title}
             </Typography>
-            <Typography variant="body2" className={styles.text}>
+            <Typography
+                variant="body2"
+                className={styles.text}
+                title={data.company}
+            >
                 {data.company}
             </Typography>
-            <Typography variant="body2" className={styles.text}>
+            <Typography
+                variant="body2"
+                className={styles.text}
+                title={data.time_created}
+            >
                 {data.time_created}
             </Typography>
         </Button>
