@@ -3,6 +3,7 @@
 import {
     Button,
     Checkbox,
+    Divider,
     FormControl,
     FormControlLabel,
     FormGroup,
@@ -19,7 +20,7 @@ import { useQueryParams } from "../useQueryParams"
 import MultiSelect from "./multi-select"
 import styles from "./search.module.scss"
 import { SearchFormData } from "./types"
-import { deserializeParams, useSearchForm } from "./useSearchForm"
+import { useSearchForm } from "./useSearchForm"
 
 export interface SearchProps {
     duties: Duty[]
@@ -29,31 +30,12 @@ export interface SearchProps {
 export default function Search({ duties, skills }: SearchProps) {
     const queryParams = useQueryParams()
 
-    const { getInitialValue, serializeForm } = useSearchForm()
+    const { getDefaultFromUrl, serializeForm } = useSearchForm()
 
-    const { register, getValues, watch, setValue } = useForm<SearchFormData>({
-        defaultValues: getInitialValue(
-            {
-                skills: {
-                    include: [],
-                    exclude: [],
-                },
-                duties: {
-                    include: [],
-                    exclude: [],
-                },
-                locations: {
-                    hybrid: false,
-                    onsite: false,
-                    remote: false,
-                },
-                text: "",
-                salary: 0,
-                clearance: "any",
-            },
-            deserializeParams(queryParams.get())
-        ),
-    })
+    const { register, getValues, watch, setValue, reset } =
+        useForm<SearchFormData>({
+            defaultValues: getDefaultFromUrl(),
+        })
 
     const skillsIncluded = watch("skills.include")
     const skillsExcluded = watch("skills.exclude")
@@ -68,6 +50,10 @@ export default function Search({ duties, skills }: SearchProps) {
         const update = serializeForm(getValues())
         update.delete("after")
         queryParams.set(update)
+    }
+
+    function handleReset() {
+        reset(getDefaultFromUrl())
     }
 
     return (
@@ -86,7 +72,7 @@ export default function Search({ duties, skills }: SearchProps) {
                 />
             </section>
 
-            <hr />
+            <Divider />
 
             {/* Filters */}
             <section>
@@ -145,7 +131,7 @@ export default function Search({ duties, skills }: SearchProps) {
                     </div>
                 </section>
 
-                <hr />
+                <Divider />
 
                 {/* Responsibilities */}
                 <section>
@@ -202,7 +188,7 @@ export default function Search({ duties, skills }: SearchProps) {
                     </div>
                 </section>
 
-                <hr />
+                <Divider />
 
                 {/* Miscellaenous */}
                 <section className="flex flex-col">
@@ -287,8 +273,10 @@ export default function Search({ duties, skills }: SearchProps) {
                 </section>
             </section>
 
-            <div className="flex justify-end py-4">
-                <Button variant="outlined">Reset</Button>
+            <div className="py-4 flex justify-end gap-2">
+                <Button variant="outlined" onClick={handleReset}>
+                    Reset
+                </Button>
                 <Button variant="contained" type="submit">
                     Submit
                 </Button>
