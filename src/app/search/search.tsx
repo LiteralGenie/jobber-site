@@ -1,14 +1,6 @@
 "use-client"
 
-import {
-    Button,
-    Checkbox,
-    Divider,
-    FormControlLabel,
-    FormGroup,
-    FormLabel,
-    TextField,
-} from "@mui/material"
+import { Button, Divider, TextField } from "@mui/material"
 import { FormEvent } from "react"
 import { useForm } from "react-hook-form"
 import { DutyDto } from "../api/duties/route"
@@ -16,6 +8,7 @@ import { SkillDto } from "../api/skills/route"
 import { useQueryParams } from "../useQueryParams"
 import { ClearanceFilter } from "./clearance-filter"
 import { DutyFilter } from "./duty-filter"
+import { LocationFilter } from "./location-filter"
 import styles from "./search.module.scss"
 import { SkillFilter } from "./skill-filter"
 import { SearchFormData } from "./types"
@@ -55,72 +48,39 @@ export default function Search({ duties, skills }: SearchProps) {
             className={styles["search-form"]}
         >
             {/* Query text */}
-            <section>
-                <TextField
-                    label="Text"
-                    variant="standard"
-                    type="text"
-                    placeholder="software (developer|engineer)"
-                    {...register("text")}
-                />
-            </section>
+            <TextField
+                label="Text"
+                variant="standard"
+                type="text"
+                placeholder="software (developer|engineer)"
+                {...register("text")}
+            />
 
             <Divider />
 
             {/* Filters */}
-            <section>
-                <SkillFilter skills={skills} form={form} />
+            <SkillFilter skills={skills} form={form} />
 
-                <Divider />
+            <Divider />
 
-                <DutyFilter duties={duties} form={form} />
+            <DutyFilter duties={duties} form={form} />
 
-                <Divider />
+            <Divider />
 
-                {/* Miscellaenous */}
-                <section className="flex flex-col">
-                    <div className="flex flex-col gap-4">
-                        <TextField
-                            label="Salary"
-                            variant="standard"
-                            type="number"
-                            {...register("salary")}
-                        />
+            {/* Miscellaenous */}
+            <section className="flex flex-col">
+                <div className="flex flex-col gap-4">
+                    <TextField
+                        label="Salary"
+                        variant="standard"
+                        type="number"
+                        {...register("salary")}
+                    />
 
-                        <FormGroup>
-                            <FormLabel id="location">Location</FormLabel>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        className="py-1"
-                                        {...register("locations.onsite")}
-                                    />
-                                }
-                                label="On-site"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        className="py-1"
-                                        {...register("locations.hybrid")}
-                                    />
-                                }
-                                label="Hybrid"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        className="py-1"
-                                        {...register("locations.remote")}
-                                    />
-                                }
-                                label="Remote"
-                            />
-                        </FormGroup>
+                    <LocationFilter form={form} />
 
-                        <ClearanceFilter form={form} />
-                    </div>
-                </section>
+                    <ClearanceFilter form={form} />
+                </div>
             </section>
 
             <div className="py-4 flex justify-end gap-2">

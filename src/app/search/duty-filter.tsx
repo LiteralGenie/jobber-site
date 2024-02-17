@@ -40,7 +40,7 @@ export function DutyFilter({ duties, form }: DutyFilterProps) {
 
     return (
         <section>
-            <h1>Skills</h1>
+            <h1>Responsibilities</h1>
 
             <div className="flex flex-col gap-6">
                 <Controller
