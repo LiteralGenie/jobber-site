@@ -31,30 +31,29 @@ export default function Search({ duties, skills }: SearchProps) {
 
     const { getInitialValue, serializeForm } = useSearchForm()
 
-    const { control, register, getValues, watch, setValue } =
-        useForm<SearchFormData>({
-            defaultValues: getInitialValue(
-                {
-                    skills: {
-                        include: [],
-                        exclude: [],
-                    },
-                    duties: {
-                        include: [],
-                        exclude: [],
-                    },
-                    locations: {
-                        hybrid: false,
-                        onsite: false,
-                        remote: false,
-                    },
-                    text: "",
-                    salary: 0,
-                    clearance: "any",
+    const { register, getValues, watch, setValue } = useForm<SearchFormData>({
+        defaultValues: getInitialValue(
+            {
+                skills: {
+                    include: [],
+                    exclude: [],
                 },
-                deserializeParams(queryParams.get())
-            ),
-        })
+                duties: {
+                    include: [],
+                    exclude: [],
+                },
+                locations: {
+                    hybrid: false,
+                    onsite: false,
+                    remote: false,
+                },
+                text: "",
+                salary: 0,
+                clearance: "any",
+            },
+            deserializeParams(queryParams.get())
+        ),
+    })
 
     const skillsIncluded = watch("skills.include")
     const skillsExcluded = watch("skills.exclude")

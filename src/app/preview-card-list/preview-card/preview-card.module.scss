@@ -1,7 +1,7 @@
 .text {
     @apply w-11/12 text-ellipsis whitespace-nowrap overflow-hidden;
 
-    // Undo mui styles
+    // Undo mui defaults
     text-transform: none;
     font-weight: inherit;
 }
@@ -12,7 +12,7 @@
     // Hide border by default
     @apply border-2 border-transparent border-solid;
 
-    // Undo mui styles
+    // Undo mui defaults
     color: inherit;
     &:global(.Mui-disabled) {
         color: inherit;
@@ -24,7 +24,7 @@
         text-decoration: underline;
     }
 
-    // Mark post shown in details pane
+    // Highlight post being shown in details pane
     &:global(.Mui-disabled) {
         border-color: inherit;
 
