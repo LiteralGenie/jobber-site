@@ -4,12 +4,9 @@ import {
     Button,
     Checkbox,
     Divider,
-    FormControl,
     FormControlLabel,
     FormGroup,
     FormLabel,
-    Radio,
-    RadioGroup,
     TextField,
 } from "@mui/material"
 import { FormEvent } from "react"
@@ -17,6 +14,7 @@ import { useForm } from "react-hook-form"
 import { DutyDto } from "../api/duties/route"
 import { SkillDto } from "../api/skills/route"
 import { useQueryParams } from "../useQueryParams"
+import { ClearanceFilter } from "./clearance-filter"
 import { DutyFilter } from "./duty-filter"
 import styles from "./search.module.scss"
 import { SkillFilter } from "./skill-filter"
@@ -120,44 +118,7 @@ export default function Search({ duties, skills }: SearchProps) {
                             />
                         </FormGroup>
 
-                        <FormControl>
-                            <FormLabel id="clearance">Clearance</FormLabel>
-                            <RadioGroup
-                                aria-labelledby="clearance"
-                                defaultValue="any"
-                            >
-                                <FormControlLabel
-                                    value="any"
-                                    control={
-                                        <Radio
-                                            className="py-1"
-                                            {...register("clearance")}
-                                        />
-                                    }
-                                    label="Any"
-                                />
-                                <FormControlLabel
-                                    value="no"
-                                    control={
-                                        <Radio
-                                            className="py-1"
-                                            {...register("clearance")}
-                                        />
-                                    }
-                                    label="Not required"
-                                />
-                                <FormControlLabel
-                                    value="yes"
-                                    control={
-                                        <Radio
-                                            className="py-1"
-                                            {...register("clearance")}
-                                        />
-                                    }
-                                    label="Required"
-                                />
-                            </RadioGroup>
-                        </FormControl>
+                        <ClearanceFilter form={form} />
                     </div>
                 </section>
             </section>

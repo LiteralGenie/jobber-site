@@ -9,7 +9,7 @@ import MultiSelect from "./multi-select"
 import { SearchFormData } from "./types"
 
 type Field<T extends "duties.include" | "duties.exclude" = any> =
-    ControllerRenderProps<SearchFormData<"">, T>
+    ControllerRenderProps<SearchFormData, T>
 
 export interface DutyFilterProps {
     duties: DutyDto[]
