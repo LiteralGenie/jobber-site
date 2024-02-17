@@ -34,9 +34,7 @@ export default function Home({ jobsInit, duties, skills }: HomeProps) {
     return (
         <div className="flex justify-center h-full">
             <div className={styles["container"]}>
-                <div className={styles["search-container"]}>
-                    <Search duties={duties} skills={skills} />
-                </div>
+                <Search duties={duties} skills={skills} />
 
                 <PreviewCardList
                     activeIndex={activeIndex}

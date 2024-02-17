@@ -1,3 +1,4 @@
+import { FormLabel } from "@mui/material"
 import { useMemo } from "react"
 import {
     Controller,
@@ -40,9 +41,11 @@ export function SkillFilter({ skills, form }: SkillFilterProps) {
 
     return (
         <section>
-            <h1>Skills</h1>
+            <div className="pb-4">
+                <FormLabel>Skills</FormLabel>
+            </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
                 <Controller
                     name="skills.include"
                     control={control}

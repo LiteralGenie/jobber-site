@@ -58,7 +58,7 @@ export default function MultiSelect({
     }
 
     return (
-        <FormControl className="w-full">
+        <FormControl size="small">
             <InputLabel id={id}>{label}</InputLabel>
             <Select
                 labelId={id}
@@ -67,9 +67,13 @@ export default function MultiSelect({
                 onChange={handleChange}
                 input={<OutlinedInput label={label} />}
                 renderValue={(sel) => (
-                    <Box className="flex flex-wrap gap-1">
+                    <Box className="flex flex-wrap gap-1 py-1">
                         {sel.map((value) => (
-                            <Chip key={value} label={valueNameMap[value]} />
+                            <Chip
+                                key={value}
+                                label={valueNameMap[value]}
+                                size="small"
+                            />
                         ))}
                     </Box>
                 )}

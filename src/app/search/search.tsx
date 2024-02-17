@@ -47,43 +47,54 @@ export default function Search({ duties, skills }: SearchProps) {
             onSubmit={(ev) => handleSubmit(ev)}
             className={styles["search-form"]}
         >
-            {/* Query text */}
-            <TextField
-                label="Text"
-                variant="standard"
-                type="text"
-                placeholder="software (developer|engineer)"
-                {...register("text")}
-            />
-
-            <Divider />
-
-            {/* Filters */}
-            <SkillFilter skills={skills} form={form} />
-
-            <Divider />
-
-            <DutyFilter duties={duties} form={form} />
-
-            <Divider />
-
-            {/* Miscellaenous */}
-            <section className="flex flex-col">
-                <div className="flex flex-col gap-4">
+            <div className="overflow-auto flex flex-col">
+                {/* Text filter */}
+                <div className="px-2">
                     <TextField
-                        label="Salary"
+                        label="Text"
                         variant="standard"
-                        type="number"
-                        {...register("salary")}
+                        type="text"
+                        placeholder="software (developer|engineer)"
+                        {...register("text")}
                     />
-
-                    <LocationFilter form={form} />
-
-                    <ClearanceFilter form={form} />
                 </div>
-            </section>
+                <div className="pb-2 pt-4">
+                    <Divider />
+                </div>
 
-            <div className="py-4 flex justify-end gap-2">
+                {/* Skill / duty filters */}
+                <div className="px-2">
+                    <SkillFilter skills={skills} form={form} />
+                </div>
+
+                <div className="pb-2 pt-4">
+                    <Divider />
+                </div>
+
+                <div className="px-2">
+                    <DutyFilter duties={duties} form={form} />
+                </div>
+
+                <div className="pb-2 pt-4">
+                    <Divider />
+                </div>
+
+                {/* Miscellaenous */}
+                <section className="flex flex-col px-2">
+                    <div className="flex flex-col gap-4">
+                        <TextField
+                            label="Salary"
+                            variant="standard"
+                            type="number"
+                            {...register("salary")}
+                        />
+                        <LocationFilter form={form} />
+                        <ClearanceFilter form={form} />
+                    </div>
+                </section>
+            </div>
+
+            <div className="pt-6 flex justify-end gap-2">
                 <Button variant="outlined" onClick={handleReset}>
                     Reset
                 </Button>
