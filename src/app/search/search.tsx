@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form"
 import { DutyDto } from "../api/duties/route"
 import { SkillDto } from "../api/skills/route"
 import { useQueryParams } from "../useQueryParams"
-import MultiSelect from "./multi-select"
+import { DutyFilter } from "./duty-filter"
 import styles from "./search.module.scss"
 import { SkillFilter } from "./skill-filter"
 import { SearchFormData } from "./types"
@@ -36,10 +36,7 @@ export default function Search({ duties, skills }: SearchProps) {
     const form = useForm<SearchFormData>({
         defaultValues: getDefaultFromUrl(),
     })
-    const { register, getValues, watch, setValue, reset } = form
-
-    const dutiesIncluded = watch("duties.include")
-    const dutiesExcluded = watch("duties.exclude")
+    const { register, getValues, reset } = form
 
     // POST form data and update query params
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -74,61 +71,11 @@ export default function Search({ duties, skills }: SearchProps) {
 
             {/* Filters */}
             <section>
-                {/* Skills */}
                 <SkillFilter skills={skills} form={form} />
 
                 <Divider />
 
-                {/* Responsibilities */}
-                <section>
-                    <h1>Responsibilities</h1>
-
-                    <div className="flex flex-col gap-6">
-                        <MultiSelect
-                            id="duties-included"
-                            options={duties.map(({ id, name }) => ({
-                                value: id.toString(),
-                                name,
-                            }))}
-                            disabledOptions={dutiesExcluded.map((v) =>
-                                v.id.toString()
-                            )}
-                            value={dutiesIncluded.map((v) => v.id.toString())}
-                            label="Included"
-                            ariaLabel="Responsibilities Included"
-                            onChange={(vals) =>
-                                setValue(
-                                    "duties.include",
-                                    vals.map((v) => ({
-                                        id: parseInt(v),
-                                    }))
-                                )
-                            }
-                        />
-
-                        <MultiSelect
-                            id="duties-excluded"
-                            options={duties.map(({ id, name }) => ({
-                                value: id.toString(),
-                                name,
-                            }))}
-                            disabledOptions={dutiesIncluded.map((v) =>
-                                v.id.toString()
-                            )}
-                            value={dutiesExcluded.map((v) => v.id.toString())}
-                            label="Excluded"
-                            ariaLabel="Responsibilities Excluded"
-                            onChange={(vals) =>
-                                setValue(
-                                    "duties.exclude",
-                                    vals.map((v) => ({
-                                        id: parseInt(v),
-                                    }))
-                                )
-                            }
-                        />
-                    </div>
-                </section>
+                <DutyFilter duties={duties} form={form} />
 
                 <Divider />
 
