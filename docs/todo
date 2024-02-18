@@ -3,10 +3,10 @@ MVP
 =============
 
 indeed link
-copy preview info to details header
 colored preview highlight
 colors in general
-add animated sticky header to details
+mobile view
+tests
 
 =============
 Dream
@@ -22,3 +22,4 @@ sorting
     maybe an argument for salary / yoe
 benefits
 show matching search term in preview card
+location filters
