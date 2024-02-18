@@ -9,14 +9,22 @@ export interface DetailsProps {
 
 export default function Details({ data }: DetailsProps) {
     return (
-        <article className="h-full overflow-auto">
-            <Card variant="outlined" className="p-4">
+        <Card variant="outlined" className="p-4 overflow-auto">
+            <article className="h-full">
                 <header>
-                    <p>{`Location: ${humanizeLocationType(
+                    <div>{data.title}</div>
+                    <div>{data.company}</div>
+                    <div>{data.time_created}</div>
+
+                    <Divider className="my-4 " />
+
+                    <div>{`Location: ${humanizeLocationType(
                         data.location_type
-                    )}`}</p>
-                    <p>{`Salary: ${humanizeSalary(data.salary)}`}</p>
-                    <p>Clearance required: {data.clearance ? " Yes" : " No"}</p>
+                    )}`}</div>
+                    <div>{`Salary: ${humanizeSalary(data.salary)}`}</div>
+                    <div>
+                        Clearance required: {data.clearance ? " Yes" : " No"}
+                    </div>
 
                     {Object.keys(data.skills).length ? (
                         <Requirements skills={data.skills} />
@@ -38,8 +46,8 @@ export default function Details({ data }: DetailsProps) {
                         {humanizeDescription(data.description)}
                     </section>
                 </CardContent>
-            </Card>
-        </article>
+            </article>
+        </Card>
     )
 }
 
