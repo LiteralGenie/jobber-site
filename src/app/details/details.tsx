@@ -1,53 +1,78 @@
 import { JobData } from "@/lib/job-data"
-import { Card, CardContent, Divider } from "@mui/material"
+import { Card, CardContent, Divider, Paper } from "@mui/material"
+import { useRef } from "react"
+import styles from "./details.module.scss"
 import Requirements from "./requirements"
 import Responsibilities from "./responsibilities"
+import { useScrollTop } from "./useScrollTop"
 
 export interface DetailsProps {
     data: JobData
 }
 
 export default function Details({ data }: DetailsProps) {
+    const scrollElRef = useRef<HTMLDivElement>(null)
+    const { scrollTop } = useScrollTop(scrollElRef)
+
     return (
-        <Card variant="outlined" className="p-4 overflow-auto">
-            <article className="h-full">
-                <header>
-                    <div>{data.title}</div>
-                    <div>{data.company}</div>
-                    <div>{data.time_created}</div>
+        <div className="relative overflow-hidden">
+            <Card
+                ref={scrollElRef}
+                variant="outlined"
+                className="overflow-auto h-full"
+            >
+                <div
+                    className={
+                        scrollTop > 150
+                            ? styles["header-visible"]
+                            : styles["header-hidden"]
+                    }
+                >
+                    <Paper elevation={6} className={styles["header-text"]}>
+                        {data.title}
+                    </Paper>
+                </div>
 
-                    <Divider className="my-4 " />
+                <article className="h-full p-4">
+                    <header>
+                        <div>{data.title}</div>
+                        <div>{data.company}</div>
+                        <div>{data.time_created}</div>
 
-                    <div>{`Location: ${humanizeLocationType(
-                        data.location_type
-                    )}`}</div>
-                    <div>{`Salary: ${humanizeSalary(data.salary)}`}</div>
-                    <div>
-                        Clearance required: {data.clearance ? " Yes" : " No"}
-                    </div>
+                        <Divider className="my-4 " />
 
-                    {Object.keys(data.skills).length ? (
-                        <Requirements skills={data.skills} />
-                    ) : (
-                        ""
-                    )}
+                        <div>{`Location: ${humanizeLocationType(
+                            data.location_type
+                        )}`}</div>
+                        <div>{`Salary: ${humanizeSalary(data.salary)}`}</div>
+                        <div>
+                            Clearance required:{" "}
+                            {data.clearance ? " Yes" : " No"}
+                        </div>
 
-                    {data.duties.length ? (
-                        <Responsibilities responsibilities={data.duties} />
-                    ) : (
-                        ""
-                    )}
-                </header>
+                        {Object.keys(data.skills).length ? (
+                            <Requirements skills={data.skills} />
+                        ) : (
+                            ""
+                        )}
 
-                <Divider className="mt-4 " />
+                        {data.duties.length ? (
+                            <Responsibilities responsibilities={data.duties} />
+                        ) : (
+                            ""
+                        )}
+                    </header>
 
-                <CardContent>
-                    <section className="whitespace-pre-wrap">
-                        {humanizeDescription(data.description)}
-                    </section>
-                </CardContent>
-            </article>
-        </Card>
+                    <Divider className="mt-4 " />
+
+                    <CardContent>
+                        <section className="whitespace-pre-wrap">
+                            {humanizeDescription(data.description)}
+                        </section>
+                    </CardContent>
+                </article>
+            </Card>
+        </div>
     )
 }
 

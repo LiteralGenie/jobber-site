@@ -1,0 +1,26 @@
+// Header is an outer container with an inner text elem
+// It slides down into view once the underlying page is scrolled
+// The container is sticky with height 0 so that it doesn't occupy space while hidden
+//     (the text needs it's own elem (<Paper />) otherwise the background looks weird with height 0)
+// We also can't simplify this setup with position absolute because absolute elems don't account for scrollbar in their width
+
+.header-hidden,
+.header-visible {
+    @apply sticky top-0 h-0;
+}
+
+.header-hidden {
+    visibility: hidden;
+    transform: translateY(-50px);
+}
+
+.header-visible {
+    transform: translateY(0);
+    transition: transform 0.15s linear;
+}
+
+.header-text {
+    @apply absolute w-full py-2 px-4;
+
+    top: 0;
+}
