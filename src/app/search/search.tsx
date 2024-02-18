@@ -12,7 +12,7 @@ import { LocationFilter } from "./location-filter"
 import styles from "./search.module.scss"
 import { SkillFilter } from "./skill-filter"
 import { SearchFormData } from "./types"
-import { useSearchForm } from "./useSearchForm"
+import { SEARCH_FORM_DEFAULT, useSearchForm } from "./useSearchForm"
 
 export interface SearchProps {
     duties: DutyDto[]
@@ -27,7 +27,7 @@ export default function Search({ duties, skills }: SearchProps) {
     const form = useForm<SearchFormData>({
         defaultValues: getDefaultFromUrl(),
     })
-    const { register, getValues, reset } = form
+    const { register, getValues, reset, setValue } = form
 
     // POST form data and update query params
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -40,6 +40,10 @@ export default function Search({ duties, skills }: SearchProps) {
 
     function handleReset() {
         reset()
+    }
+
+    function handleClear() {
+        reset(SEARCH_FORM_DEFAULT(), { keepDefaultValues: true })
     }
 
     return (
@@ -95,6 +99,9 @@ export default function Search({ duties, skills }: SearchProps) {
             </div>
 
             <div className="pt-6 flex justify-end gap-2">
+                <Button variant="outlined" onClick={handleClear}>
+                    Clear
+                </Button>
                 <Button variant="outlined" onClick={handleReset}>
                     Reset
                 </Button>

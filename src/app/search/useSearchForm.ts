@@ -1,17 +1,8 @@
 import { useQueryParams } from "../useQueryParams"
 import { SearchFormData } from "./types"
 
-export function useSearchForm() {
-    const queryParams = useQueryParams()
-
-    return {
-        getDefaultFromUrl: () => getDefaultFromUrl(queryParams),
-        serializeForm,
-    }
-}
-
-function getDefaultFromUrl(queryParams: ReturnType<typeof useQueryParams>) {
-    const fromDefault = {
+export const SEARCH_FORM_DEFAULT = () =>
+    ({
         skills: {
             include: [],
             exclude: [],
@@ -28,8 +19,19 @@ function getDefaultFromUrl(queryParams: ReturnType<typeof useQueryParams>) {
         text: "",
         salary: 0,
         clearance: "any",
-    } as Omit<SearchFormData, "after">
+    } as Omit<SearchFormData, "after">)
 
+export function useSearchForm() {
+    const queryParams = useQueryParams()
+
+    return {
+        getDefaultFromUrl: () => getDefaultFromUrl(queryParams),
+        serializeForm,
+    }
+}
+
+function getDefaultFromUrl(queryParams: ReturnType<typeof useQueryParams>) {
+    const fromDefault = SEARCH_FORM_DEFAULT()
     const fromUrl = deserializeParams(queryParams.get())
 
     const result = { ...fromDefault, after: "" } satisfies SearchFormData
