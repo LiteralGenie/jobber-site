@@ -1,6 +1,6 @@
 import { db } from "@/database/db"
 
-export interface Skill {
+export interface SkillDto {
     id: number
     name: string
 }

@@ -1,0 +1,35 @@
+.text {
+    @apply w-11/12 text-ellipsis whitespace-nowrap overflow-hidden;
+
+    // Undo mui defaults
+    text-transform: none;
+    font-weight: inherit;
+}
+
+.button {
+    @apply flex flex-col p-4 h-full w-full text-start overflow-hidden;
+
+    // Hide border by default
+    @apply border-2 border-transparent border-solid;
+
+    // Undo mui defaults
+    color: inherit;
+    &:global(.Mui-disabled) {
+        color: inherit;
+        border-radius: 0;
+    }
+
+    // Emphasize on hover
+    &:hover .title {
+        text-decoration: underline;
+    }
+
+    // Highlight post being shown in details pane
+    &:global(.Mui-disabled) {
+        border-color: inherit;
+
+        .text {
+            font-weight: bold;
+        }
+    }
+}

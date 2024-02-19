@@ -1,38 +1,78 @@
 import { JobData } from "@/lib/job-data"
+import { Card, CardContent, Divider, Paper } from "@mui/material"
+import { useRef } from "react"
+import styles from "./details.module.scss"
 import Requirements from "./requirements"
 import Responsibilities from "./responsibilities"
+import { useScrollTop } from "./useScrollTop"
 
 export interface DetailsProps {
     data: JobData
 }
 
 export default function Details({ data }: DetailsProps) {
+    const scrollElRef = useRef<HTMLDivElement>(null)
+    const { scrollTop } = useScrollTop(scrollElRef)
+
     return (
-        <section className="border-2 rounded-md p-4 h-full overflow-auto">
-            <section>
-                <p>{`Location: ${humanizeLocationType(data.location_type)}`}</p>
-                <p>{`Salary: ${humanizeSalary(data.salary)}`}</p>
-                <p>Clearance required: {data.clearance ? " Yes" : " No"}</p>
+        <div className="relative overflow-hidden">
+            <Card
+                ref={scrollElRef}
+                variant="outlined"
+                className="overflow-auto h-full"
+            >
+                <div
+                    className={
+                        scrollTop > 150
+                            ? styles["header-visible"]
+                            : styles["header-hidden"]
+                    }
+                >
+                    <Paper elevation={6} className={styles["header-text"]}>
+                        {data.title}
+                    </Paper>
+                </div>
 
-                {Object.keys(data.skills).length ? (
-                    <Requirements skills={data.skills} />
-                ) : (
-                    ""
-                )}
+                <article className="h-full p-4">
+                    <header>
+                        <div>{data.title}</div>
+                        <div>{data.company}</div>
+                        <div>{data.time_created}</div>
 
-                {data.duties.length ? (
-                    <Responsibilities responsibilities={data.duties} />
-                ) : (
-                    ""
-                )}
-            </section>
+                        <Divider className="my-4 " />
 
-            <hr className="my-4" />
+                        <div>{`Location: ${humanizeLocationType(
+                            data.location_type
+                        )}`}</div>
+                        <div>{`Salary: ${humanizeSalary(data.salary)}`}</div>
+                        <div>
+                            Clearance required:{" "}
+                            {data.clearance ? " Yes" : " No"}
+                        </div>
 
-            <section className="whitespace-pre-wrap">
-                {humanizeDescription(data.description)}
-            </section>
-        </section>
+                        {Object.keys(data.skills).length ? (
+                            <Requirements skills={data.skills} />
+                        ) : (
+                            ""
+                        )}
+
+                        {data.duties.length ? (
+                            <Responsibilities responsibilities={data.duties} />
+                        ) : (
+                            ""
+                        )}
+                    </header>
+
+                    <Divider className="mt-4 " />
+
+                    <CardContent>
+                        <section className="whitespace-pre-wrap">
+                            {humanizeDescription(data.description)}
+                        </section>
+                    </CardContent>
+                </article>
+            </Card>
+        </div>
     )
 }
 

@@ -1,6 +1,6 @@
 import { db } from "@/database/db"
 
-export interface Duty {
+export interface DutyDto {
     id: number
     name: string
 }

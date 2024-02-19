@@ -1,10 +1,5 @@
 .search-form {
-    @apply w-60;
-
-    input,
-    select {
-        @apply text-black;
-    }
+    @apply w-60 min-h-0 flex flex-col;
 
     hr {
         @apply my-2;

@@ -2,51 +2,11 @@
 MVP
 =============
 
-FE
-    list
-        card
-            title
-            company
-            (optional) location
-            (optional) YoE summary
-        pagination
-    search
-    filters
-        (subset of details)
-    details
-        title
-        company
-        date
-        parsed (optionals)
-            (with citations)
-            skills + YoE
-                languages / tech
-                (no degree-conditional YoE, pick or assume BS)
-            responsibilities
-                on-call
-                design
-            pay
-            clearance
-        description
-
-BE
-    data
-        (see FE.details)
-        store hourly / yearly separately but normalize to yearly
-    training
-        independent extractors (easy to add more)
-        citations
-            check each sentence?
-                + also solves context window problem
-                - what if conflicting?
-                    use confidence rating
-        structured output
-            jsonformer
-                no particular reason
-            not lmql
-                custom template language
-                    no ide support
-                    hard to extend / debug 
+indeed link
+colored preview highlight
+colors in general
+mobile view
+tests
 
 =============
 Dream
@@ -62,3 +22,4 @@ sorting
     maybe an argument for salary / yoe
 benefits
 show matching search term in preview card
+location filters

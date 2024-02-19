@@ -1,34 +1,57 @@
+import { useQueryParams } from "../useQueryParams"
 import { SearchFormData } from "./types"
 
+export const SEARCH_FORM_DEFAULT = () =>
+    ({
+        skills: {
+            include: [],
+            exclude: [],
+        },
+        duties: {
+            include: [],
+            exclude: [],
+        },
+        locations: {
+            hybrid: false,
+            onsite: false,
+            remote: false,
+        },
+        text: "",
+        salary: 0,
+        clearance: "any",
+    } as Omit<SearchFormData, "after">)
+
 export function useSearchForm() {
-    return { getInitialValue, serializeForm }
+    const queryParams = useQueryParams()
+
+    return {
+        getDefaultFromUrl: () => getDefaultFromUrl(queryParams),
+        serializeForm,
+    }
 }
 
-/**
- * Load form data from url params
- */
-function getInitialValue(
-    defaultValue: Omit<SearchFormData, "after">,
-    currentValue: Partial<SearchFormData<never>>
-): SearchFormData {
-    const result = { ...defaultValue, after: "" } satisfies SearchFormData
+function getDefaultFromUrl(queryParams: ReturnType<typeof useQueryParams>) {
+    const fromDefault = SEARCH_FORM_DEFAULT()
+    const fromUrl = deserializeParams(queryParams.get())
 
-    result.text = currentValue.text || defaultValue.text
-    result.salary = currentValue.salary || defaultValue.salary
-    result.clearance = currentValue.clearance || defaultValue.clearance
-    result.locations = currentValue.locations || defaultValue.locations
-    result.skills.include = currentValue.skills?.include.length
-        ? currentValue.skills.include
-        : defaultValue.skills.include
-    result.skills.exclude = currentValue.skills?.exclude.length
-        ? currentValue.skills.exclude
-        : defaultValue.skills.exclude
-    result.duties.include = currentValue.duties?.include.length
-        ? currentValue.duties.include
-        : defaultValue.duties.include
-    result.duties.exclude = currentValue.duties?.exclude.length
-        ? currentValue.duties.exclude
-        : defaultValue.duties.exclude
+    const result = { ...fromDefault, after: "" } satisfies SearchFormData
+
+    result.text = fromUrl.text || fromDefault.text
+    result.salary = fromUrl.salary || fromDefault.salary
+    result.clearance = fromUrl.clearance || fromDefault.clearance
+    result.locations = fromUrl.locations || fromDefault.locations
+    result.skills.include = fromUrl.skills?.include.length
+        ? fromUrl.skills.include
+        : fromDefault.skills.include
+    result.skills.exclude = fromUrl.skills?.exclude.length
+        ? fromUrl.skills.exclude
+        : fromDefault.skills.exclude
+    result.duties.include = fromUrl.duties?.include.length
+        ? fromUrl.duties.include
+        : fromDefault.duties.include
+    result.duties.exclude = fromUrl.duties?.exclude.length
+        ? fromUrl.duties.exclude
+        : fromDefault.duties.exclude
 
     return result
 }
@@ -62,21 +85,21 @@ function serializeForm(data: SearchFormData): URLSearchParams {
     if (data.locations.onsite) params.append("locations", "onsite")
     if (data.locations.remote) params.append("locations", "remote")
 
-    data.skills.include
-        .filter(({ id }) => id !== "")
-        .forEach(({ id }) => params.append("skills-included", id.toString()))
+    data.skills.include.forEach(({ id }) =>
+        params.append("skills-included", id.toString())
+    )
 
-    data.skills.exclude
-        .filter(({ id }) => id !== "")
-        .forEach(({ id }) => params.append("skills-included", id.toString()))
+    data.skills.exclude.forEach(({ id }) =>
+        params.append("skills-excluded", id.toString())
+    )
 
-    data.duties.include
-        .filter(({ id }) => id !== "")
-        .forEach(({ id }) => params.append("duties-included", id.toString()))
+    data.duties.include.forEach(({ id }) =>
+        params.append("duties-included", id.toString())
+    )
 
-    data.duties.exclude
-        .filter(({ id }) => id !== "")
-        .forEach(({ id }) => params.append("duties-excluded", id.toString()))
+    data.duties.exclude.forEach(({ id }) =>
+        params.append("duties-excluded", id.toString())
+    )
 
     return params
 }
