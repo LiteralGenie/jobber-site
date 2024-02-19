@@ -51,9 +51,10 @@ export async function getJobs(
                 )
                 .groupBy("post.id")
                 .select(
-                    sql<string>`sk.id || ':' || sk.name || ':' || lbl.label`.as(
-                        "skills"
-                    )
+                    sql<string>`GROUP_CONCAT(
+                        sk.id || ':' || sk.name || ':' || lbl.label, 
+                        ';'
+                    )`.as("skills")
                 )
                 .selectAll("post")
 
@@ -87,10 +88,12 @@ export async function getJobs(
                 )
                 .groupBy("post.id")
                 .select(
-                    sql<string>`dt.id || ':' || dt.name || ':' || lbl.label`.as(
-                        "duties"
-                    )
+                    sql<string>`GROUP_CONCAT(
+                        dt.id || ':' || dt.name || ':' || lbl.label, 
+                        ';'
+                    )`.as("duties")
                 )
+                // .select(sql<string>`GROUP_CONCAT(duties_raw, ';')`.as("duties"))
                 .selectAll("post")
 
             filters.duties?.include.forEach(({ id }) => {
@@ -124,9 +127,10 @@ export async function getJobs(
                 .leftJoin("locations as loc", "loc.id", "lbl.id_location")
                 .groupBy("post.id")
                 .select(
-                    sql<string>`loc.id || ':' || loc.country || ':' || loc.state || ':' || loc.city`.as(
-                        "locations"
-                    )
+                    sql<string>`GROUP_CONCAT(
+                            loc.id || ':' || loc.country || ':' || loc.state || ':' || loc.city,
+                            ';'
+                        )`.as("locations")
                 )
                 .selectAll("post")
 
@@ -196,6 +200,7 @@ export async function getJobs(
     if (filters.after !== undefined) {
         queryAfter = queryAfter.where("rowid", "<=", filters.after)
     }
+    // console.log("queryAfter", queryAfter.compile().sql)
 
     const rowsAfter = await queryAfter.execute()
 
@@ -257,7 +262,7 @@ export async function getJobs(
                     d.locations === null
                         ? []
                         : d.locations
-                              .split(",")
+                              .split(";")
                               .map((text) => text.split(":"))
                               .flatMap(([id, country, state, city]) => ({
                                   id: parseInt(id),
