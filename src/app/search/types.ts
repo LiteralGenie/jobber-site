@@ -7,7 +7,7 @@ export interface SearchFormData<NullType = ""> {
         include: { id: number }[]
         exclude: { id: number }[]
     }
-    locations: {
+    locationTypes: {
         hybrid: boolean
         onsite: boolean
         remote: boolean
@@ -16,6 +16,7 @@ export interface SearchFormData<NullType = ""> {
     salary: number
     clearance: "any" | "no" | "yes"
     after: number | NullType
+    locations: number[]
 }
 
 export interface SearchParamsData {
