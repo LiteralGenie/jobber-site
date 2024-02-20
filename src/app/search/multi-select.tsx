@@ -34,7 +34,6 @@ function readFormValue(
     value: Array<{ id: number }>,
     optionMap: OptionMap
 ): Option[] {
-    console.log("reading", value)
     return value.map(({ id }) => optionMap[id])
 }
 
@@ -60,8 +59,6 @@ export default function MultiSelect({
             ),
         [options]
     )
-    console.log("options", options)
-    console.log("optionMap", optionMap)
 
     return (
         <Controller
