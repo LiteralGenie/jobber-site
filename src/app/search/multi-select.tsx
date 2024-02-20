@@ -1,95 +1,96 @@
 // https://mui.com/material-ui/react-select/#chip
 
-import Box from "@mui/material/Box"
-import Chip from "@mui/material/Chip"
-import FormControl from "@mui/material/FormControl"
-import InputLabel from "@mui/material/InputLabel"
-import MenuItem from "@mui/material/MenuItem"
-import OutlinedInput from "@mui/material/OutlinedInput"
-import Select, { SelectChangeEvent } from "@mui/material/Select"
+import { Autocomplete, TextField } from "@mui/material"
 import { useMemo } from "react"
+import {
+    Controller,
+    ControllerRenderProps,
+    UseFormReturn,
+} from "react-hook-form"
+import styles from "./multi-select.module.scss"
+import { SearchFormData } from "./types"
+
+type Option = { id: number; name: string }
+type OptionMap = Record<Option["id"], Option>
+
+type ControlName =
+    | "skills.include"
+    | "skills.exclude"
+    | "duties.include"
+    | "duties.exclude"
+
+type Field = ControllerRenderProps<SearchFormData, ControlName>
 
 export interface MultiSelectProps {
-    id: string
-    options: { value: string; name: string }[]
-    disabledOptions: string[]
-    value: string[]
+    form: UseFormReturn<SearchFormData>
+    controlName: ControlName
+    options: Option[]
+    disabledOptions: number[]
     label: string
     ariaLabel: string
-    onChange: (selected: string[]) => void
 }
 
-const ITEM_HEIGHT = 48
-const ITEM_PADDING_TOP = 8
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
+function readFormValue(
+    value: Array<{ id: number }>,
+    optionMap: OptionMap
+): Option[] {
+    console.log("reading", value)
+    return value.map(({ id }) => optionMap[id])
+}
+
+function setFormValue(options: Option[], field: Field) {
+    field.onChange(options)
 }
 
 export default function MultiSelect({
-    id,
+    form,
+    controlName,
     options,
     disabledOptions,
-    value,
     label,
     ariaLabel,
-    onChange,
 }: MultiSelectProps) {
-    const valueNameMap = useMemo(
+    const { control } = form
+
+    const optionMap = useMemo(
         () =>
             options.reduce(
-                (acc, { value, name }) => ({ ...acc, [value]: name }),
-                {} as Record<string, string>
+                (acc, opt) => ({ [opt.id]: opt, ...acc }),
+                {} as OptionMap
             ),
         [options]
     )
-
-    const handleChange = (event: SelectChangeEvent<string[]>) => {
-        const {
-            target: { value },
-        } = event
-
-        const update = typeof value === "string" ? value.split(",") : value
-        onChange(update)
-    }
+    console.log("options", options)
+    console.log("optionMap", optionMap)
 
     return (
-        <FormControl size="small">
-            <InputLabel id={id}>{label}</InputLabel>
-            <Select
-                labelId={id}
-                multiple
-                value={value}
-                onChange={handleChange}
-                input={<OutlinedInput label={label} />}
-                renderValue={(sel) => (
-                    <Box className="flex flex-wrap gap-1 py-1">
-                        {sel.map((value) => (
-                            <Chip
-                                key={value}
-                                label={valueNameMap[value]}
-                                size="small"
-                            />
-                        ))}
-                    </Box>
-                )}
-                MenuProps={MenuProps}
-                aria-label={ariaLabel}
-            >
-                {options.map(({ value, name }) => (
-                    <MenuItem
-                        key={value}
-                        value={value}
-                        disabled={disabledOptions.includes(value)}
-                    >
-                        {name}
-                    </MenuItem>
-                ))}
-            </Select>
-        </FormControl>
+        <Controller
+            name={controlName}
+            control={control}
+            render={({ field }) => (
+                <Autocomplete
+                    multiple
+                    value={readFormValue(field.value, optionMap)}
+                    options={options}
+                    className={styles["autocomplete"]}
+                    size="small"
+                    getOptionLabel={(option) => option.name}
+                    getOptionDisabled={(opt) =>
+                        disabledOptions.includes(opt.id)
+                    }
+                    onChange={(_, value) => setFormValue(value, field)}
+                    renderInput={(params) => (
+                        // @fixme: this params spread causes a key error
+                        //         but maybe a next.js issue
+                        //         https://github.com/vercel/next.js/issues/55642#issuecomment-1806788416
+                        <TextField
+                            {...params}
+                            label={label}
+                            aria-label={ariaLabel}
+                        />
+                    )}
+                />
+            )}
+        />
     )
 }

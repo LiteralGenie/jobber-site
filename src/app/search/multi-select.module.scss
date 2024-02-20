@@ -1,0 +1,5 @@
+.autocomplete {
+    :global(.MuiInputBase-root) {
+        @apply py-2 #{!important};
+    }
+}
