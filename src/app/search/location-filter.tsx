@@ -148,6 +148,7 @@ export function LocationFilter({ form, locations }: LocationFilterProps) {
                     getOptionLabel={getOptionLabel}
                     onChange={(_, value) => setFormValue(value, field)}
                     className="px-2"
+                    size="small"
                     renderInput={(params) => (
                         // @fixme: this params spread causes a key error
                         //         but maybe a next.js issue

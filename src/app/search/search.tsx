@@ -1,6 +1,6 @@
 "use-client"
 
-import { Button, Divider, TextField } from "@mui/material"
+import { Button, Divider, Paper, TextField } from "@mui/material"
 import { FormEvent } from "react"
 import { useForm } from "react-hook-form"
 import { DutyDto } from "../api/duties/route"
@@ -54,7 +54,10 @@ export default function Search({ duties, skills, locations }: SearchProps) {
             onSubmit={(ev) => handleSubmit(ev)}
             className={styles["search-form"]}
         >
-            <div className="overflow-auto flex flex-col">
+            <Paper
+                variant="outlined"
+                className="overflow-auto flex flex-col px-2"
+            >
                 {/* Text filter */}
                 <div className="px-2">
                     <TextField
@@ -104,7 +107,7 @@ export default function Search({ duties, skills, locations }: SearchProps) {
                         <ClearanceFilter form={form} />
                     </div>
                 </section>
-            </div>
+            </Paper>
 
             <div className="pt-6 flex justify-end gap-2">
                 <Button variant="outlined" onClick={handleClear}>
