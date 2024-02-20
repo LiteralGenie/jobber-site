@@ -17,10 +17,10 @@ import Requirements from "./requirements"
 import Responsibilities from "./responsibilities"
 import { useScrollTop } from "./useScrollTop"
 export interface DetailsProps {
-    data: JobData
+    job: JobData
 }
 
-export default function Details({ data }: DetailsProps) {
+export default function Details({ job: data }: DetailsProps) {
     const scrollElRef = useRef<HTMLDivElement>(null)
     const { scrollTop } = useScrollTop(scrollElRef)
 

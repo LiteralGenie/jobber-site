@@ -1,12 +1,14 @@
 "use client"
 
+import { JobData } from "@/lib/job-data"
 import { useQuery } from "@tanstack/react-query"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { DutyDto } from "./api/duties/route"
 import { JobsDto } from "./api/jobs/route"
 import { LocationDto } from "./api/locations/route"
 import { SkillDto } from "./api/skills/route"
 import Details from "./details/details"
+import { EmptyDetails } from "./details/empty-details"
 import styles from "./home.module.scss"
 import PreviewCardList from "./preview-card-list/preview-card-list"
 import Search from "./search/search"
@@ -38,6 +40,11 @@ export default function Home({
     })
     const [activeIndex, setActiveIndex] = useState(0)
 
+    const activeJob = useMemo<JobData | undefined>(
+        () => data.jobs[activeIndex],
+        [data, activeIndex]
+    )
+
     return (
         <div className="flex justify-center h-full">
             <div className={styles["container"]}>
@@ -51,7 +58,7 @@ export default function Home({
                     nextPageCursor={data.nextPageCursor}
                 />
 
-                <Details data={data.jobs[activeIndex]} />
+                {activeJob ? <Details job={activeJob} /> : <EmptyDetails />}
             </div>
         </div>
     )

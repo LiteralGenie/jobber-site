@@ -57,6 +57,15 @@ export default function PreviewCardList({
                         {idx == items.length - 1 ? "" : <Divider />}
                     </div>
                 ))}
+
+                {/* Handle empty case */}
+                {items.length === 0 ? (
+                    <div className="opacity-90 h-full flex items-center justify-center">
+                        No matching jobs found
+                    </div>
+                ) : (
+                    ""
+                )}
             </Paper>
 
             {/* Paginator */}
