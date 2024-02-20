@@ -1,23 +1,22 @@
 import { MONTHS } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
-import { Button, Typography, alpha, useTheme } from "@mui/material"
+import LaunchIcon from "@mui/icons-material/Launch"
+import { Button, IconButton, Typography, alpha } from "@mui/material"
 import { useMemo } from "react"
 import styles from "./preview-card.module.scss"
-
 export interface PreviewCardProps {
-    data: JobData
+    job: JobData
     onClick: () => void
 
     isActive: boolean
 }
 
 export default function PreviewCard({
-    data,
+    job,
     onClick,
     isActive,
 }: PreviewCardProps) {
-    const date = useMemo(() => humanizeDate(data.time_created), [data])
-    const theme = useTheme()
+    const date = useMemo(() => humanizeDate(job.time_created), [job])
 
     return (
         <Button
@@ -32,33 +31,59 @@ export default function PreviewCard({
                 },
             }}
         >
-            <Typography
-                variant="body1"
-                className={`${styles.text} ${styles.title}`}
-                fontWeight="inherit"
-                title={data.title}
-                sx={{
-                    color: isActive ? "info.main" : "",
-                }}
-            >
-                {data.title}
-            </Typography>
-            <Typography
-                variant="body2"
-                className={styles.text}
-                sx={{ color: isActive ? "info.main" : "text.secondary" }}
-                title={data.company}
-            >
-                {data.company}
-            </Typography>
-            <Typography
-                variant="body2"
-                className={styles.text}
-                sx={{ color: isActive ? "info.main" : "text.secondary" }}
-                title={date}
-            >
-                {date}
-            </Typography>
+            <div className="w-full flex justify-between">
+                {/* Info */}
+                <div className="grow flex flex-col text-start overflow-hidden">
+                    <Typography
+                        variant="body1"
+                        className={`${styles.text} ${styles.title}`}
+                        fontWeight="inherit"
+                        title={job.title}
+                        sx={{
+                            color: isActive ? "info.main" : "",
+                        }}
+                    >
+                        {job.title}
+                    </Typography>
+                    <Typography
+                        variant="body2"
+                        className={styles.text}
+                        sx={{
+                            color: isActive ? "info.main" : "text.secondary",
+                        }}
+                        title={job.company}
+                    >
+                        {job.company}
+                    </Typography>
+                    <Typography
+                        variant="body2"
+                        className={styles.text}
+                        sx={{
+                            color: isActive ? "info.main" : "text.secondary",
+                        }}
+                        title={date}
+                    >
+                        {date}
+                    </Typography>
+                </div>
+
+                {/* Link to original post */}
+                <IconButton
+                    className="h-min self-center p-4"
+                    href={`https://www.indeed.com/viewjob?jk=${job.id}`}
+                    target="_blank"
+                    rel="noopener"
+                    sx={{
+                        pointerEvents: "initial",
+                        color: isActive ? "info.main" : "",
+                    }}
+                    onClick={(ev) => {
+                        ev.stopPropagation()
+                    }}
+                >
+                    <LaunchIcon />
+                </IconButton>
+            </div>
         </Button>
     )
 }

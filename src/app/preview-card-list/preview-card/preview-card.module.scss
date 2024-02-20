@@ -7,7 +7,7 @@
 }
 
 .button {
-    @apply flex flex-col p-4 h-full w-full text-start overflow-hidden;
+    @apply p-4 pr-2 h-full w-full;
 
     // Border is always active but only colored for active card (via sx, not this file)
     @apply border-2 border-solid;
@@ -17,10 +17,11 @@
     &:global(.Mui-disabled) {
         color: inherit;
         border-radius: 0;
+        background-color: unset !important;
     }
 
     // Emphasize on hover
-    &:hover .title {
+    &:hover:not(:global(.Mui-disabled)) .title {
         text-decoration: underline;
     }
 

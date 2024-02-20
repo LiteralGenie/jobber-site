@@ -57,7 +57,7 @@ export default function PreviewCardList({
                 {jobs.map((item, idx) => (
                     <div key={item.id} className="rounded-md">
                         <PreviewCard
-                            data={item}
+                            job={item}
                             onClick={() => setActiveIndex(idx)}
                             isActive={idx === activeIndex}
                         />
