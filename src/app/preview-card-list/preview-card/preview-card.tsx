@@ -1,6 +1,6 @@
 import { MONTHS } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
-import { Button, Typography } from "@mui/material"
+import { Button, Typography, alpha, useTheme } from "@mui/material"
 import { useMemo } from "react"
 import styles from "./preview-card.module.scss"
 
@@ -17,13 +17,20 @@ export default function PreviewCard({
     isActive,
 }: PreviewCardProps) {
     const date = useMemo(() => humanizeDate(data.time_created), [data])
+    const theme = useTheme()
 
     return (
         <Button
             disabled={isActive}
             className={styles.button}
             onClick={onClick}
-            sx={{ borderColor: isActive ? "secondary.main" : "transparent" }}
+            sx={{
+                borderColor: isActive ? "info.main" : "transparent",
+                "&.MuiButton-root:hover": {
+                    backgroundColor: (theme) =>
+                        alpha(theme.palette.info.main, 0.08),
+                },
+            }}
         >
             <Typography
                 variant="body1"
@@ -31,7 +38,7 @@ export default function PreviewCard({
                 fontWeight="inherit"
                 title={data.title}
                 sx={{
-                    color: isActive ? "secondary.main" : "",
+                    color: isActive ? "info.main" : "",
                 }}
             >
                 {data.title}
@@ -39,7 +46,7 @@ export default function PreviewCard({
             <Typography
                 variant="body2"
                 className={styles.text}
-                sx={{ color: isActive ? "secondary.main" : "text.secondary" }}
+                sx={{ color: isActive ? "info.main" : "text.secondary" }}
                 title={data.company}
             >
                 {data.company}
@@ -47,7 +54,7 @@ export default function PreviewCard({
             <Typography
                 variant="body2"
                 className={styles.text}
-                sx={{ color: isActive ? "secondary.main" : "text.secondary" }}
+                sx={{ color: isActive ? "info.main" : "text.secondary" }}
                 title={date}
             >
                 {date}
