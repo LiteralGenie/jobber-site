@@ -2,7 +2,7 @@ import { JobData } from "@/lib/job-data"
 import { FirstPage, LastPage } from "@mui/icons-material"
 import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import ChevronRight from "@mui/icons-material/ChevronRight"
-import { Button, Divider, Paper } from "@mui/material"
+import { Button, Divider, Paper, Typography } from "@mui/material"
 import { useQueryParams } from "../useQueryParams"
 import PreviewCard from "./preview-card/preview-card"
 
@@ -60,9 +60,12 @@ export default function PreviewCardList({
 
                 {/* Handle empty case */}
                 {items.length === 0 ? (
-                    <div className="opacity-90 h-full flex items-center justify-center">
+                    <Typography
+                        className="h-full flex items-center justify-center"
+                        sx={{ color: "text.disabled" }}
+                    >
                         No matching jobs found
-                    </div>
+                    </Typography>
                 ) : (
                     ""
                 )}

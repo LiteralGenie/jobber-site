@@ -31,11 +31,17 @@ export default function PreviewCard({
             <Typography
                 variant="body2"
                 className={styles.text}
+                sx={{ color: "text.secondary" }}
                 title={data.company}
             >
                 {data.company}
             </Typography>
-            <Typography variant="body2" className={styles.text} title={date}>
+            <Typography
+                variant="body2"
+                className={styles.text}
+                sx={{ color: "text.secondary" }}
+                title={date}
+            >
                 {date}
             </Typography>
         </Button>
