@@ -93,7 +93,6 @@ export async function getJobs(
                         ';'
                     )`.as("duties")
                 )
-                // .select(sql<string>`GROUP_CONCAT(duties_raw, ';')`.as("duties"))
                 .selectAll("post")
 
             filters.duties?.include.forEach(({ id }) => {
