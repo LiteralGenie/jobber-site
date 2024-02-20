@@ -26,7 +26,7 @@ export function SkillFilter({ skills, form }: SkillFilterProps) {
                     controlName="skills.include"
                     options={skills}
                     disabledOptions={excluded.map((v) => v.id)}
-                    label="Included"
+                    label="Include"
                     ariaLabel="Skills Included"
                 />
 
@@ -35,7 +35,7 @@ export function SkillFilter({ skills, form }: SkillFilterProps) {
                     controlName="skills.exclude"
                     options={skills}
                     disabledOptions={included.map((v) => v.id)}
-                    label="Excluded"
+                    label="Exclude"
                     ariaLabel="Skills Excluded"
                 />
             </div>

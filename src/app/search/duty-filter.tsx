@@ -10,7 +10,7 @@ export interface DutyFilterProps {
 }
 
 export function DutyFilter({ duties, form }: DutyFilterProps) {
-    const { control, watch } = form
+    const { watch } = form
     const included = watch("duties.include")
     const excluded = watch("duties.exclude")
 
@@ -26,7 +26,7 @@ export function DutyFilter({ duties, form }: DutyFilterProps) {
                     controlName="duties.include"
                     options={duties}
                     disabledOptions={excluded.map((v) => v.id)}
-                    label="Included"
+                    label="Include"
                     ariaLabel="Duties Included"
                 />
 
@@ -35,7 +35,7 @@ export function DutyFilter({ duties, form }: DutyFilterProps) {
                     controlName="duties.exclude"
                     options={duties}
                     disabledOptions={included.map((v) => v.id)}
-                    label="Excluded"
+                    label="Exclude"
                     ariaLabel="Duties Excluded"
                 />
             </div>
