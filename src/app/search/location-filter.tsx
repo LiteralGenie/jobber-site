@@ -39,11 +39,12 @@ type LocationMap = Record<LocationDto["id"], LocationDto>
 type Field = ControllerRenderProps<SearchFormData, "locations">
 
 function getOptionLabel(opt: CityOrStateOption): string {
+    const stateAbbrv = STATE_ABBREVIATIONS[opt.state] || opt.state
+
     if ("city" in opt) {
-        const stateAbbrv = STATE_ABBREVIATIONS[opt.state] || opt.state
         return `${opt.city}, ${stateAbbrv} (${opt.count})`
     } else {
-        return `${opt.state} (${opt.count})`
+        return `${opt.state} - ${stateAbbrv} (${opt.count})`
     }
 }
 
