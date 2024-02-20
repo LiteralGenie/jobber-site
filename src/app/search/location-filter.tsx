@@ -1,3 +1,4 @@
+import { STATE_ABBREVIATIONS } from "@/lib/format-utils"
 import { Autocomplete, TextField } from "@mui/material"
 import { alphabetical, group } from "radash"
 import { useMemo } from "react"
@@ -7,7 +8,6 @@ import {
     UseFormReturn,
 } from "react-hook-form"
 import { LocationDto } from "../api/locations/route"
-import { STATE_ABBREVIATIONS } from "./constants"
 import { SearchFormData } from "./types"
 
 export interface LocationFilterProps {

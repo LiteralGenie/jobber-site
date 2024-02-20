@@ -25,8 +25,8 @@ export interface JobData {
 
     locations: Array<{
         id: number
-        country: string | null
-        state: string | null
+        country: string
+        state: string
         city: string | null
     }>
 }

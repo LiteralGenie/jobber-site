@@ -133,7 +133,6 @@ export async function getJobs(
                 )
                 .selectAll("post")
 
-            console.log("filters", filters)
             const cities = filters.locations?.cities
             if (cities?.length) {
                 query = query.where("lbl.id_location", "in", cities)

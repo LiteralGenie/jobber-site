@@ -7,8 +7,8 @@ export interface RequirementsProps {
 export default function Requirements({ skills }: RequirementsProps) {
     return (
         <div>
-            <p>Requirements</p>
-            <ul>
+            <p className="mb-1">Requirements:</p>
+            <ul className="mt-0">
                 {skills.map((sk) => (
                     <li key={sk.id}>{sk.name}</li>
                 ))}
