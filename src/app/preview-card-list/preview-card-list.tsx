@@ -67,6 +67,7 @@ export default function PreviewCardList({
                     onClick={() => onPageChange(null)}
                     disabled={prevPageCursor === null}
                     aria-label="First page"
+                    title="First page"
                 >
                     <FirstPage />
                 </Button>
@@ -76,6 +77,7 @@ export default function PreviewCardList({
                     onClick={() => onPageChange(prevPageCursor)}
                     disabled={prevPageCursor === null}
                     aria-label="Previous page"
+                    title="Previous page"
                 >
                     <ChevronLeft />
                 </Button>
@@ -85,6 +87,7 @@ export default function PreviewCardList({
                     onClick={() => onPageChange(nextPageCursor)}
                     disabled={nextPageCursor === null}
                     aria-label="Next page"
+                    title="Next page"
                 >
                     <ChevronRight />
                 </Button>
@@ -94,6 +97,7 @@ export default function PreviewCardList({
                     onClick={() => onPageChange(pageSize)}
                     disabled={nextPageCursor === null}
                     aria-label="Last page"
+                    title="Last page"
                 >
                     <LastPage />
                 </Button>

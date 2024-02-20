@@ -1,13 +1,21 @@
 import { MONTHS } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
-import { Card, CardContent, Divider, Paper } from "@mui/material"
-import { useRef } from "react"
+import LaunchIcon from "@mui/icons-material/Launch"
+import LinkIcon from "@mui/icons-material/Link"
+import {
+    Button,
+    Card,
+    CardContent,
+    Divider,
+    Paper,
+    Snackbar,
+} from "@mui/material"
+import { useRef, useState } from "react"
 import styles from "./details.module.scss"
 import Locations from "./locations"
 import Requirements from "./requirements"
 import Responsibilities from "./responsibilities"
 import { useScrollTop } from "./useScrollTop"
-
 export interface DetailsProps {
     data: JobData
 }
@@ -16,8 +24,31 @@ export default function Details({ data }: DetailsProps) {
     const scrollElRef = useRef<HTMLDivElement>(null)
     const { scrollTop } = useScrollTop(scrollElRef)
 
+    const [snackbarOpen, setSnackbarOpen] = useState(false)
+
+    function handleLinkCopy() {
+        // @fixme: use url fragment instead of updating cursor
+        //         this is janky when navigating back and forth between pages
+        const url = new URL(window.location.href)
+        url.searchParams.set("after", data.rowid.toString())
+        navigator.clipboard.writeText(url.href)
+
+        setSnackbarOpen(true)
+    }
+
+    const handleSnackbarClose = (
+        event: React.SyntheticEvent | Event,
+        reason?: string
+    ) => {
+        if (reason === "clickaway") {
+            return
+        }
+
+        setSnackbarOpen(false)
+    }
+
     return (
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden flex flex-col">
             <Card
                 ref={scrollElRef}
                 variant="outlined"
@@ -41,7 +72,7 @@ export default function Details({ data }: DetailsProps) {
                         <div>{data.company}</div>
                         <div>{humanizeDate(data.time_created)}</div>
 
-                        <Divider className="my-4 " />
+                        <Divider className="my-4" />
 
                         <div>{`Salary: ${humanizeSalary(data.salary)}`}</div>
                         <div>
@@ -49,7 +80,7 @@ export default function Details({ data }: DetailsProps) {
                             {data.clearance ? " Yes" : " No"}
                         </div>
 
-                        <Divider className="my-4 " />
+                        <Divider className="my-4" />
                         <Locations
                             locationType={data.location_type}
                             locations={data.locations}
@@ -57,7 +88,7 @@ export default function Details({ data }: DetailsProps) {
 
                         {Object.keys(data.skills).length ? (
                             <div>
-                                <Divider className="my-4 " />
+                                <Divider className="my-4" />
                                 <Requirements skills={data.skills} />
                             </div>
                         ) : (
@@ -66,7 +97,7 @@ export default function Details({ data }: DetailsProps) {
 
                         {data.duties.length ? (
                             <div>
-                                <Divider className="my-4 " />
+                                <Divider className="my-4" />
                                 <Responsibilities
                                     responsibilities={data.duties}
                                 />
@@ -76,15 +107,57 @@ export default function Details({ data }: DetailsProps) {
                         )}
                     </header>
 
-                    <Divider className="mt-4 " />
+                    <Divider className="mt-4" />
 
                     <CardContent>
-                        <section className="whitespace-pre-wrap">
+                        <section className="whitespace-pre-wrap pb-8">
                             {humanizeDescription(data.description)}
                         </section>
                     </CardContent>
                 </article>
+
+                <Paper
+                    elevation={1}
+                    className="absolute bottom-0 w-full p-2 flex justify-between"
+                >
+                    <div className="flex gap-2">
+                        <Button
+                            size="large"
+                            color="primary"
+                            variant="outlined"
+                            aria-label="Copy link"
+                            title="Copy link"
+                            onClick={handleLinkCopy}
+                        >
+                            <LinkIcon />
+                        </Button>
+                    </div>
+
+                    <div className="flex gap-2">
+                        <Button
+                            href={`https://www.indeed.com/viewjob?jk=${data.id}`}
+                            target="_blank"
+                            rel="noopener"
+                            size="large"
+                            color="primary"
+                            variant="contained"
+                            endIcon={<LaunchIcon />}
+                            aria-label="Apply on Indeed"
+                            title="Apply on Indeed"
+                        >
+                            Indeed
+                        </Button>
+                    </div>
+                </Paper>
             </Card>
+
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={1500}
+                onClose={handleSnackbarClose}
+                message="Copied link to clipboard"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            />
         </div>
     )
 }

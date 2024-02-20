@@ -56,7 +56,7 @@ export default function Search({ duties, skills, locations }: SearchProps) {
         >
             <Paper
                 variant="outlined"
-                className="overflow-auto flex flex-col px-2"
+                className="overflow-auto flex flex-col p-2"
             >
                 {/* Text filter */}
                 <div className="px-2">
@@ -110,13 +110,28 @@ export default function Search({ duties, skills, locations }: SearchProps) {
             </Paper>
 
             <div className="pt-6 flex justify-end gap-2">
-                <Button variant="outlined" onClick={handleClear}>
+                <Button
+                    variant="outlined"
+                    onClick={handleClear}
+                    aria-label="Clear filters"
+                    title="Clear filters"
+                >
                     Clear
                 </Button>
-                <Button variant="outlined" onClick={handleReset}>
+                <Button
+                    variant="outlined"
+                    onClick={handleReset}
+                    aria-label="Reset changes"
+                    title="Reset changes"
+                >
                     Reset
                 </Button>
-                <Button variant="contained" type="submit">
+                <Button
+                    variant="contained"
+                    type="submit"
+                    aria-label="Submit"
+                    title="Apply filters"
+                >
                     Submit
                 </Button>
             </div>
