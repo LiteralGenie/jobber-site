@@ -133,14 +133,17 @@ export async function getJobs(
                 )
                 .selectAll("post")
 
-            const cities = filters.locations?.cities
-            if (cities?.length) {
-                query = query.where("lbl.id_location", "in", cities)
-            }
-
-            const states = filters.locations?.states
-            if (states?.length) {
-                query = query.where("loc.state", "in", states)
+            const states = filters.locations?.states || []
+            const cities = filters.locations?.cities || []
+            if (states.length || cities.length) {
+                query = query.where((eb) =>
+                    eb.or([
+                        ...cities.map((city) =>
+                            eb("lbl.id_location", "=", city)
+                        ),
+                        ...states.map((state) => eb("loc.state", "=", state)),
+                    ])
+                )
             }
 
             return query
