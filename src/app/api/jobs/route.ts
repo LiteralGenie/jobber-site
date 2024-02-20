@@ -114,7 +114,6 @@ export async function getJobs(
 
             return query
         })
-
         // Create column with duty array
         .with("with_locations", (eb) => {
             let query = eb
@@ -134,8 +133,15 @@ export async function getJobs(
                 )
                 .selectAll("post")
 
-            if (filters.locations?.length) {
-                query = query.where("lbl.id_location", "in", filters.locations)
+            console.log("filters", filters)
+            const cities = filters.locations?.cities
+            if (cities?.length) {
+                query = query.where("lbl.id_location", "in", cities)
+            }
+
+            const states = filters.locations?.states
+            if (states?.length) {
+                query = query.where("loc.state", "in", states)
             }
 
             return query

@@ -12,11 +12,14 @@ export interface SearchFormData<NullType = ""> {
         onsite: boolean
         remote: boolean
     }
+    locations: {
+        cities: number[]
+        states: string[]
+    }
     text: string
     salary: number
     clearance: "any" | "no" | "yes"
     after: number | NullType
-    locations: number[]
 }
 
 export interface SearchParamsData {

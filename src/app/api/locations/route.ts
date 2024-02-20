@@ -1,6 +1,6 @@
 import { db } from "@/database/db"
 
-// @hack: Backend data is kinda messy so manually curate the location filter options
+// @jank: Backend data is kinda messy so manually curate the location filter options
 //        (eg LLM won't respect requested order (country, state, city) or will use abbreviations (USA))
 //        This won't affect the details pane, only dropdown options in search filters
 const COUNTRY_WHITELIST = ["United States"]
@@ -8,6 +8,7 @@ const COUNTRY_WHITELIST = ["United States"]
 const STATE_WHITELIST = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming", ]
 
 export interface LocationDto {
+    id: number
     country: string
     state: string
     city: string | null

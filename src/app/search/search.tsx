@@ -4,11 +4,13 @@ import { Button, Divider, TextField } from "@mui/material"
 import { FormEvent } from "react"
 import { useForm } from "react-hook-form"
 import { DutyDto } from "../api/duties/route"
+import { LocationDto } from "../api/locations/route"
 import { SkillDto } from "../api/skills/route"
 import { useQueryParams } from "../useQueryParams"
 import { ClearanceFilter } from "./clearance-filter"
 import { DutyFilter } from "./duty-filter"
 import { LocationFilter } from "./location-filter"
+import { LocationTypeFilter } from "./location-type-filter"
 import styles from "./search.module.scss"
 import { SkillFilter } from "./skill-filter"
 import { SearchFormData } from "./types"
@@ -17,9 +19,10 @@ import { SEARCH_FORM_DEFAULT, useSearchForm } from "./useSearchForm"
 export interface SearchProps {
     duties: DutyDto[]
     skills: SkillDto[]
+    locations: LocationDto[]
 }
 
-export default function Search({ duties, skills }: SearchProps) {
+export default function Search({ duties, skills, locations }: SearchProps) {
     const queryParams = useQueryParams()
 
     const { getDefaultFromUrl, serializeForm } = useSearchForm()
@@ -27,7 +30,7 @@ export default function Search({ duties, skills }: SearchProps) {
     const form = useForm<SearchFormData>({
         defaultValues: getDefaultFromUrl(),
     })
-    const { register, getValues, reset, setValue } = form
+    const { register, getValues, reset } = form
 
     // POST form data and update query params
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -62,6 +65,11 @@ export default function Search({ duties, skills }: SearchProps) {
                         {...register("text")}
                     />
                 </div>
+
+                <div className="pb-2 pt-4">
+                    <LocationFilter form={form} locations={locations} />
+                </div>
+
                 <div className="pb-2 pt-4">
                     <Divider />
                 </div>
@@ -92,7 +100,7 @@ export default function Search({ duties, skills }: SearchProps) {
                             type="number"
                             {...register("salary")}
                         />
-                        <LocationFilter form={form} />
+                        <LocationTypeFilter form={form} />
                         <ClearanceFilter form={form} />
                     </div>
                 </section>

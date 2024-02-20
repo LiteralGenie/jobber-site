@@ -16,10 +16,13 @@ export const SEARCH_FORM_DEFAULT = () =>
             onsite: false,
             remote: false,
         },
+        locations: {
+            cities: [],
+            states: [],
+        },
         text: "",
         salary: 0,
         clearance: "any",
-        locations: [],
     } as Omit<SearchFormData, "after">)
 
 export function useSearchForm() {
@@ -40,7 +43,10 @@ function getDefaultFromUrl(queryParams: ReturnType<typeof useQueryParams>) {
     result.text = fromUrl.text || fromDefault.text
     result.salary = fromUrl.salary || fromDefault.salary
     result.clearance = fromUrl.clearance || fromDefault.clearance
-    result.locations = fromUrl.locations || fromDefault.locations
+    result.locations.cities =
+        fromUrl.locations?.cities || fromDefault.locations.cities
+    result.locations.states =
+        fromUrl.locations?.states || fromDefault.locations.states
     result.skills.include = fromUrl.skills?.include.length
         ? fromUrl.skills.include
         : fromDefault.skills.include
@@ -103,6 +109,14 @@ function serializeForm(data: SearchFormData): URLSearchParams {
         params.append("duties-excluded", id.toString())
     )
 
+    data.locations.cities.forEach((id) => {
+        params.append("cities", id.toString())
+    })
+
+    data.locations.states.forEach((state) => {
+        params.append("states", state)
+    })
+
     return params
 }
 
@@ -133,10 +147,10 @@ export function deserializeParams(
         data["clearance"] = clearance
     }
 
-    const locations = params.getAll("locations")
+    const locationTypes = params.getAll("locationTypes")
     data.locationTypes = { hybrid: false, onsite: false, remote: false }
     ;(["hybrid", "onsite", "remote"] as const).forEach((key) => {
-        data.locationTypes![key] = locations.includes(key)
+        data.locationTypes![key] = locationTypes.includes(key)
     })
 
     const skillsIncluded = params.getAll("skills-included")
@@ -206,6 +220,13 @@ export function deserializeParams(
             return { id }
         })
     }
+
+    const cities = params
+        .getAll("cities")
+        .map((idString) => parseInt(idString))
+        .filter((id) => !isNaN(id))
+    const states = params.getAll("states")
+    data.locations = { cities, states }
 
     return data
 }
