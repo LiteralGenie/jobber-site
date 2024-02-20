@@ -1,5 +1,6 @@
 import { getDuties } from "./api/duties/route"
 import { getJobs } from "./api/jobs/route"
+import { getLocations } from "./api/locations/route"
 import { getSkills } from "./api/skills/route"
 import { HomeContainer } from "./home-container"
 import { deserializeParams } from "./search/useSearchForm"
@@ -11,8 +12,16 @@ export default async function Page({ searchParams }: PageProps) {
 
     const duties = await getDuties()
     const skills = await getSkills()
+    const locations = await getLocations()
 
-    return <HomeContainer jobsInit={jobs} duties={duties} skills={skills} />
+    return (
+        <HomeContainer
+            jobsInit={jobs}
+            duties={duties}
+            skills={skills}
+            locations={locations}
+        />
+    )
 }
 
 function pageParamsToUrlParams(

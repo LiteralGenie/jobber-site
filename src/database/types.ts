@@ -1,15 +1,18 @@
-import { Generated, Selectable } from "kysely"
+import { Generated } from "kysely"
 
 export type SqliteBool = 1 | 0
 
 export interface Database {
     duties: DutiesTable
     skills: SkillsTable
+    locations: LocationsTable
 
     indeed_posts: IndeedPostsTable
+    indeed_label_statuses: IndeedLabelStatusesTable
     indeed_skill_labels: IndeedSkillLabelsTable
     indeed_duty_labels: IndeedDutyLabelsTable
     indeed_misc_labels: IndeedMiscLabelsTable
+    indeed_location_labels: IndeedLocationLabelsTable
 }
 
 export interface DutiesTable {
@@ -22,6 +25,14 @@ export interface SkillsTable {
     id: Generated<number>
 
     name: string
+}
+
+export interface LocationsTable {
+    id: number
+
+    country: string
+    state: string
+    city: string
 }
 
 export interface IndeedPostsTable {
@@ -61,8 +72,16 @@ export interface IndeedMiscLabelsTable {
     clearance: SqliteBool
 }
 
-export type Skill = Selectable<SkillsTable>
-export type Duty = Selectable<DutiesTable>
-export type IndeedPost = Selectable<IndeedPostsTable>
-export type IndeedSkillLabel = Selectable<IndeedSkillLabelsTable>
-export type IndeedDutyLabel = Selectable<IndeedDutyLabelsTable>
+export interface IndeedLabelStatusesTable {
+    id_post: string
+
+    has_skills: SqliteBool
+    has_duties: SqliteBool
+    has_misc: SqliteBool
+    has_locations: SqliteBool
+}
+
+export interface IndeedLocationLabelsTable {
+    id_post: string
+    id_location: number
+}

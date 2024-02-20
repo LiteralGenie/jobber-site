@@ -9,8 +9,8 @@ export default function Responsibilities({
 }: ResponsibilitiesProps) {
     return (
         <div>
-            <p>Responsibilities</p>
-            <ul>
+            <p className="mb-1">Responsibilities:</p>
+            <ul className="mt-0">
                 {responsibilities.map((r) => (
                     <li key={r.id}>{r.name}</li>
                 ))}

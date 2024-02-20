@@ -1,7 +1,9 @@
+import { MONTHS } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
 import { Card, CardContent, Divider, Paper } from "@mui/material"
 import { useRef } from "react"
 import styles from "./details.module.scss"
+import Locations from "./locations"
 import Requirements from "./requirements"
 import Responsibilities from "./responsibilities"
 import { useScrollTop } from "./useScrollTop"
@@ -37,27 +39,38 @@ export default function Details({ data }: DetailsProps) {
                     <header>
                         <div>{data.title}</div>
                         <div>{data.company}</div>
-                        <div>{data.time_created}</div>
+                        <div>{humanizeDate(data.time_created)}</div>
 
                         <Divider className="my-4 " />
 
-                        <div>{`Location: ${humanizeLocationType(
-                            data.location_type
-                        )}`}</div>
                         <div>{`Salary: ${humanizeSalary(data.salary)}`}</div>
                         <div>
                             Clearance required:{" "}
                             {data.clearance ? " Yes" : " No"}
                         </div>
 
+                        <Divider className="my-4 " />
+                        <Locations
+                            locationType={data.location_type}
+                            locations={data.locations}
+                        />
+
                         {Object.keys(data.skills).length ? (
-                            <Requirements skills={data.skills} />
+                            <div>
+                                <Divider className="my-4 " />
+                                <Requirements skills={data.skills} />
+                            </div>
                         ) : (
                             ""
                         )}
 
                         {data.duties.length ? (
-                            <Responsibilities responsibilities={data.duties} />
+                            <div>
+                                <Divider className="my-4 " />
+                                <Responsibilities
+                                    responsibilities={data.duties}
+                                />
+                            </div>
                         ) : (
                             ""
                         )}
@@ -76,12 +89,6 @@ export default function Details({ data }: DetailsProps) {
     )
 }
 
-const LOCATION_TYPE_NAMES = {
-    is_hybrid: "Hybrid",
-    is_onsite: "On-site",
-    is_remote: "Remote",
-} as const
-
 function humanizeDescription(description: JobData["description"]) {
     let result = description.trim()
 
@@ -94,21 +101,6 @@ function humanizeDescription(description: JobData["description"]) {
     return result
 }
 
-function humanizeLocationType(locationType: JobData["location_type"]) {
-    const types = Object.entries(locationType)
-        .filter(([_, isAllowed]) => !!isAllowed)
-        .map(
-            ([type, _]) =>
-                LOCATION_TYPE_NAMES[type as keyof JobData["location_type"]]
-        )
-
-    if (types.length) {
-        return types.join(" | ")
-    } else {
-        return "???"
-    }
-}
-
 function humanizeSalary(salary: JobData["salary"]): string {
     if (!salary) {
         return "???"
@@ -117,4 +109,12 @@ function humanizeSalary(salary: JobData["salary"]): string {
     } else {
         return `${salary.min}+`
     }
+}
+
+function humanizeDate(isoDate: string): string {
+    const d = new Date(isoDate)
+    const month = MONTHS[d.getMonth()].long
+    const day = d.getDate()
+    const year = d.getFullYear()
+    return `${month} ${day}, ${year}`
 }

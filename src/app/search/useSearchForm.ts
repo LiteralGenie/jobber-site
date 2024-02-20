@@ -11,10 +11,14 @@ export const SEARCH_FORM_DEFAULT = () =>
             include: [],
             exclude: [],
         },
-        locations: {
+        locationTypes: {
             hybrid: false,
             onsite: false,
             remote: false,
+        },
+        locations: {
+            cities: [],
+            states: [],
         },
         text: "",
         salary: 0,
@@ -39,7 +43,10 @@ function getDefaultFromUrl(queryParams: ReturnType<typeof useQueryParams>) {
     result.text = fromUrl.text || fromDefault.text
     result.salary = fromUrl.salary || fromDefault.salary
     result.clearance = fromUrl.clearance || fromDefault.clearance
-    result.locations = fromUrl.locations || fromDefault.locations
+    result.locations.cities =
+        fromUrl.locations?.cities || fromDefault.locations.cities
+    result.locations.states =
+        fromUrl.locations?.states || fromDefault.locations.states
     result.skills.include = fromUrl.skills?.include.length
         ? fromUrl.skills.include
         : fromDefault.skills.include
@@ -52,6 +59,7 @@ function getDefaultFromUrl(queryParams: ReturnType<typeof useQueryParams>) {
     result.duties.exclude = fromUrl.duties?.exclude.length
         ? fromUrl.duties.exclude
         : fromDefault.duties.exclude
+    result.locationTypes = fromUrl.locationTypes || fromDefault.locationTypes
 
     return result
 }
@@ -81,9 +89,9 @@ function serializeForm(data: SearchFormData): URLSearchParams {
         params.set("salary", data.salary.toString())
     }
 
-    if (data.locations.hybrid) params.append("locations", "hybrid")
-    if (data.locations.onsite) params.append("locations", "onsite")
-    if (data.locations.remote) params.append("locations", "remote")
+    if (data.locationTypes.hybrid) params.append("location-types", "hybrid")
+    if (data.locationTypes.onsite) params.append("location-types", "onsite")
+    if (data.locationTypes.remote) params.append("location-types", "remote")
 
     data.skills.include.forEach(({ id }) =>
         params.append("skills-included", id.toString())
@@ -100,6 +108,14 @@ function serializeForm(data: SearchFormData): URLSearchParams {
     data.duties.exclude.forEach(({ id }) =>
         params.append("duties-excluded", id.toString())
     )
+
+    data.locations.cities.forEach((id) => {
+        params.append("cities", id.toString())
+    })
+
+    data.locations.states.forEach((state) => {
+        params.append("states", state)
+    })
 
     return params
 }
@@ -131,10 +147,10 @@ export function deserializeParams(
         data["clearance"] = clearance
     }
 
-    const locations = params.getAll("locations")
-    data.locations = { hybrid: false, onsite: false, remote: false }
+    const locationTypes = params.getAll("locationTypes")
+    data.locationTypes = { hybrid: false, onsite: false, remote: false }
     ;(["hybrid", "onsite", "remote"] as const).forEach((key) => {
-        data.locations![key] = locations.includes(key)
+        data.locationTypes![key] = locationTypes.includes(key)
     })
 
     const skillsIncluded = params.getAll("skills-included")
@@ -204,6 +220,13 @@ export function deserializeParams(
             return { id }
         })
     }
+
+    const cities = params
+        .getAll("cities")
+        .map((idString) => parseInt(idString))
+        .filter((id) => !isNaN(id))
+    const states = params.getAll("states")
+    data.locations = { cities, states }
 
     return data
 }

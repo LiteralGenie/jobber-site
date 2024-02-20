@@ -19,26 +19,18 @@ export async function getJobs(
 ): Promise<JobsDto> {
     let query = db
         // Create column with skill array
-        .with("with_skills", (eb) => {
-            let query = eb
+        .with("with_labels", (eb) =>
+            eb
                 .selectFrom("indeed_posts as post")
-                .innerJoin("skills as sk", (join) => join.onTrue())
-                .leftJoin("indeed_skill_labels as lbl", (join) =>
-                    join
-                        .onRef("lbl.id_post", "=", "post.id")
-                        .onRef("lbl.id_skill", "=", "sk.id")
+                .innerJoin(
+                    "indeed_label_statuses as status",
+                    "status.id_post",
+                    "post.id"
                 )
-                .groupBy("post.id")
-                .select(
-                    sql<string>`sk.id || ':' || sk.name || ':' || lbl.label`.as(
-                        "skills"
-                    )
-                )
-                .havingRef(
-                    (eb) => eb.fn.countAll(),
-                    "=",
-                    (eb) => eb.fn.count("label")
-                )
+                .where("status.has_skills", "=", 1)
+                .where("status.has_duties", "=", 1)
+                .where("status.has_locations", "=", 1)
+                .where("status.has_misc", "=", 1)
                 .select([
                     "post.rowid",
                     "post.id",
@@ -47,6 +39,24 @@ export async function getJobs(
                     "post.company",
                     "post.time_created",
                 ])
+        )
+        .with("with_skills", (eb) => {
+            let query = eb
+                .selectFrom("with_labels as post")
+                .innerJoin("skills as sk", (join) => join.onTrue())
+                .leftJoin("indeed_skill_labels as lbl", (join) =>
+                    join
+                        .onRef("lbl.id_post", "=", "post.id")
+                        .onRef("lbl.id_skill", "=", "sk.id")
+                )
+                .groupBy("post.id")
+                .select(
+                    sql<string>`GROUP_CONCAT(
+                        sk.id || ':' || sk.name || ':' || lbl.label, 
+                        ';'
+                    )`.as("skills")
+                )
+                .selectAll("post")
 
             filters.skills?.include.forEach(({ id }) => {
                 query = query.having(
@@ -78,14 +88,10 @@ export async function getJobs(
                 )
                 .groupBy("post.id")
                 .select(
-                    sql<string>`dt.id || ':' || dt.name || ':' || lbl.label`.as(
-                        "duties"
-                    )
-                )
-                .havingRef(
-                    (eb) => eb.fn.countAll(),
-                    "=",
-                    (eb) => eb.fn.count("label")
+                    sql<string>`GROUP_CONCAT(
+                        dt.id || ':' || dt.name || ':' || lbl.label, 
+                        ';'
+                    )`.as("duties")
                 )
                 .selectAll("post")
 
@@ -107,10 +113,44 @@ export async function getJobs(
 
             return query
         })
+        // Create column with duty array
+        .with("with_locations", (eb) => {
+            let query = eb
+                .selectFrom("with_duties as post")
+                .leftJoin(
+                    "indeed_location_labels as lbl",
+                    "lbl.id_post",
+                    "post.id"
+                )
+                .leftJoin("locations as loc", "loc.id", "lbl.id_location")
+                .groupBy("post.id")
+                .select(
+                    sql<string>`GROUP_CONCAT(
+                            loc.id || ':' || loc.country || ':' || loc.state || ':' || loc.city,
+                            ';'
+                        )`.as("locations")
+                )
+                .selectAll("post")
+
+            const states = filters.locations?.states || []
+            const cities = filters.locations?.cities || []
+            if (states.length || cities.length) {
+                query = query.where((eb) =>
+                    eb.or([
+                        ...cities.map((city) =>
+                            eb("lbl.id_location", "=", city)
+                        ),
+                        ...states.map((state) => eb("loc.state", "=", state)),
+                    ])
+                )
+            }
+
+            return query
+        })
         // Include salary / clearance labels
         .with("with_misc", (eb) =>
             eb
-                .selectFrom("with_duties as post")
+                .selectFrom("with_locations as post")
                 .innerJoin(
                     "indeed_misc_labels as lbl",
                     "lbl.id_post",
@@ -145,19 +185,19 @@ export async function getJobs(
         query = query.where("post.clearance", "=", val)
     }
 
-    const locFilters: Array<"is_hybrid" | "is_onsite" | "is_remote"> = []
-    if (filters.locations?.hybrid) {
-        locFilters.push("is_hybrid")
+    const locTypeFilters: Array<"is_hybrid" | "is_onsite" | "is_remote"> = []
+    if (filters.locationTypes?.hybrid) {
+        locTypeFilters.push("is_hybrid")
     }
-    if (filters.locations?.onsite) {
-        locFilters.push("is_onsite")
+    if (filters.locationTypes?.onsite) {
+        locTypeFilters.push("is_onsite")
     }
-    if (filters.locations?.remote) {
-        locFilters.push("is_remote")
+    if (filters.locationTypes?.remote) {
+        locTypeFilters.push("is_remote")
     }
-    if (locFilters.length) {
+    if (locTypeFilters.length) {
         query = query.where((eb) =>
-            eb.or(locFilters.map((loc) => eb(loc, "=", 1)))
+            eb.or(locTypeFilters.map((loc) => eb(loc, "=", 1)))
         )
     }
 
@@ -167,6 +207,7 @@ export async function getJobs(
     if (filters.after !== undefined) {
         queryAfter = queryAfter.where("rowid", "<=", filters.after)
     }
+    // console.log("queryAfter", queryAfter.compile().sql)
 
     const rowsAfter = await queryAfter.execute()
 
@@ -224,6 +265,18 @@ export async function getJobs(
                             },
                         ]
                     }),
+                locations:
+                    d.locations === null
+                        ? []
+                        : d.locations
+                              .split(";")
+                              .map((text) => text.split(":"))
+                              .flatMap(([id, country, state, city]) => ({
+                                  id: parseInt(id),
+                                  country,
+                                  state,
+                                  city,
+                              })),
             } satisfies JobData)
     )
 

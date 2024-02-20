@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 import { DutyDto } from "./api/duties/route"
 import { JobsDto } from "./api/jobs/route"
+import { LocationDto } from "./api/locations/route"
 import { SkillDto } from "./api/skills/route"
 import Details from "./details/details"
 import styles from "./home.module.scss"
@@ -15,9 +16,15 @@ export interface HomeProps {
     jobsInit: JobsDto
     duties: DutyDto[]
     skills: SkillDto[]
+    locations: LocationDto[]
 }
 
-export default function Home({ jobsInit, duties, skills }: HomeProps) {
+export default function Home({
+    jobsInit,
+    duties,
+    skills,
+    locations,
+}: HomeProps) {
     const queryKey = useQueryParams().get().toString()
 
     const { data } = useQuery({
@@ -34,7 +41,7 @@ export default function Home({ jobsInit, duties, skills }: HomeProps) {
     return (
         <div className="flex justify-center h-full">
             <div className={styles["container"]}>
-                <Search duties={duties} skills={skills} />
+                <Search duties={duties} skills={skills} locations={locations} />
 
                 <PreviewCardList
                     activeIndex={activeIndex}

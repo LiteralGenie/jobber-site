@@ -7,6 +7,10 @@ colored preview highlight
 colors in general
 mobile view
 tests
+title / favicon
+deploy
+    nginx
+    readme
 
 =============
 Dream
@@ -22,4 +26,14 @@ sorting
     maybe an argument for salary / yoe
 benefits
 show matching search term in preview card
-location filters
+pwa
+swagger docs
+ep for db export
+put active card index in url fragment
+
+=============
+Bugs
+=============
+
+handle no-results
+reset active card index on search
