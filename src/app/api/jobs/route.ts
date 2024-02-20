@@ -169,11 +169,26 @@ export async function getJobs(
         .selectAll()
 
     if (filters.text) {
-        query = query.where(
-            sql`LOWER(post.title) || '\n\n' || LOWER(post.text)`,
-            "regexp",
-            filters.text.toLowerCase()
-        )
+        let isRegexp = true
+        try {
+            new RegExp(filters.text)
+        } catch {
+            isRegexp = false
+        }
+
+        if (isRegexp) {
+            query = query.where(
+                sql`LOWER(post.title) || '\n\n' || LOWER(post.text)`,
+                "regexp",
+                filters.text.toLowerCase()
+            )
+        } else {
+            query = query.where(
+                sql`LOWER(post.title) || '\n\n' || LOWER(post.text)`,
+                "=",
+                `%${filters.text.toLowerCase()}%`
+            )
+        }
     }
 
     if (filters.salary) {
