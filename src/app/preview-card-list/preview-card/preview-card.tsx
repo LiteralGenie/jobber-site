@@ -1,4 +1,5 @@
 import { MONTHS } from "@/lib/format-utils"
+import { useHash } from "@/lib/hooks/useHash"
 import { JobData } from "@/lib/job-data"
 import LaunchIcon from "@mui/icons-material/Launch"
 import { Button, IconButton, Typography, alpha } from "@mui/material"
@@ -6,25 +7,21 @@ import { useMemo } from "react"
 import styles from "./preview-card.module.scss"
 export interface PreviewCardProps {
     job: JobData
-    onClick: () => void
-
-    isActive: boolean
 }
 
-export default function PreviewCard({
-    job,
-    onClick,
-    isActive,
-}: PreviewCardProps) {
+export default function PreviewCard({ job }: PreviewCardProps) {
     const date = useMemo(() => humanizeDate(job.time_created), [job])
+
+    const { hash } = useHash()
+    const isActive = useMemo(() => hash === job.id, [hash])
 
     return (
         <div className="w-full flex justify-between">
             {/* Overview */}
             <Button
                 disabled={isActive}
+                href={`#${job.id}`}
                 className={styles.button}
-                onClick={onClick}
                 sx={{
                     borderColor: isActive ? "info.main" : "transparent",
                     "&.MuiButton-root:hover": {

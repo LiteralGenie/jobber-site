@@ -34,12 +34,7 @@ export default function Details({ job }: DetailsProps) {
     }, [job])
 
     function handleLinkCopy() {
-        // @fixme: use url fragment instead of updating cursor
-        //         this is janky when navigating back and forth between pages
-        const url = new URL(window.location.href)
-        url.searchParams.set("after", job.rowid.toString())
-        navigator.clipboard.writeText(url.href)
-
+        navigator.clipboard.writeText(window.location.href)
         setSnackbarOpen(true)
     }
 

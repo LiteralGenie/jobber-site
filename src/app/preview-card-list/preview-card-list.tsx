@@ -8,16 +8,12 @@ import { useQueryParams } from "../useQueryParams"
 import PreviewCard from "./preview-card/preview-card"
 
 export interface PreviewCardListProps {
-    activeIndex: number
-    setActiveIndex: (idx: number) => void
     jobs: JobData[]
     prevPageCursor: number | null
     nextPageCursor: number | null
 }
 
 export default function PreviewCardList({
-    activeIndex,
-    setActiveIndex,
     jobs,
     prevPageCursor,
     nextPageCursor,
@@ -29,7 +25,7 @@ export default function PreviewCardList({
     // but the last-page button that uses this will be disabled in that case anyways
     const pageSize = useMemo(() => jobs.length, [jobs])
 
-    function onPageChange(cursor: number | null) {
+    function handlePageChange(cursor: number | null) {
         const update = queryParams.get()
 
         if (cursor === null) {
@@ -56,11 +52,7 @@ export default function PreviewCardList({
             >
                 {jobs.map((item, idx) => (
                     <div key={item.id} className="rounded-md">
-                        <PreviewCard
-                            job={item}
-                            onClick={() => setActiveIndex(idx)}
-                            isActive={idx === activeIndex}
-                        />
+                        <PreviewCard job={item} />
 
                         {idx == jobs.length - 1 ? "" : <Divider />}
                     </div>
@@ -84,7 +76,7 @@ export default function PreviewCardList({
                 <Button
                     variant="outlined"
                     className="border rounded-md h-12"
-                    onClick={() => onPageChange(null)}
+                    onClick={() => handlePageChange(null)}
                     disabled={prevPageCursor === null}
                     aria-label="First page"
                     title="First page"
@@ -94,7 +86,7 @@ export default function PreviewCardList({
                 <Button
                     variant="outlined"
                     className="border rounded-md h-12"
-                    onClick={() => onPageChange(prevPageCursor)}
+                    onClick={() => handlePageChange(prevPageCursor)}
                     disabled={prevPageCursor === null}
                     aria-label="Previous page"
                     title="Previous page"
@@ -104,7 +96,7 @@ export default function PreviewCardList({
                 <Button
                     variant="outlined"
                     className="border rounded-md h-12"
-                    onClick={() => onPageChange(nextPageCursor)}
+                    onClick={() => handlePageChange(nextPageCursor)}
                     disabled={nextPageCursor === null}
                     aria-label="Next page"
                     title="Next page"
@@ -114,7 +106,7 @@ export default function PreviewCardList({
                 <Button
                     variant="outlined"
                     className="border rounded-md h-12"
-                    onClick={() => onPageChange(pageSize)}
+                    onClick={() => handlePageChange(pageSize)}
                     disabled={nextPageCursor === null}
                     aria-label="Last page"
                     title="Last page"
