@@ -16,6 +16,7 @@ import Locations from "./locations"
 import Requirements from "./requirements"
 import Responsibilities from "./responsibilities"
 import { useScrollTop } from "./useScrollTop"
+
 export interface DetailsProps {
     job: JobData
 }

@@ -13,7 +13,7 @@ import Home, { HomeProps } from "./home"
 // const rootElement = document.getElementById("app")
 
 const darkTheme = createTheme({
-    // Angular Material palletes
+    // Angular Material palettes
     // https://github.com/angular/components/blob/350ab4d87eddc534cbae6ab7d2933fd773e7f965/src/material/core/theming/_palette.scss
     palette: {
         mode: "dark",

@@ -25,11 +25,13 @@ sorting
 benefits
 show matching search term in preview card
 pwa
-swagger docs
 ep for db export
 put active card index in url fragment
 stats
     heatmap
+top bar
+    faq
+    api swagger docs
 
 =============
 Bugs
