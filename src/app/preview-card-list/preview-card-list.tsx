@@ -66,6 +66,7 @@ export default function PreviewCardList({
                     className="border rounded-md h-12"
                     onClick={() => onPageChange(null)}
                     disabled={prevPageCursor === null}
+                    aria-label="First page"
                 >
                     <FirstPage />
                 </Button>
@@ -74,6 +75,7 @@ export default function PreviewCardList({
                     className="border rounded-md h-12"
                     onClick={() => onPageChange(prevPageCursor)}
                     disabled={prevPageCursor === null}
+                    aria-label="Previous page"
                 >
                     <ChevronLeft />
                 </Button>
@@ -82,6 +84,7 @@ export default function PreviewCardList({
                     className="border rounded-md h-12"
                     onClick={() => onPageChange(nextPageCursor)}
                     disabled={nextPageCursor === null}
+                    aria-label="Next page"
                 >
                     <ChevronRight />
                 </Button>
@@ -90,6 +93,7 @@ export default function PreviewCardList({
                     className="border rounded-md h-12"
                     onClick={() => onPageChange(pageSize)}
                     disabled={nextPageCursor === null}
+                    aria-label="Last page"
                 >
                     <LastPage />
                 </Button>

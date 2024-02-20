@@ -11,6 +11,7 @@ title / favicon
 deploy
     nginx
     readme
+    auto scrape
 
 =============
 Dream
@@ -30,6 +31,8 @@ pwa
 swagger docs
 ep for db export
 put active card index in url fragment
+stats
+    heatmap
 
 =============
 Bugs
