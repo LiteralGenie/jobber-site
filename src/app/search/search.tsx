@@ -30,15 +30,19 @@ export default function Search({ duties, skills, locations }: SearchProps) {
     const form = useForm<SearchFormData>({
         defaultValues: getDefaultFromUrl(),
     })
-    const { register, getValues, reset } = form
+    const { register, getValues, reset, formState } = form
 
     // POST form data and update query params
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
 
-        const update = serializeForm(getValues())
+        const data = getValues()
+
+        const update = serializeForm(data)
         update.delete("after")
         queryParams.set(update)
+
+        reset(data)
     }
 
     function handleReset() {
@@ -131,6 +135,7 @@ export default function Search({ duties, skills, locations }: SearchProps) {
                     type="submit"
                     aria-label="Submit"
                     title="Apply filters"
+                    disabled={!formState.isDirty}
                 >
                     Submit
                 </Button>

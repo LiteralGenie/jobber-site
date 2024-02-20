@@ -1,3 +1,4 @@
+import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
 function getHash(): string {
@@ -13,11 +14,11 @@ export function useHash() {
     //        https://github.com/vercel/next.js/discussions/49465#discussioncomment-7034208
     //        Why does nextjs make reading anything url related so hard...
     const [isClient, setIsClient] = useState(false)
-
     useEffect(() => {
         setIsClient(true)
     }, [])
 
+    // Update hash on `window.location.hash = ...` calls
     useEffect(() => {
         if (!isClient) {
             return
@@ -31,6 +32,13 @@ export function useHash() {
             window.removeEventListener("hashchange", handleHashChange)
         }
     }, [isClient])
+
+    // Update hash when router wipes it out
+    // (which doesn't trigger hashchange events)
+    const params = useSearchParams()
+    useEffect(() => {
+        setHash(getHash())
+    }, [params])
 
     return {
         hash: isClient ? hash : "",
