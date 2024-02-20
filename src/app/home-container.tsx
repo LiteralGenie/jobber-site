@@ -17,6 +17,8 @@ const darkTheme = createTheme({
         mode: "dark",
     },
     components: {
+        // @fixme: Is this needed for tailwind interop?
+        //         https://mui.com/material-ui/integrations/interoperability/#tailwind-css
         // MuiPopover: {
         //     defaultProps: {
         //         container: rootElement,

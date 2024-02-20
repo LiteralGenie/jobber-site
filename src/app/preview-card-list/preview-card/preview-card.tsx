@@ -19,19 +19,27 @@ export default function PreviewCard({
     const date = useMemo(() => humanizeDate(data.time_created), [data])
 
     return (
-        <Button disabled={isActive} className={styles.button} onClick={onClick}>
+        <Button
+            disabled={isActive}
+            className={styles.button}
+            onClick={onClick}
+            sx={{ borderColor: isActive ? "secondary.main" : "transparent" }}
+        >
             <Typography
                 variant="body1"
                 className={`${styles.text} ${styles.title}`}
                 fontWeight="inherit"
                 title={data.title}
+                sx={{
+                    color: isActive ? "secondary.main" : "",
+                }}
             >
                 {data.title}
             </Typography>
             <Typography
                 variant="body2"
                 className={styles.text}
-                sx={{ color: "text.secondary" }}
+                sx={{ color: isActive ? "secondary.main" : "text.secondary" }}
                 title={data.company}
             >
                 {data.company}
@@ -39,7 +47,7 @@ export default function PreviewCard({
             <Typography
                 variant="body2"
                 className={styles.text}
-                sx={{ color: "text.secondary" }}
+                sx={{ color: isActive ? "secondary.main" : "text.secondary" }}
                 title={date}
             >
                 {date}
