@@ -3,6 +3,7 @@ import { FirstPage, LastPage } from "@mui/icons-material"
 import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import ChevronRight from "@mui/icons-material/ChevronRight"
 import { Button, Divider, Paper, Typography } from "@mui/material"
+import { useEffect, useMemo, useRef } from "react"
 import { useQueryParams } from "../useQueryParams"
 import PreviewCard from "./preview-card/preview-card"
 
@@ -17,11 +18,16 @@ export interface PreviewCardListProps {
 export default function PreviewCardList({
     activeIndex,
     setActiveIndex,
-    jobs: items,
+    jobs,
     prevPageCursor,
     nextPageCursor,
 }: PreviewCardListProps) {
     const queryParams = useQueryParams()
+    const scrollElRef = useRef<HTMLDivElement>(null)
+
+    // This can be smaller for last page
+    // but the last-page button that uses this will be disabled in that case anyways
+    const pageSize = useMemo(() => jobs.length, [jobs])
 
     function onPageChange(cursor: number | null) {
         const update = queryParams.get()
@@ -35,9 +41,10 @@ export default function PreviewCardList({
         queryParams.set(update)
     }
 
-    // This can be smaller for last page
-    // but the last-page button that uses this will be disabled in that case anyways
-    const pageSize = items.length
+    // Reset scroll position on content change
+    useEffect(() => {
+        scrollElRef.current?.scrollTo({ top: 0 })
+    }, [jobs])
 
     return (
         <section className="min-h-0 h-full flex flex-col">
@@ -45,8 +52,9 @@ export default function PreviewCardList({
             <Paper
                 variant="outlined"
                 className="min-h-0 h-full overflow-auto flex flex-col"
+                ref={scrollElRef}
             >
-                {items.map((item, idx) => (
+                {jobs.map((item, idx) => (
                     <div key={item.id} className="rounded-md">
                         <PreviewCard
                             data={item}
@@ -54,12 +62,12 @@ export default function PreviewCardList({
                             isActive={idx === activeIndex}
                         />
 
-                        {idx == items.length - 1 ? "" : <Divider />}
+                        {idx == jobs.length - 1 ? "" : <Divider />}
                     </div>
                 ))}
 
                 {/* Handle empty case */}
-                {items.length === 0 ? (
+                {jobs.length === 0 ? (
                     <Typography
                         className="h-full flex items-center justify-center"
                         sx={{ color: "text.disabled" }}

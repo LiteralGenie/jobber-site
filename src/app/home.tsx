@@ -2,7 +2,7 @@
 
 import { JobData } from "@/lib/job-data"
 import { useQuery } from "@tanstack/react-query"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { DutyDto } from "./api/duties/route"
 import { JobsDto } from "./api/jobs/route"
 import { LocationDto } from "./api/locations/route"
@@ -44,6 +44,11 @@ export default function Home({
         () => data.jobs[activeIndex],
         [data, activeIndex]
     )
+
+    // Reset active index on pagination / filter change
+    useEffect(() => {
+        setActiveIndex(0)
+    }, [queryKey])
 
     return (
         <div className="flex justify-center h-full">

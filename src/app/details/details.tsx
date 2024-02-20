@@ -10,7 +10,7 @@ import {
     Paper,
     Snackbar,
 } from "@mui/material"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import styles from "./details.module.scss"
 import Locations from "./locations"
 import Requirements from "./requirements"
@@ -20,17 +20,22 @@ export interface DetailsProps {
     job: JobData
 }
 
-export default function Details({ job: data }: DetailsProps) {
+export default function Details({ job }: DetailsProps) {
     const scrollElRef = useRef<HTMLDivElement>(null)
     const { scrollTop } = useScrollTop(scrollElRef)
 
     const [snackbarOpen, setSnackbarOpen] = useState(false)
 
+    // Reset scroll position on content change
+    useEffect(() => {
+        scrollElRef.current?.scrollTo({ top: 0 })
+    }, [job])
+
     function handleLinkCopy() {
         // @fixme: use url fragment instead of updating cursor
         //         this is janky when navigating back and forth between pages
         const url = new URL(window.location.href)
-        url.searchParams.set("after", data.rowid.toString())
+        url.searchParams.set("after", job.rowid.toString())
         navigator.clipboard.writeText(url.href)
 
         setSnackbarOpen(true)
@@ -62,44 +67,43 @@ export default function Details({ job: data }: DetailsProps) {
                     }
                 >
                     <Paper elevation={6} className={styles["header-text"]}>
-                        {data.title}
+                        {job.title}
                     </Paper>
                 </div>
 
                 <article className="h-full p-4">
                     <header>
-                        <div>{data.title}</div>
-                        <div>{data.company}</div>
-                        <div>{humanizeDate(data.time_created)}</div>
+                        <div>{job.title}</div>
+                        <div>{job.company}</div>
+                        <div>{humanizeDate(job.time_created)}</div>
 
                         <Divider className="my-4" />
 
-                        <div>{`Salary: ${humanizeSalary(data.salary)}`}</div>
+                        <div>{`Salary: ${humanizeSalary(job.salary)}`}</div>
                         <div>
-                            Clearance required:{" "}
-                            {data.clearance ? " Yes" : " No"}
+                            Clearance required: {job.clearance ? " Yes" : " No"}
                         </div>
 
                         <Divider className="my-4" />
                         <Locations
-                            locationType={data.location_type}
-                            locations={data.locations}
+                            locationType={job.location_type}
+                            locations={job.locations}
                         />
 
-                        {Object.keys(data.skills).length ? (
+                        {Object.keys(job.skills).length ? (
                             <div>
                                 <Divider className="my-4" />
-                                <Requirements skills={data.skills} />
+                                <Requirements skills={job.skills} />
                             </div>
                         ) : (
                             ""
                         )}
 
-                        {data.duties.length ? (
+                        {job.duties.length ? (
                             <div>
                                 <Divider className="my-4" />
                                 <Responsibilities
-                                    responsibilities={data.duties}
+                                    responsibilities={job.duties}
                                 />
                             </div>
                         ) : (
@@ -111,7 +115,7 @@ export default function Details({ job: data }: DetailsProps) {
 
                     <CardContent>
                         <section className="whitespace-pre-wrap pb-8">
-                            {humanizeDescription(data.description)}
+                            {humanizeDescription(job.description)}
                         </section>
                     </CardContent>
                 </article>
@@ -135,7 +139,7 @@ export default function Details({ job: data }: DetailsProps) {
 
                     <div className="flex gap-2">
                         <Button
-                            href={`https://www.indeed.com/viewjob?jk=${data.id}`}
+                            href={`https://www.indeed.com/viewjob?jk=${job.id}`}
                             target="_blank"
                             rel="noopener"
                             size="large"
