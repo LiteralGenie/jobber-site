@@ -50,9 +50,11 @@ function humanizeLocationType(locationType: JobData["location_type"]) {
 
 function humanizeLocation(loc: JobData["locations"][number]): string {
     if (loc.city) {
-        const stateAbbrv = STATE_ABBREVIATIONS[loc.state] || loc.state
+        const stateAbbrv = STATE_ABBREVIATIONS[loc.state ?? ""] ?? loc.state
         return `${loc.city}, ${stateAbbrv}`
-    } else {
+    } else if (loc.state) {
         return loc.state
+    } else {
+        return "???"
     }
 }
