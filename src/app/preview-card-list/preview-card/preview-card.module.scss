@@ -7,10 +7,11 @@
 }
 
 .button {
-    @apply flex flex-col p-4 h-full w-full text-start overflow-hidden;
+    @apply grow p-4 pr-2 h-full w-full;
+    @apply flex flex-col text-start overflow-hidden;
 
-    // Hide border by default
-    @apply border-2 border-transparent border-solid;
+    // Border is always active but only colored for active card (via sx, not this file)
+    @apply border-2 border-solid;
 
     // Undo mui defaults
     color: inherit;
@@ -26,8 +27,6 @@
 
     // Highlight post being shown in details pane
     &:global(.Mui-disabled) {
-        border-color: inherit;
-
         .text {
             font-weight: bold;
         }

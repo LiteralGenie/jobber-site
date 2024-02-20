@@ -2,15 +2,13 @@
 MVP
 =============
 
-indeed link
-colored preview highlight
-colors in general
 mobile view
 tests
 title / favicon
 deploy
     nginx
     readme
+    auto scrape
 
 =============
 Dream
@@ -27,13 +25,15 @@ sorting
 benefits
 show matching search term in preview card
 pwa
-swagger docs
 ep for db export
-put active card index in url fragment
+stats
+    heatmap
+top bar
+    faq
+    api swagger docs
+highlight matches in autocomplete
 
 =============
 Bugs
 =============
 
-handle no-results
-reset active card index on search

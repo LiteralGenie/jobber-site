@@ -1,6 +1,6 @@
 "use-client"
 
-import { Button, Divider, TextField } from "@mui/material"
+import { Button, Divider, Paper, TextField } from "@mui/material"
 import { FormEvent } from "react"
 import { useForm } from "react-hook-form"
 import { DutyDto } from "../api/duties/route"
@@ -30,15 +30,19 @@ export default function Search({ duties, skills, locations }: SearchProps) {
     const form = useForm<SearchFormData>({
         defaultValues: getDefaultFromUrl(),
     })
-    const { register, getValues, reset } = form
+    const { register, getValues, reset, formState } = form
 
     // POST form data and update query params
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
 
-        const update = serializeForm(getValues())
+        const data = getValues()
+
+        const update = serializeForm(data)
         update.delete("after")
         queryParams.set(update)
+
+        reset(data)
     }
 
     function handleReset() {
@@ -54,7 +58,10 @@ export default function Search({ duties, skills, locations }: SearchProps) {
             onSubmit={(ev) => handleSubmit(ev)}
             className={styles["search-form"]}
         >
-            <div className="overflow-auto flex flex-col">
+            <Paper
+                variant="outlined"
+                className="overflow-auto flex flex-col p-2"
+            >
                 {/* Text filter */}
                 <div className="px-2">
                     <TextField
@@ -104,16 +111,32 @@ export default function Search({ duties, skills, locations }: SearchProps) {
                         <ClearanceFilter form={form} />
                     </div>
                 </section>
-            </div>
+            </Paper>
 
             <div className="pt-6 flex justify-end gap-2">
-                <Button variant="outlined" onClick={handleClear}>
+                <Button
+                    variant="outlined"
+                    onClick={handleClear}
+                    aria-label="Clear filters"
+                    title="Clear filters"
+                >
                     Clear
                 </Button>
-                <Button variant="outlined" onClick={handleReset}>
+                <Button
+                    variant="outlined"
+                    onClick={handleReset}
+                    aria-label="Reset changes"
+                    title="Reset changes"
+                >
                     Reset
                 </Button>
-                <Button variant="contained" type="submit">
+                <Button
+                    variant="contained"
+                    type="submit"
+                    aria-label="Submit"
+                    title="Apply filters"
+                    disabled={!formState.isDirty}
+                >
                     Submit
                 </Button>
             </div>

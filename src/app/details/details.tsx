@@ -1,7 +1,17 @@
-import { MONTHS } from "@/lib/format-utils"
+import { MONTHS, commafy } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
-import { Card, CardContent, Divider, Paper } from "@mui/material"
-import { useRef } from "react"
+import LaunchIcon from "@mui/icons-material/Launch"
+import LinkIcon from "@mui/icons-material/Link"
+import {
+    Button,
+    Card,
+    CardContent,
+    Divider,
+    Paper,
+    Snackbar,
+    Typography,
+} from "@mui/material"
+import { useEffect, useRef, useState } from "react"
 import styles from "./details.module.scss"
 import Locations from "./locations"
 import Requirements from "./requirements"
@@ -9,15 +19,38 @@ import Responsibilities from "./responsibilities"
 import { useScrollTop } from "./useScrollTop"
 
 export interface DetailsProps {
-    data: JobData
+    job: JobData
 }
 
-export default function Details({ data }: DetailsProps) {
+export default function Details({ job }: DetailsProps) {
     const scrollElRef = useRef<HTMLDivElement>(null)
     const { scrollTop } = useScrollTop(scrollElRef)
 
+    const [snackbarOpen, setSnackbarOpen] = useState(false)
+
+    // Reset scroll position on content change
+    useEffect(() => {
+        scrollElRef.current?.scrollTo({ top: 0 })
+    }, [job])
+
+    function handleLinkCopy() {
+        navigator.clipboard.writeText(window.location.href)
+        setSnackbarOpen(true)
+    }
+
+    const handleSnackbarClose = (
+        event: React.SyntheticEvent | Event,
+        reason?: string
+    ) => {
+        if (reason === "clickaway") {
+            return
+        }
+
+        setSnackbarOpen(false)
+    }
+
     return (
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden flex flex-col">
             <Card
                 ref={scrollElRef}
                 variant="outlined"
@@ -31,44 +64,57 @@ export default function Details({ data }: DetailsProps) {
                     }
                 >
                     <Paper elevation={6} className={styles["header-text"]}>
-                        {data.title}
+                        {job.title}
                     </Paper>
                 </div>
 
                 <article className="h-full p-4">
                     <header>
-                        <div>{data.title}</div>
-                        <div>{data.company}</div>
-                        <div>{humanizeDate(data.time_created)}</div>
+                        {/* Basic info */}
+                        <Typography>{job.title}</Typography>
+                        <Typography>{job.company}</Typography>
+                        <Typography>
+                            {humanizeDate(job.time_created)}
+                        </Typography>
 
-                        <Divider className="my-4 " />
+                        <Divider className="my-4" />
 
-                        <div>{`Salary: ${humanizeSalary(data.salary)}`}</div>
+                        {/* Salary */}
                         <div>
-                            Clearance required:{" "}
-                            {data.clearance ? " Yes" : " No"}
+                            <span className="font-bold">Salary:</span>
+                            <span>{" " + humanizeSalary(job.salary)}</span>
                         </div>
 
-                        <Divider className="my-4 " />
-                        <Locations
-                            locationType={data.location_type}
-                            locations={data.locations}
-                        />
+                        {/* Clearance */}
+                        <div>
+                            <span className="font-bold">
+                                Clearance required:
+                            </span>
+                            <span>{job.clearance ? " Yes" : " No"}</span>
+                        </div>
 
-                        {Object.keys(data.skills).length ? (
+                        <Divider className="my-4" />
+
+                        {/* Locations */}
+                        <Locations
+                            locationType={job.location_type}
+                            locations={job.locations}
+                        />
+                        {Object.keys(job.skills).length ? (
                             <div>
-                                <Divider className="my-4 " />
-                                <Requirements skills={data.skills} />
+                                <Divider className="my-4" />
+                                <Requirements skills={job.skills} />
                             </div>
                         ) : (
                             ""
                         )}
 
-                        {data.duties.length ? (
+                        {/* Responsibilities */}
+                        {job.duties.length ? (
                             <div>
-                                <Divider className="my-4 " />
+                                <Divider className="my-4" />
                                 <Responsibilities
-                                    responsibilities={data.duties}
+                                    responsibilities={job.duties}
                                 />
                             </div>
                         ) : (
@@ -76,15 +122,59 @@ export default function Details({ data }: DetailsProps) {
                         )}
                     </header>
 
-                    <Divider className="mt-4 " />
+                    <Divider className="mt-4 mb-4" />
 
-                    <CardContent>
-                        <section className="whitespace-pre-wrap">
-                            {humanizeDescription(data.description)}
+                    {/* Description */}
+                    <span className="font-bold">Description:</span>
+                    <CardContent className="pt-2">
+                        <section className="whitespace-pre-wrap pb-8">
+                            {humanizeDescription(job.description)}
                         </section>
                     </CardContent>
                 </article>
+
+                <Paper
+                    elevation={1}
+                    className="absolute bottom-0 w-full p-2 flex justify-between"
+                >
+                    <div className="flex gap-2">
+                        <Button
+                            size="large"
+                            color="primary"
+                            variant="outlined"
+                            aria-label="Copy link"
+                            title="Copy link"
+                            onClick={handleLinkCopy}
+                        >
+                            <LinkIcon />
+                        </Button>
+                    </div>
+
+                    <div className="flex gap-2">
+                        <Button
+                            href={`https://www.indeed.com/viewjob?jk=${job.id}`}
+                            target="_blank"
+                            rel="noopener"
+                            size="large"
+                            color="primary"
+                            variant="contained"
+                            endIcon={<LaunchIcon />}
+                            aria-label="Apply on Indeed"
+                            title="Apply on Indeed"
+                        >
+                            Indeed
+                        </Button>
+                    </div>
+                </Paper>
             </Card>
+
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={1500}
+                onClose={handleSnackbarClose}
+                message="Copied link to clipboard"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            />
         </div>
     )
 }
@@ -105,9 +195,9 @@ function humanizeSalary(salary: JobData["salary"]): string {
     if (!salary) {
         return "???"
     } else if (salary.max) {
-        return `${salary.min} - ${salary.max}`
+        return `${commafy(salary.min)} - ${commafy(salary.max)}`
     } else {
-        return `${salary.min}+`
+        return `${commafy(salary.min)}`
     }
 }
 

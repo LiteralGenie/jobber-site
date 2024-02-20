@@ -64,3 +64,8 @@ export const STATE_ABBREVIATIONS = {
     Wisconsin: "WI",
     Wyoming: "WY",
 } as Record<string, string>
+
+// https://stackoverflow.com/a/2901298
+export function commafy(n: number) {
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+}

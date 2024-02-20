@@ -1,16 +1,8 @@
 import { FormLabel } from "@mui/material"
-import { useMemo } from "react"
-import {
-    Controller,
-    ControllerRenderProps,
-    UseFormReturn,
-} from "react-hook-form"
+import { UseFormReturn } from "react-hook-form"
 import { SkillDto } from "../api/skills/route"
 import MultiSelect from "./multi-select"
 import { SearchFormData } from "./types"
-
-type Field<T extends "skills.include" | "skills.exclude" = any> =
-    ControllerRenderProps<SearchFormData, T>
 
 export interface SkillFilterProps {
     skills: SkillDto[]
@@ -18,26 +10,9 @@ export interface SkillFilterProps {
 }
 
 export function SkillFilter({ skills, form }: SkillFilterProps) {
-    const { control, watch } = form
+    const { watch } = form
     const included = watch("skills.include")
     const excluded = watch("skills.exclude")
-
-    const options = useMemo(
-        () =>
-            skills.map(({ id, name }) => ({
-                value: id.toString(),
-                name,
-            })),
-        [skills]
-    )
-
-    function handleChange(field: Field, ids: string[]) {
-        field.onChange(
-            ids.map((v) => ({
-                id: parseInt(v),
-            }))
-        )
-    }
 
     return (
         <section>
@@ -46,40 +21,22 @@ export function SkillFilter({ skills, form }: SkillFilterProps) {
             </div>
 
             <div className="flex flex-col gap-4">
-                <Controller
-                    name="skills.include"
-                    control={control}
-                    render={({ field }) => (
-                        <MultiSelect
-                            id="skills-included"
-                            options={options}
-                            disabledOptions={excluded.map((v) =>
-                                v.id.toString()
-                            )}
-                            value={included.map((v) => v.id.toString())}
-                            label="Included"
-                            ariaLabel="Skills Included"
-                            onChange={(ids) => handleChange(field, ids)}
-                        />
-                    )}
+                <MultiSelect
+                    form={form}
+                    controlName="skills.include"
+                    options={skills}
+                    disabledOptions={excluded.map((v) => v.id)}
+                    label="Included"
+                    ariaLabel="Skills Included"
                 />
 
-                <Controller
-                    name="skills.exclude"
-                    control={control}
-                    render={({ field }) => (
-                        <MultiSelect
-                            id="skills-excluded"
-                            options={options}
-                            disabledOptions={included.map((v) =>
-                                v.id.toString()
-                            )}
-                            value={excluded.map((v) => v.id.toString())}
-                            label="Excluded"
-                            ariaLabel="Skills Excluded"
-                            onChange={(ids) => handleChange(field, ids)}
-                        />
-                    )}
+                <MultiSelect
+                    form={form}
+                    controlName="skills.exclude"
+                    options={skills}
+                    disabledOptions={included.map((v) => v.id)}
+                    label="Excluded"
+                    ariaLabel="Skills Excluded"
                 />
             </div>
         </section>

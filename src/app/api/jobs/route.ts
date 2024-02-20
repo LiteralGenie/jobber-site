@@ -12,7 +12,7 @@ export interface JobsDto {
     nextPageCursor: number | null
 }
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = 15
 
 export async function getJobs(
     filters: Partial<SearchFormData<never>>
@@ -215,6 +215,7 @@ export async function getJobs(
         (d) =>
             ({
                 id: d.id,
+                rowid: d.rowid,
 
                 clearance: fromSqliteBool(d.clearance),
                 description: d.text,
