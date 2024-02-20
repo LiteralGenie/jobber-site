@@ -15,11 +15,14 @@ export interface LocationsProps {
 export default function Locations({ locationType, locations }: LocationsProps) {
     return (
         <div>
-            <div>{`Work location: ${humanizeLocationType(locationType)}`}</div>
+            <div>
+                <span className="font-bold">Work location:</span>
+                <span>{" " + humanizeLocationType(locationType)}</span>
+            </div>
 
             {locations.length ? (
                 <div>
-                    <p className="mt-0 mb-1">Locations:</p>
+                    <span className="mt-0 mb-1 font-bold">Locations:</span>
                     <ul className="mt-0">
                         {locations.map((loc) => (
                             <li key={loc.id}>{humanizeLocation(loc)}</li>

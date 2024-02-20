@@ -1,4 +1,4 @@
-import { MONTHS } from "@/lib/format-utils"
+import { MONTHS, commafy } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
 import LaunchIcon from "@mui/icons-material/Launch"
 import LinkIcon from "@mui/icons-material/Link"
@@ -9,6 +9,7 @@ import {
     Divider,
     Paper,
     Snackbar,
+    Typography,
 } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
 import styles from "./details.module.scss"
@@ -74,23 +75,36 @@ export default function Details({ job }: DetailsProps) {
 
                 <article className="h-full p-4">
                     <header>
-                        <div>{job.title}</div>
-                        <div>{job.company}</div>
-                        <div>{humanizeDate(job.time_created)}</div>
+                        {/* Basic info */}
+                        <Typography>{job.title}</Typography>
+                        <Typography>{job.company}</Typography>
+                        <Typography>
+                            {humanizeDate(job.time_created)}
+                        </Typography>
 
                         <Divider className="my-4" />
 
-                        <div>{`Salary: ${humanizeSalary(job.salary)}`}</div>
+                        {/* Salary */}
                         <div>
-                            Clearance required: {job.clearance ? " Yes" : " No"}
+                            <span className="font-bold">Salary:</span>
+                            <span>{" " + humanizeSalary(job.salary)}</span>
+                        </div>
+
+                        {/* Clearance */}
+                        <div>
+                            <span className="font-bold">
+                                Clearance required:
+                            </span>
+                            <span>{job.clearance ? " Yes" : " No"}</span>
                         </div>
 
                         <Divider className="my-4" />
+
+                        {/* Locations */}
                         <Locations
                             locationType={job.location_type}
                             locations={job.locations}
                         />
-
                         {Object.keys(job.skills).length ? (
                             <div>
                                 <Divider className="my-4" />
@@ -100,6 +114,7 @@ export default function Details({ job }: DetailsProps) {
                             ""
                         )}
 
+                        {/* Responsibilities */}
                         {job.duties.length ? (
                             <div>
                                 <Divider className="my-4" />
@@ -112,9 +127,11 @@ export default function Details({ job }: DetailsProps) {
                         )}
                     </header>
 
-                    <Divider className="mt-4" />
+                    <Divider className="mt-4 mb-4" />
 
-                    <CardContent>
+                    {/* Description */}
+                    <span className="font-bold">Description:</span>
+                    <CardContent className="pt-2">
                         <section className="whitespace-pre-wrap pb-8">
                             {humanizeDescription(job.description)}
                         </section>
@@ -183,9 +200,9 @@ function humanizeSalary(salary: JobData["salary"]): string {
     if (!salary) {
         return "???"
     } else if (salary.max) {
-        return `${salary.min} - ${salary.max}`
+        return `${commafy(salary.min)} - ${commafy(salary.max)}`
     } else {
-        return `${salary.min}+`
+        return `${commafy(salary.min)}`
     }
 }
 
