@@ -15,6 +15,7 @@ import styles from "./search.module.scss"
 import { SkillFilter } from "./skill-filter"
 import { SearchFormData } from "./types"
 import { SEARCH_FORM_DEFAULT, useSearchForm } from "./useSearchForm"
+import { YoeFilter } from "./yoe-filter"
 
 export interface SearchProps {
     duties: DutyDto[]
@@ -75,6 +76,15 @@ export default function Search({ duties, skills, locations }: SearchProps) {
 
                 <div className="pb-2 pt-4">
                     <LocationFilter form={form} locations={locations} />
+                </div>
+
+                <div className="pb-2 pt-4">
+                    <Divider />
+                </div>
+
+                {/* Experience filter */}
+                <div className="px-2">
+                    <YoeFilter form={form} />
                 </div>
 
                 <div className="pb-2 pt-4">
