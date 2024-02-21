@@ -18,7 +18,7 @@ export async function getJobs(
     filters: Partial<SearchFormData<never>>
 ): Promise<JobsDto> {
     let query = db
-        // Create column with skill array
+        // Filter for fully-labeled posts
         .with("with_labels", (eb) =>
             eb
                 .selectFrom("indeed_posts as post")
@@ -41,6 +41,7 @@ export async function getJobs(
                     "post.time_created",
                 ])
         )
+        // Skill array column
         .with("with_skills", (eb) => {
             let query = eb
                 .selectFrom("with_labels as post")
@@ -77,7 +78,7 @@ export async function getJobs(
 
             return query
         })
-        // Create column with duty array
+        // Duty array column
         .with("with_duties", (eb) => {
             let query = eb
                 .selectFrom("with_skills as post")
@@ -114,7 +115,7 @@ export async function getJobs(
 
             return query
         })
-        // Create column with duty array
+        // Location array column
         .with("with_locations", (eb) => {
             let query = eb
                 .selectFrom("with_duties as post")
@@ -148,7 +149,7 @@ export async function getJobs(
 
             return query
         })
-        // Include salary / clearance labels
+        // Misc labels
         .with("with_misc", (eb) =>
             eb
                 .selectFrom("with_locations as post")
@@ -166,6 +167,7 @@ export async function getJobs(
                     "lbl.clearance",
                 ])
         )
+        // Years-of-experience column
         .with("with_yoe", (eb) => {
             let query = eb
                 .selectFrom("with_misc as post")
