@@ -20,6 +20,10 @@ export const SEARCH_FORM_DEFAULT = () =>
             cities: [],
             states: [],
         },
+        yoe: {
+            minimum: 0,
+            ignoreNull: false,
+        },
         text: "",
         salary: 0,
         clearance: "any",
@@ -60,6 +64,7 @@ function getDefaultFromUrl(queryParams: ReturnType<typeof useQueryParams>) {
         ? fromUrl.duties.exclude
         : fromDefault.duties.exclude
     result.locationTypes = fromUrl.locationTypes || fromDefault.locationTypes
+    result.yoe = fromUrl.yoe || fromDefault.yoe
 
     return result
 }
@@ -92,6 +97,14 @@ function serializeForm(data: SearchFormData): URLSearchParams {
     if (data.locationTypes.hybrid) params.append("location-types", "hybrid")
     if (data.locationTypes.onsite) params.append("location-types", "onsite")
     if (data.locationTypes.remote) params.append("location-types", "remote")
+
+    if (data.yoe.minimum) {
+        params.append("yoe-minimum", data.yoe.minimum.toString())
+    }
+
+    if (data.yoe.ignoreNull) {
+        params.append("yoe-ignore-null", "yes")
+    }
 
     data.skills.include.forEach(({ id }) =>
         params.append("skills-included", id.toString())
@@ -227,6 +240,18 @@ export function deserializeParams(
         .filter((id) => !isNaN(id))
     const states = params.getAll("states")
     data.locations = { cities, states }
+
+    const yoeRaw = params.get("yoe-minimum")
+    const yoe = yoeRaw ? parseInt(yoeRaw) : NaN
+    data.yoe = { minimum: 0, ignoreNull: false }
+    if (!isNaN(yoe)) {
+        data.yoe.minimum = yoe
+    }
+
+    const yoeIgnoreNull = params.get("yoe-ignore-null")
+    if (yoeIgnoreNull === "yes") {
+        data.yoe.ignoreNull = true
+    }
 
     return data
 }

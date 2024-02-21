@@ -15,6 +15,7 @@ import styles from "./search.module.scss"
 import { SkillFilter } from "./skill-filter"
 import { SearchFormData } from "./types"
 import { SEARCH_FORM_DEFAULT, useSearchForm } from "./useSearchForm"
+import { YoeFilter } from "./yoe-filter"
 
 export interface SearchProps {
     duties: DutyDto[]
@@ -81,6 +82,15 @@ export default function Search({ duties, skills, locations }: SearchProps) {
                     <Divider />
                 </div>
 
+                {/* Experience filter */}
+                <div className="px-2">
+                    <YoeFilter form={form} />
+                </div>
+
+                <div className="pb-2">
+                    <Divider />
+                </div>
+
                 {/* Skill / duty filters */}
                 <div className="px-2">
                     <SkillFilter skills={skills} form={form} />
@@ -113,7 +123,7 @@ export default function Search({ duties, skills, locations }: SearchProps) {
                 </section>
             </Paper>
 
-            <div className="pt-6 flex justify-end gap-2">
+            <div className="pt-4 flex justify-end gap-2">
                 <Button
                     variant="outlined"
                     onClick={handleClear}

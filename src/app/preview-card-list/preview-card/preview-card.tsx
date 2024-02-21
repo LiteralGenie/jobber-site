@@ -3,6 +3,7 @@ import { useHash } from "@/lib/hooks/useHash"
 import { JobData } from "@/lib/job-data"
 import LaunchIcon from "@mui/icons-material/Launch"
 import { Button, IconButton, Typography, alpha } from "@mui/material"
+import Link from "next/link"
 import { useMemo } from "react"
 import styles from "./preview-card.module.scss"
 export interface PreviewCardProps {
@@ -21,6 +22,8 @@ export default function PreviewCard({ job }: PreviewCardProps) {
             <Button
                 disabled={isActive}
                 href={`#${job.id}`}
+                // Back button breaks unless we notify nextjs of navigation
+                component={Link}
                 className={styles.button}
                 sx={{
                     borderColor: isActive ? "info.main" : "transparent",

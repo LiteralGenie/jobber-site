@@ -9,7 +9,7 @@ export interface LocationTypeFilterProps {
 export function LocationTypeFilter({ form }: LocationTypeFilterProps) {
     return (
         <FormGroup>
-            <FormLabel id="location">Location</FormLabel>
+            <FormLabel id="location-type">Location type</FormLabel>
             <FormControlLabel
                 control={<Option form={form} name="locationTypes.onsite" />}
                 label="On-site"
