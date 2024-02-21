@@ -6,7 +6,8 @@
         "dev": "next dev",
         "build": "next experimental-compile",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "build-prod": "bash build-prod.sh"
     },
     "dependencies": {
         "@emotion/react": "^11.11.3",

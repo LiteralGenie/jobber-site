@@ -6,6 +6,8 @@ import { HomeContainer } from "./home-container"
 import { deserializeParams } from "./search/useSearchForm"
 import { PageProps } from "./types"
 
+export const dynamic = "force-dynamic"
+
 export default async function Page({ searchParams }: PageProps) {
     const filters = deserializeParams(pageParamsToUrlParams(searchParams))
     const jobs = await getJobs(filters)
