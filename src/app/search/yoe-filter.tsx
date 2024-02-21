@@ -29,6 +29,9 @@ export function YoeFilter({ form }: YoeFilterProps) {
                     endAdornment: (
                         <InputAdornment position="end">years</InputAdornment>
                     ),
+                    inputProps: {
+                        min: 0,
+                    },
                 }}
                 aria-label="Minimum years of experience"
                 sx={{
