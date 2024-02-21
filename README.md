@@ -50,7 +50,7 @@ cp .env.local.example .env.local
 nano .env.local
 ```
 
-Then start the dev server
+Start the dev server
 
 ```bash
 git clone https://github.com/LiteralGenie/jobber-site
