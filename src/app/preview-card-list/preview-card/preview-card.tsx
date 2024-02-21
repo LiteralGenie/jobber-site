@@ -14,7 +14,7 @@ export default function PreviewCard({ job }: PreviewCardProps) {
     const date = useMemo(() => humanizeDate(job.time_created), [job])
 
     const { hash } = useHash()
-    const isActive = useMemo(() => hash === job.id, [hash])
+    const isActive = useMemo(() => hash === job.id, [hash, job])
 
     return (
         <div className="w-full flex justify-between">

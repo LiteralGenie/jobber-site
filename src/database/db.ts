@@ -2,8 +2,18 @@ import * as SQLite from "better-sqlite3"
 import { Kysely, SqliteDialect } from "kysely"
 import { Database } from "./types"
 
-const conn = new SQLite(process.env.DB_FILE)
-conn.loadExtension("/usr/lib/sqlite3/pcre.so") // https://stackoverflow.com/a/8338515
+const fp =
+    process.env.NODE_ENV === "production"
+        ? "/app/src/data/db.sqlite"
+        : process.env.DB_FILE
+const conn = new (SQLite as any)(fp)
+
+// Load regex extension
+conn.loadExtension(
+    process.env.NODE_ENV === "production"
+        ? "/usr/lib/sqlite3/pcre"
+        : process.env.PCRE_FILE
+)
 
 const dialect = new SqliteDialect({
     database: conn,

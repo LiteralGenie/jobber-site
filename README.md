@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+_A job board with (mostly) working filters_
 
-## Getting Started
+## Docker Setup
 
-First, run the development server:
+Initialize the SQLite database by following the setup instructions for the classifier backend:  
+https://github.com/LiteralGenie/jobber-classifier
+
+Build the Docker image:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Download files
+git clone https://github.com/LiteralGenie/jobber-site
+cd /path/to/jobber-site
+
+# So that nextjs doesn't error out
+touch env.local
+
+# Build Docker image
+docker build -t nextjs-docker .
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Start the server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# -d runs server in background
+# -p sets port to 3001
+# --mount loads the database file generated earlier
+docker run \
+-d \
+-p 3001:3000 \
+--mount type=bind,source="/path/to/jobber-site/src/data/db.sqlite,target=/app/src/data/db.sqlite \
+nextjs-docker
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+$APP will be running at http://localhost:3001
 
-## Learn More
+## Development
 
-To learn more about Next.js, take a look at the following resources:
+Initialize the SQLite database by following the setup instructions for the classifier backend  
+https://github.com/LiteralGenie/jobber-classifier
 
--   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
--   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Install the regex extension for sqlite  
+https://github.com/ralight/sqlite3-pcre  
+Ubuntu users can run `apt install sqlite3-pcre`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Create a `.env.local` file using the `.env.local.example` template.
 
-## Deploy on Vercel
+```bash
+cp .env.local.example .env.local
+nano .env.local
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Start the dev server
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+git clone https://github.com/LiteralGenie/jobber-site
+cd /path/to/jobber-site
+npm install
+npm run dev
+```
+
+$APP will be running at http://localhost:3000
