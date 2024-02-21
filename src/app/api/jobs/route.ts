@@ -184,7 +184,6 @@ export async function getJobs(
                 )
             }
 
-            console.log("yoe", filters.yoe)
             if (ignoreNull) {
                 query = query.where("lbl.yoe", "is not", null)
             }
