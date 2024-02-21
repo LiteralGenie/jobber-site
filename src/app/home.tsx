@@ -3,6 +3,7 @@
 import { useHash } from "@/lib/hooks/useHash"
 import { JobData } from "@/lib/job-data"
 import { useQuery } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
 import { useEffect, useMemo } from "react"
 import { DutyDto } from "./api/duties/route"
 import { JobsDto } from "./api/jobs/route"
@@ -67,20 +68,20 @@ export default function Home({
     })
 
     // Update selection on card click / filter change / pagination
-    const hashData = useHash()
+    const { hash } = useHash()
     const activeJob = useMemo<JobData | undefined>(() => {
-        return data.jobs.find((job) => job.id === hashData.hash)
-    }, [data, hashData])
+        return data.jobs.find((job) => job.id === hash)
+    }, [data, hash])
 
     // Set default selection on pagination / filter change
+    const router = useRouter()
     useEffect(() => {
-        // We don't know if there's an active job (ie url fragment) until after first render
-        //   (because of ssr-related bullshit -- https://github.com/vercel/next.js/discussions/49465)
-        // So wait until then before setting default
-        if (!activeJob && hashData.isHashAvailable) {
-            window.location.hash = data.jobs[0]?.id ?? ""
+        if (!activeJob && hash === "") {
+            const update = new URL(window.location.href)
+            update.hash = data.jobs[0]?.id ?? ""
+            router.replace(update.toString())
         }
-    }, [activeJob, data, hashData])
+    }, [activeJob, data, hash])
 
     return (
         <div className="flex justify-center h-full">
