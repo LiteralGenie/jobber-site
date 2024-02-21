@@ -19,6 +19,10 @@ export interface SearchFormData<NullType = ""> {
     text: string
     salary: number
     clearance: "any" | "no" | "yes"
+    yoe: {
+        minimum: number
+        ignoreNull: boolean | NullType
+    }
     after: number | NullType
 }
 
@@ -30,4 +34,6 @@ export interface SearchParamsData {
     "skills-excluded"?: string[]
     "duties-included"?: string[]
     "duties-excluded"?: string[]
+    "yoe-minimum"?: number
+    "yoe-ignore-null"?: boolean
 }

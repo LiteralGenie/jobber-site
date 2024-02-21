@@ -31,6 +31,7 @@ export async function getJobs(
                 .where("status.has_duties", "=", 1)
                 .where("status.has_locations", "=", 1)
                 .where("status.has_misc", "=", 1)
+                .where("status.has_yoe", "=", 1)
                 .select([
                     "post.rowid",
                     "post.id",
@@ -165,7 +166,32 @@ export async function getJobs(
                     "lbl.clearance",
                 ])
         )
-        .selectFrom("with_misc as post")
+        .with("with_yoe", (eb) => {
+            let query = eb
+                .selectFrom("with_misc as post")
+                .leftJoin("indeed_yoe_labels as lbl", "lbl.id_post", "post.id")
+                .selectAll("post")
+                .select("lbl.yoe")
+
+            const { minimum, ignoreNull } = filters.yoe ?? {}
+            if (minimum) {
+                query = query.where((eb) =>
+                    eb(
+                        eb.fn.coalesce("lbl.yoe", sql<number>`99`),
+                        ">=",
+                        minimum
+                    )
+                )
+            }
+
+            console.log("yoe", filters.yoe)
+            if (ignoreNull) {
+                query = query.where("lbl.yoe", "is not", null)
+            }
+
+            return query
+        })
+        .selectFrom("with_yoe as post")
         .selectAll()
 
     if (filters.text) {
@@ -236,6 +262,7 @@ export async function getJobs(
                 description: d.text,
                 company: d.company,
                 title: d.title,
+                yoe: d.yoe,
 
                 location_type: {
                     is_hybrid: fromSqliteBool(d.is_hybrid),

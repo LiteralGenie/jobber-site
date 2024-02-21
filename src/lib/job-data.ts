@@ -7,12 +7,11 @@ export interface JobData {
     clearance: boolean
     company: string
     description: string
-    time_created: IsoDate
-    title: string
-
-    // optionals
     location_type: LocationType
     salary: SalaryRange | null
+    time_created: IsoDate
+    title: string
+    yoe: number | null
 
     skills: Array<{
         id: number
