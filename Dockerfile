@@ -18,7 +18,7 @@ RUN \
 COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
+ENV NODE_ENV build
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
@@ -34,5 +34,6 @@ WORKDIR /server
 EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
+ENV NODE_ENV production
 
 CMD ["node", "server.js"]

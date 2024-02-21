@@ -23,7 +23,10 @@ Start the server:
 
 ```bash
 # Listens on port 3001
-docker run -d -p 3000:3001 nextjs-docker
+docker run \
+-p 3000:3001 \
+--mount type=bind,source="$(pwd)"/src/data/db.sqlite,target=/app/src/data/db.sqlite \
+nextjs-docker
 ```
 
 $APP will be running at http://localhost:3001
