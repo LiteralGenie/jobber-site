@@ -27,13 +27,9 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-RUN mkdir /server
-RUN cp -a ./.next/standalone/. /server/
-WORKDIR /server
-
 EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 ENV NODE_ENV production
 
-CMD ["node", "server.js"]
+CMD ["sh", "run.sh"]

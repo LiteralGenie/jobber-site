@@ -5,11 +5,15 @@ import { Database } from "./types"
 const fp =
     process.env.NODE_ENV === "production"
         ? "/app/src/data/db.sqlite"
-        : "./src/data/db.sqlite"
+        : process.env.DB_FILE
 const conn = new (SQLite as any)(fp)
 
-// Load regex extension (from ubuntu's sqlite3-pcre package)
-conn.loadExtension("/usr/lib/sqlite3/pcre")
+// Load regex extension
+conn.loadExtension(
+    process.env.NODE_ENV === "production"
+        ? "/usr/lib/sqlite3/pcre"
+        : process.env.PCRE_FILE
+)
 
 const dialect = new SqliteDialect({
     database: conn,
