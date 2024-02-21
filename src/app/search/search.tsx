@@ -123,7 +123,7 @@ export default function Search({ duties, skills, locations }: SearchProps) {
                 </section>
             </Paper>
 
-            <div className="pt-6 flex justify-end gap-2">
+            <div className="pt-4 flex justify-end gap-2">
                 <Button
                     variant="outlined"
                     onClick={handleClear}

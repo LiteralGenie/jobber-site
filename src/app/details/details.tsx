@@ -54,7 +54,7 @@ export default function Details({ job }: DetailsProps) {
             <Card
                 ref={scrollElRef}
                 variant="outlined"
-                className="overflow-auto h-full"
+                className="overflow-y-auto h-full flex flex-col"
             >
                 <div
                     className={
@@ -134,51 +134,48 @@ export default function Details({ job }: DetailsProps) {
                         )}
                     </header>
 
-                    <Divider className="mt-4 mb-4" />
+                    <Divider className="my-4" />
 
                     {/* Description */}
                     <span className="font-bold">Description:</span>
                     <CardContent className="pt-2">
-                        <section className="whitespace-pre-wrap pb-8">
+                        <section className="whitespace-pre-wrap">
                             {humanizeDescription(job.description)}
                         </section>
                     </CardContent>
                 </article>
-
-                <Paper
-                    elevation={1}
-                    className="absolute bottom-0 w-full p-2 flex justify-between"
-                >
-                    <div className="flex gap-2">
-                        <Button
-                            size="large"
-                            color="primary"
-                            variant="outlined"
-                            aria-label="Copy link"
-                            title="Copy link"
-                            onClick={handleLinkCopy}
-                        >
-                            <LinkIcon />
-                        </Button>
-                    </div>
-
-                    <div className="flex gap-2">
-                        <Button
-                            href={`https://www.indeed.com/viewjob?jk=${job.id}`}
-                            target="_blank"
-                            rel="noopener"
-                            size="large"
-                            color="primary"
-                            variant="contained"
-                            endIcon={<LaunchIcon />}
-                            aria-label="Apply on Indeed"
-                            title="Apply on Indeed"
-                        >
-                            Indeed
-                        </Button>
-                    </div>
-                </Paper>
             </Card>
+
+            <Paper elevation={1} className="w-full p-2 flex justify-between">
+                <div className="flex gap-2">
+                    <Button
+                        size="large"
+                        color="primary"
+                        variant="outlined"
+                        aria-label="Copy link"
+                        title="Copy link"
+                        onClick={handleLinkCopy}
+                    >
+                        <LinkIcon />
+                    </Button>
+                </div>
+
+                <div className="flex gap-2">
+                    <Button
+                        href={`https://www.indeed.com/viewjob?jk=${job.id}`}
+                        target="_blank"
+                        rel="noopener"
+                        size="large"
+                        color="primary"
+                        variant="contained"
+                        endIcon={<LaunchIcon />}
+                        aria-label="Apply on Indeed"
+                        title="Apply on Indeed"
+                    >
+                        Indeed
+                    </Button>
+                </div>
+            </Paper>
 
             <Snackbar
                 open={snackbarOpen}
