@@ -5,10 +5,10 @@ import { JobData } from "@/lib/job-data"
 import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo } from "react"
-import { DutyDto } from "./api/duties/route"
-import { JobsDto } from "./api/jobs/route"
-import { LocationDto } from "./api/locations/route"
-import { SkillDto } from "./api/skills/route"
+import { DutyDto } from "./api/duties/handler"
+import { JobsDto } from "./api/jobs/handler"
+import { LocationDto } from "./api/locations/handler"
+import { SkillDto } from "./api/skills/handler"
 import Details from "./details/details"
 import { EmptyDetails } from "./details/empty-details"
 import styles from "./home.module.scss"
@@ -83,7 +83,7 @@ export default function Home({
             update.hash = data.jobs[0]?.id ?? ""
             router.replace(update.toString())
         }
-    }, [activeJob, data, hash])
+    }, [activeJob, data, hash, router])
 
     return (
         <div className="flex justify-center h-full">

@@ -1,6 +1,6 @@
 import { FormLabel } from "@mui/material"
 import { UseFormReturn } from "react-hook-form"
-import { DutyDto } from "../api/duties/route"
+import { DutyDto } from "../api/duties/handler"
 import MultiSelect from "./multi-select"
 import { SearchFormData } from "./types"
 

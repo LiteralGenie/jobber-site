@@ -7,7 +7,7 @@ import {
     ControllerRenderProps,
     UseFormReturn,
 } from "react-hook-form"
-import { LocationDto } from "../api/locations/route"
+import { LocationDto } from "../api/locations/handler"
 import { SearchFormData } from "./types"
 
 export interface LocationFilterProps {
