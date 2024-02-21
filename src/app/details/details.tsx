@@ -93,6 +93,18 @@ export default function Details({ job }: DetailsProps) {
                             <span>{job.clearance ? " Yes" : " No"}</span>
                         </div>
 
+                        {/* YoE */}
+                        <div>
+                            <span className="font-bold">
+                                Minimum experience:
+                            </span>
+                            <span>
+                                {job.yoe !== null
+                                    ? ` ${job.yoe} years`
+                                    : " ???"}
+                            </span>
+                        </div>
+
                         <Divider className="my-4" />
 
                         {/* Locations */}

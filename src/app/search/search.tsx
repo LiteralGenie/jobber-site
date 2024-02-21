@@ -87,7 +87,7 @@ export default function Search({ duties, skills, locations }: SearchProps) {
                     <YoeFilter form={form} />
                 </div>
 
-                <div className="pb-2 pt-4">
+                <div className="pb-2">
                     <Divider />
                 </div>
 

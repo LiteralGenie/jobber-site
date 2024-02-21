@@ -24,12 +24,19 @@ export function YoeFilter({ form }: YoeFilterProps) {
             <TextField
                 type="number"
                 label="Minimum"
+                size="small"
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">years</InputAdornment>
                     ),
                 }}
                 aria-label="Minimum years of experience"
+                sx={{
+                    ".MuiInputBase-root": {
+                        paddingTop: "0.25rem",
+                        paddingBottom: "0.25rem",
+                    },
+                }}
                 {...register("yoe.minimum")}
             />
 
@@ -38,7 +45,13 @@ export function YoeFilter({ form }: YoeFilterProps) {
                 control={control}
                 render={({ field: { value, ...field } }) => (
                     <FormControlLabel
-                        control={<Checkbox {...field} checked={!!value} />}
+                        control={
+                            <Checkbox
+                                size="small"
+                                checked={!!value}
+                                {...field}
+                            />
+                        }
                         label="Ignore if unspecified"
                         className="pt-2"
                         title="Exclude posts that don't specify a minimum amount of experience"
