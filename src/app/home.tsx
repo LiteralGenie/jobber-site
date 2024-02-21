@@ -27,6 +27,8 @@ const PARAM_WHITELIST = [
     "duties-excluded",
     "cities",
     "states",
+    "yoe-minimum",
+    "yoe-ignore-null",
 ]
 
 export interface HomeProps {
