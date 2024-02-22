@@ -1,4 +1,4 @@
-import { useQueryParams } from "../useQueryParams"
+import { useQueryParams } from "../../lib/hooks/useQueryParams"
 import { SearchFormData } from "./types"
 
 export const SEARCH_FORM_DEFAULT = () =>

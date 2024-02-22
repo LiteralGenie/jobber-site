@@ -3,8 +3,8 @@ import { FirstPage, LastPage } from "@mui/icons-material"
 import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import ChevronRight from "@mui/icons-material/ChevronRight"
 import { Button, Divider, Paper, Typography } from "@mui/material"
-import { useEffect, useMemo, useRef } from "react"
-import { useQueryParams } from "../useQueryParams"
+import { Suspense, useEffect, useMemo, useRef } from "react"
+import { useQueryParams } from "../../lib/hooks/useQueryParams"
 import PreviewCard from "./preview-card/preview-card"
 
 export interface PreviewCardListProps {
@@ -50,25 +50,27 @@ export default function PreviewCardList({
                 className="min-h-0 h-full overflow-auto flex flex-col"
                 ref={scrollElRef}
             >
-                {jobs.map((item, idx) => (
-                    <div key={item.id} className="rounded-md">
-                        <PreviewCard job={item} />
+                <Suspense fallback={<div>lmao</div>}>
+                    {jobs.map((item, idx) => (
+                        <div key={item.id} className="rounded-md">
+                            <PreviewCard job={item} />
 
-                        {idx == jobs.length - 1 ? "" : <Divider />}
-                    </div>
-                ))}
+                            {idx == jobs.length - 1 ? "" : <Divider />}
+                        </div>
+                    ))}
 
-                {/* Handle empty case */}
-                {jobs.length === 0 ? (
-                    <Typography
-                        className="h-full flex items-center justify-center"
-                        sx={{ color: "text.disabled" }}
-                    >
-                        No matching jobs found
-                    </Typography>
-                ) : (
-                    ""
-                )}
+                    {/* Handle empty case */}
+                    {jobs.length === 0 ? (
+                        <Typography
+                            className="h-full flex items-center justify-center"
+                            sx={{ color: "text.disabled" }}
+                        >
+                            No matching jobs found
+                        </Typography>
+                    ) : (
+                        ""
+                    )}
+                </Suspense>
             </Paper>
 
             {/* Paginator */}

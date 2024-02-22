@@ -1,10 +1,6 @@
 "use client"
 
-import { useHash } from "@/lib/hooks/useHash"
-import { JobData } from "@/lib/job-data"
-import { useQuery } from "@tanstack/react-query"
-import { useRouter } from "next/navigation"
-import { useEffect, useMemo } from "react"
+import { useJobsQuery } from "@/lib/hooks/useJobsQuery"
 import { DutyDto } from "./api/duties/handler"
 import { JobsDto } from "./api/jobs/handler"
 import { LocationDto } from "./api/locations/handler"
@@ -14,7 +10,6 @@ import { EmptyDetails } from "./details/empty-details"
 import styles from "./home.module.scss"
 import PreviewCardList from "./preview-card-list/preview-card-list"
 import Search from "./search/search"
-import { useQueryParams } from "./useQueryParams"
 
 const PARAM_WHITELIST = [
     "after",
@@ -44,46 +39,9 @@ export default function Home({
     skills,
     locations,
 }: HomeProps) {
-    const queryParams = useQueryParams()
-    const queryKey = useMemo(() => {
-        const params = queryParams.get()
-
-        // Only watch query params that affect search results
-        Array.from(params.keys())
-            .filter((k) => !PARAM_WHITELIST.includes(k))
-            .forEach((k) => params.delete(k))
-
-        params.sort()
-
-        return params.toString()
-    }, [queryParams])
-
-    // Refetch on filter change
-    const { data } = useQuery({
-        queryKey: [queryKey],
-        queryFn: async () => {
-            const resp = await fetch(`/api/jobs?${queryKey}`)
-            const update = (await resp.json()) as JobsDto
-            return update
-        },
+    const { activeJob, jobs, prevPageCursor, nextPageCursor } = useJobsQuery({
         initialData: jobsInit,
     })
-
-    // Update selection on card click / filter change / pagination
-    const { hash } = useHash()
-    const activeJob = useMemo<JobData | undefined>(() => {
-        return data.jobs.find((job) => job.id === hash)
-    }, [data, hash])
-
-    // Set default selection on pagination / filter change
-    const router = useRouter()
-    useEffect(() => {
-        if (!activeJob && hash === "") {
-            const update = new URL(window.location.href)
-            update.hash = data.jobs[0]?.id ?? ""
-            router.replace(update.toString())
-        }
-    }, [activeJob, data, hash, router])
 
     return (
         <div className="flex justify-center h-full">
@@ -91,9 +49,9 @@ export default function Home({
                 <Search duties={duties} skills={skills} locations={locations} />
 
                 <PreviewCardList
-                    jobs={data.jobs}
-                    prevPageCursor={data.prevPageCursor}
-                    nextPageCursor={data.nextPageCursor}
+                    jobs={jobs}
+                    prevPageCursor={prevPageCursor}
+                    nextPageCursor={nextPageCursor}
                 />
 
                 {activeJob ? <Details job={activeJob} /> : <EmptyDetails />}
