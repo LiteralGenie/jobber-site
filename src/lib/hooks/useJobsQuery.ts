@@ -26,7 +26,7 @@ const PARAM_WHITELIST = [
 
 type Options = UseSuspenseQueryOptions<JobsDto, Error, JobsDto, string[]>
 
-export function useJobsQuery(options: Partial<Options>) {
+export function useJobsQuery(options?: Partial<Options>) {
     const queryParams = useQueryParams()
     const queryKey = useMemo(() => {
         const params = queryParams.get()
@@ -55,7 +55,7 @@ export function useJobsQuery(options: Partial<Options>) {
     // Update selection on card click / filter change / pagination
     const { hash } = useHash()
     const activeJob = useMemo<JobData | undefined>(() => {
-        return data.jobs.find((job) => job.id === hash)
+        return data?.jobs.find((job) => job.id === hash)
     }, [data, hash])
 
     // Set default selection on pagination / filter change
@@ -63,10 +63,10 @@ export function useJobsQuery(options: Partial<Options>) {
     useEffect(() => {
         if (!activeJob && hash === "") {
             const update = new URL(window.location.href)
-            update.hash = data.jobs[0]?.id ?? ""
+            update.hash = data?.jobs[0]?.id ?? ""
             router.replace(update.toString())
         }
     }, [activeJob, data, hash, router])
 
-    return { ...data, activeJob }
+    return { ...data, activeJob, queryKey }
 }

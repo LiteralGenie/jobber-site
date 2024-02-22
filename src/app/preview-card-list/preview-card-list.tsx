@@ -1,34 +1,26 @@
-import { JobData } from "@/lib/job-data"
+import { useJobsQuery } from "@/lib/hooks/useJobsQuery"
 import { FirstPage, LastPage } from "@mui/icons-material"
 import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import ChevronRight from "@mui/icons-material/ChevronRight"
 import { Button, Divider, Paper, Typography } from "@mui/material"
-import { Suspense, useEffect, useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { useQueryParams } from "../../lib/hooks/useQueryParams"
 import PreviewCard from "./preview-card/preview-card"
 
-export interface PreviewCardListProps {
-    jobs: JobData[]
-    prevPageCursor: number | null
-    nextPageCursor: number | null
-}
+export default function PreviewCardList() {
+    const { jobs, prevPageCursor, nextPageCursor } = useJobsQuery()
 
-export default function PreviewCardList({
-    jobs,
-    prevPageCursor,
-    nextPageCursor,
-}: PreviewCardListProps) {
     const queryParams = useQueryParams()
     const scrollElRef = useRef<HTMLDivElement>(null)
 
     // This can be smaller for last page
     // but the last-page button that uses this will be disabled in that case anyways
-    const pageSize = useMemo(() => jobs.length, [jobs])
+    const pageSize = useMemo(() => jobs?.length, [jobs])
 
-    function handlePageChange(cursor: number | null) {
+    function handlePageChange(cursor?: number | null) {
         const update = queryParams.get()
 
-        if (cursor === null) {
+        if (cursor === null || cursor === undefined) {
             update.delete("after")
         } else {
             update.set("after", cursor.toString())
@@ -50,27 +42,31 @@ export default function PreviewCardList({
                 className="min-h-0 h-full overflow-auto flex flex-col"
                 ref={scrollElRef}
             >
-                <Suspense fallback={<div>lmao</div>}>
-                    {jobs.map((item, idx) => (
-                        <div key={item.id} className="rounded-md">
-                            <PreviewCard job={item} />
+                {jobs ? (
+                    <>
+                        {jobs.map((item, idx) => (
+                            <div key={item.id} className="rounded-md">
+                                <PreviewCard job={item} />
 
-                            {idx == jobs.length - 1 ? "" : <Divider />}
-                        </div>
-                    ))}
+                                {idx == jobs.length - 1 ? "" : <Divider />}
+                            </div>
+                        ))}
 
-                    {/* Handle empty case */}
-                    {jobs.length === 0 ? (
-                        <Typography
-                            className="h-full flex items-center justify-center"
-                            sx={{ color: "text.disabled" }}
-                        >
-                            No matching jobs found
-                        </Typography>
-                    ) : (
-                        ""
-                    )}
-                </Suspense>
+                        {/* Handle empty case */}
+                        {jobs.length === 0 ? (
+                            <Typography
+                                className="h-full flex items-center justify-center"
+                                sx={{ color: "text.disabled" }}
+                            >
+                                No matching jobs found
+                            </Typography>
+                        ) : (
+                            ""
+                        )}
+                    </>
+                ) : (
+                    "lmao"
+                )}
             </Paper>
 
             {/* Paginator */}

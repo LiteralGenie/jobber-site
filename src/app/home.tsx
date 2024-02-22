@@ -5,26 +5,10 @@ import { DutyDto } from "./api/duties/handler"
 import { JobsDto } from "./api/jobs/handler"
 import { LocationDto } from "./api/locations/handler"
 import { SkillDto } from "./api/skills/handler"
-import Details from "./details/details"
-import { EmptyDetails } from "./details/empty-details"
+import { DetailsContainer } from "./details/details-container"
 import styles from "./home.module.scss"
 import PreviewCardList from "./preview-card-list/preview-card-list"
 import Search from "./search/search"
-
-const PARAM_WHITELIST = [
-    "after",
-    "text",
-    "salary",
-    "location-types",
-    "skills-included",
-    "skills-excluded",
-    "duties-included",
-    "duties-excluded",
-    "cities",
-    "states",
-    "yoe-minimum",
-    "yoe-ignore-null",
-]
 
 export interface HomeProps {
     jobsInit: JobsDto
@@ -39,22 +23,16 @@ export default function Home({
     skills,
     locations,
 }: HomeProps) {
-    const { activeJob, jobs, prevPageCursor, nextPageCursor } = useJobsQuery({
-        initialData: jobsInit,
-    })
+    useJobsQuery({ initialData: jobsInit })
 
     return (
         <div className="flex justify-center h-full">
             <div className={styles["container"]}>
                 <Search duties={duties} skills={skills} locations={locations} />
 
-                <PreviewCardList
-                    jobs={jobs}
-                    prevPageCursor={prevPageCursor}
-                    nextPageCursor={nextPageCursor}
-                />
+                <PreviewCardList />
 
-                {activeJob ? <Details job={activeJob} /> : <EmptyDetails />}
+                <DetailsContainer />
             </div>
         </div>
     )
