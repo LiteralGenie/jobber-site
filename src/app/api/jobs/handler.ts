@@ -13,7 +13,7 @@ export interface JobsDto {
 const PAGE_SIZE = 15
 
 export async function getJobs(
-    filters: Partial<SearchFormData>
+    formData: Partial<SearchFormData>
 ): Promise<JobsDto> {
     let query = db
         // Filter for fully-labeled posts
@@ -58,7 +58,7 @@ export async function getJobs(
                 )
                 .selectAll("post")
 
-            filters.skills?.include.forEach(({ id }) => {
+            formData.skills?.include.forEach(({ id }) => {
                 query = query.having(
                     sql`(lbl.id_skill, lbl.label)`,
                     "=",
@@ -66,7 +66,7 @@ export async function getJobs(
                 )
             })
 
-            filters.skills?.exclude.forEach(({ id }) => {
+            formData.skills?.exclude.forEach(({ id }) => {
                 query = query.having(
                     sql`(lbl.id_skill, lbl.label)`,
                     "=",
@@ -95,7 +95,7 @@ export async function getJobs(
                 )
                 .selectAll("post")
 
-            filters.duties?.include.forEach(({ id }) => {
+            formData.duties?.include.forEach(({ id }) => {
                 query = query.having(
                     sql`(lbl.id_duty, lbl.label)`,
                     "=",
@@ -103,7 +103,7 @@ export async function getJobs(
                 )
             })
 
-            filters.duties?.exclude.forEach(({ id }) => {
+            formData.duties?.exclude.forEach(({ id }) => {
                 query = query.having(
                     sql`(lbl.id_duty, lbl.label)`,
                     "=",
@@ -132,8 +132,8 @@ export async function getJobs(
                 )
                 .selectAll("post")
 
-            const states = filters.locations?.states || []
-            const cities = filters.locations?.cities || []
+            const states = formData.locations?.states || []
+            const cities = formData.locations?.cities || []
             if (states.length || cities.length) {
                 query = query.where((eb) =>
                     eb.or([
@@ -165,25 +165,25 @@ export async function getJobs(
                     "lbl.clearance",
                 ])
 
-            if (filters.salary) {
-                query = query.where("lbl.salary", ">=", filters.salary)
+            if (formData.salary) {
+                query = query.where("lbl.salary", ">=", formData.salary)
             }
 
-            if (typeof filters.clearance === "boolean") {
-                const val = toSqliteBool(filters.clearance)
+            if (typeof formData.clearance === "boolean") {
+                const val = toSqliteBool(formData.clearance)
                 query = query.where("lbl.clearance", "=", val)
             }
 
             const locTypeFilters: Array<
                 "lbl.is_hybrid" | "lbl.is_onsite" | "lbl.is_remote"
             > = []
-            if (filters.locationTypes?.hybrid) {
+            if (formData.locationTypes?.hybrid) {
                 locTypeFilters.push("lbl.is_hybrid")
             }
-            if (filters.locationTypes?.onsite) {
+            if (formData.locationTypes?.onsite) {
                 locTypeFilters.push("lbl.is_onsite")
             }
-            if (filters.locationTypes?.remote) {
+            if (formData.locationTypes?.remote) {
                 locTypeFilters.push("lbl.is_remote")
             }
             if (locTypeFilters.length) {
@@ -202,7 +202,7 @@ export async function getJobs(
                 .selectAll("post")
                 .select("lbl.yoe")
 
-            const { minimum, ignoreNull } = filters.yoe ?? {}
+            const { minimum, ignoreNull } = formData.yoe ?? {}
             if (minimum) {
                 query = query.where((eb) =>
                     eb(
@@ -222,10 +222,10 @@ export async function getJobs(
         .selectFrom("with_yoe as post")
         .selectAll()
 
-    if (filters.text) {
+    if (formData.text) {
         let isRegexp = true
         try {
-            new RegExp(filters.text)
+            new RegExp(formData.text)
         } catch {
             isRegexp = false
         }
@@ -234,13 +234,13 @@ export async function getJobs(
             query = query.where(
                 sql`LOWER(post.title) || '\n\n' || LOWER(post.text)`,
                 "regexp",
-                filters.text.toLowerCase()
+                formData.text.toLowerCase()
             )
         } else {
             query = query.where(
                 sql`LOWER(post.title) || '\n\n' || LOWER(post.text)`,
                 "=",
-                `%${filters.text.toLowerCase()}%`
+                `%${formData.text.toLowerCase()}%`
             )
         }
     }
@@ -248,8 +248,8 @@ export async function getJobs(
     // Take the newest N+1 rows
     // where the +1 is the cursor for next page
     let queryAfter = query.orderBy("rowid", "desc").limit(PAGE_SIZE + 1)
-    if (typeof filters.after === "number") {
-        queryAfter = queryAfter.where("rowid", "<=", filters.after)
+    if (typeof formData.after === "number") {
+        queryAfter = queryAfter.where("rowid", "<=", formData.after)
     }
     // console.log("queryAfter", queryAfter.compile().sql)
 
@@ -332,9 +332,9 @@ export async function getJobs(
     }
 
     let prevPageCursor: number | null = null
-    if (filters.after) {
+    if (formData.after) {
         const queryBefore = query
-            .where("rowid", ">", filters.after)
+            .where("rowid", ">", formData.after)
             .orderBy("rowid", "asc")
             .limit(PAGE_SIZE)
 

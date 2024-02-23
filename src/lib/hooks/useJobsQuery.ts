@@ -1,14 +1,12 @@
 import { JobsDto } from "@/app/api/jobs/handler"
 import { SEARCH_FILTER_SERIALIZER } from "@/app/search/hooks/constants"
 import { useSearchFilters } from "@/app/search/hooks/useSearchFilters"
-import { UseQueryOptions, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { JobData } from "../job-data"
 import { useHash } from "./useHash"
 
-type Options = UseQueryOptions<JobsDto, Error, JobsDto, string[]>
-
-export function useJobsQuery(options?: Partial<Options>) {
+export function useJobsQuery() {
     const { searchFilters } = useSearchFilters()
 
     const queryString = SEARCH_FILTER_SERIALIZER(searchFilters)
@@ -21,7 +19,6 @@ export function useJobsQuery(options?: Partial<Options>) {
             const update = (await resp.json()) as JobsDto
             return update
         },
-        ...options,
     })
 
     // Update selection on card click / filter change / pagination
