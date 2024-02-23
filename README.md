@@ -16,7 +16,7 @@ cd /path/to/jobber-site
 touch env.local
 
 # Build Docker image
-docker build -t nextjs-docker .
+docker build -t jobber-site .
 ```
 
 Start the server:
@@ -24,12 +24,14 @@ Start the server:
 ```bash
 # -d runs server in background
 # -p sets port to 3001
+# --name makes other docker commands more convenient (eg docker restart ...)
 # --mount loads the database file generated earlier
 docker run \
 -d \
 -p 3001:3000 \
+--name jobber \
 --mount type=bind,source="/path/to/jobber-site/src/data/db.sqlite,target=/app/src/data/db.sqlite \
-nextjs-docker
+jobber-site
 ```
 
 $APP will be running at http://localhost:3001
