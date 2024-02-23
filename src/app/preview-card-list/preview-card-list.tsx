@@ -10,10 +10,10 @@ export default function PreviewCardList() {
     if (isFetching) {
         // Loading
         return [...Array(PAGE_SIZE)].map((_, idx) => (
-            <>
-                <PreviewCardSkeleton key={idx} />
+            <div key={idx}>
+                <PreviewCardSkeleton />
                 <Divider />
-            </>
+            </div>
         ))
     } else if (jobs.length === 0) {
         // Zero results

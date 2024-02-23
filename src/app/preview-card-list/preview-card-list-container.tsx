@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react"
 import PreviewCardList from "./preview-card-list"
 
 export default function PreviewCardListContainer() {
-    const { jobs, isFetching, prevPageCursor, nextPageCursor } = useJobsQuery()
+    const { jobs, prevPageCursor, nextPageCursor } = useJobsQuery()
 
     const scrollElRef = useRef<HTMLDivElement>(null)
 
