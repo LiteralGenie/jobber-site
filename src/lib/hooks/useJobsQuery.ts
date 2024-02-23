@@ -7,7 +7,19 @@ import { JobData } from "../job-data"
 import { useHash } from "./useHash"
 
 export function useJobsQuery() {
+    const { hash } = useHash()
     const { searchFilters } = useSearchFilters()
+
+    // @jank: Override nuqs state (query params) with window.location
+    //        Basically, unless <Link> is used, url changes via back button aren't detected
+    //        And the preview cards are using <a>s instead of <Link>s because
+    //        the latter blocks on RSC stuff despite the href only pointing to a fragment (#job-id)
+    const after = useMemo(() => {
+        const params = new URLSearchParams(window.location.search)
+        const after = parseInt(params.get("after") ?? "")
+        return after
+    }, [searchFilters, hash])
+    searchFilters.after = isNaN(after) ? null : after
 
     const queryString = SEARCH_FILTER_SERIALIZER(searchFilters)
 
@@ -22,7 +34,7 @@ export function useJobsQuery() {
     })
 
     // Update selection on card click / filter change / pagination
-    const { hash } = useHash()
+    // const { hash } = useHash()
     const hashedJob = useMemo<JobData | undefined>(() => {
         return data?.jobs.find((job) => job.id === hash)
     }, [data, hash])
