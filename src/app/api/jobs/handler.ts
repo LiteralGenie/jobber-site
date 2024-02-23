@@ -13,7 +13,7 @@ export interface JobsDto {
 const PAGE_SIZE = 15
 
 export async function getJobs(
-    filters: Partial<SearchFormData<never>>
+    filters: Partial<SearchFormData>
 ): Promise<JobsDto> {
     let query = db
         // Filter for fully-labeled posts
@@ -148,8 +148,8 @@ export async function getJobs(
             return query
         })
         // Misc labels
-        .with("with_misc", (eb) =>
-            eb
+        .with("with_misc", (eb) => {
+            let query = eb
                 .selectFrom("with_locations as post")
                 .innerJoin(
                     "indeed_misc_labels as lbl",
@@ -164,7 +164,36 @@ export async function getJobs(
                     "lbl.salary",
                     "lbl.clearance",
                 ])
-        )
+
+            if (filters.salary) {
+                query = query.where("lbl.salary", ">=", filters.salary)
+            }
+
+            if (typeof filters.clearance === "boolean") {
+                const val = toSqliteBool(filters.clearance)
+                query = query.where("lbl.clearance", "=", val)
+            }
+
+            const locTypeFilters: Array<
+                "lbl.is_hybrid" | "lbl.is_onsite" | "lbl.is_remote"
+            > = []
+            if (filters.locationTypes?.hybrid) {
+                locTypeFilters.push("lbl.is_hybrid")
+            }
+            if (filters.locationTypes?.onsite) {
+                locTypeFilters.push("lbl.is_onsite")
+            }
+            if (filters.locationTypes?.remote) {
+                locTypeFilters.push("lbl.is_remote")
+            }
+            if (locTypeFilters.length) {
+                query = query.where((eb) =>
+                    eb.or(locTypeFilters.map((loc) => eb(loc, "=", 1)))
+                )
+            }
+
+            return query
+        })
         // Years-of-experience column
         .with("with_yoe", (eb) => {
             let query = eb
@@ -216,35 +245,10 @@ export async function getJobs(
         }
     }
 
-    if (filters.salary) {
-        query = query.where("post.salary", ">=", filters.salary)
-    }
-
-    if (filters.clearance === "no" || filters.clearance === "yes") {
-        const val = toSqliteBool(filters.clearance === "yes")
-        query = query.where("post.clearance", "=", val)
-    }
-
-    const locTypeFilters: Array<"is_hybrid" | "is_onsite" | "is_remote"> = []
-    if (filters.locationTypes?.hybrid) {
-        locTypeFilters.push("is_hybrid")
-    }
-    if (filters.locationTypes?.onsite) {
-        locTypeFilters.push("is_onsite")
-    }
-    if (filters.locationTypes?.remote) {
-        locTypeFilters.push("is_remote")
-    }
-    if (locTypeFilters.length) {
-        query = query.where((eb) =>
-            eb.or(locTypeFilters.map((loc) => eb(loc, "=", 1)))
-        )
-    }
-
     // Take the newest N+1 rows
     // where the +1 is the cursor for next page
     let queryAfter = query.orderBy("rowid", "desc").limit(PAGE_SIZE + 1)
-    if (filters.after !== undefined) {
+    if (typeof filters.after === "number") {
         queryAfter = queryAfter.where("rowid", "<=", filters.after)
     }
     // console.log("queryAfter", queryAfter.compile().sql)

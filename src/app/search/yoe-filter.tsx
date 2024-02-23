@@ -6,10 +6,10 @@ import {
     TextField,
 } from "@mui/material"
 import { Controller, UseFormReturn } from "react-hook-form"
-import { SearchFormData } from "./types"
+import { FilterData } from "./types"
 
 export interface YoeFilterProps {
-    form: UseFormReturn<SearchFormData>
+    form: UseFormReturn<FilterData>
 }
 
 export function YoeFilter({ form }: YoeFilterProps) {
