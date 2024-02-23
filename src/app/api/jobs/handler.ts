@@ -1,5 +1,6 @@
 import { SearchFormData } from "@/app/search/types"
 import { db } from "@/database/db"
+import { PAGE_SIZE } from "@/lib/constants"
 import { JobData } from "@/lib/job-data"
 import { fromSqliteBool, toSqliteBool } from "@/lib/sql-utils"
 import { sql } from "kysely"
@@ -9,8 +10,6 @@ export interface JobsDto {
     prevPageCursor: number | null
     nextPageCursor: number | null
 }
-
-const PAGE_SIZE = 15
 
 export async function getJobs(
     formData: Partial<SearchFormData>

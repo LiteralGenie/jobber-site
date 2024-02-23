@@ -95,7 +95,7 @@ export function HomeContainer(props: HomeProps) {
         //
         // @fixme: Revisit this when next@14.1.1 lands
         //         This only happens on next version 14.1.1-canary.46 and later
-        <div>
+        <div className="h-full">
             <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={darkTheme}>
                     <CssBaseline />

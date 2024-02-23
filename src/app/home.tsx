@@ -5,7 +5,7 @@ import { LocationDto } from "./api/locations/handler"
 import { SkillDto } from "./api/skills/handler"
 import { DetailsContainer } from "./details/details-container"
 import styles from "./home.module.scss"
-import PreviewCardList from "./preview-card-list/preview-card-list"
+import PreviewCardListContainer from "./preview-card-list/preview-card-list-container"
 import Search from "./search/search"
 
 export interface HomeProps {
@@ -20,7 +20,7 @@ export default function Home({ duties, skills, locations }: HomeProps) {
             <div className={styles["container"]}>
                 <Search duties={duties} skills={skills} locations={locations} />
 
-                <PreviewCardList />
+                <PreviewCardListContainer />
 
                 <DetailsContainer />
             </div>

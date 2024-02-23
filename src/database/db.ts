@@ -2,10 +2,7 @@ import * as SQLite from "better-sqlite3"
 import { Kysely, SqliteDialect } from "kysely"
 import { Database } from "./types"
 
-const fp =
-    process.env.NODE_ENV === "production"
-        ? "/app/src/data/db.sqlite"
-        : process.env.DB_FILE
+const fp = "/media/anne/bottle/projs/2024/jobber-scraper/src/data/db.sqlite"
 const conn = new (SQLite as any)(fp)
 
 // Load regex extension
