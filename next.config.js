@@ -2,6 +2,9 @@
 const nextConfig = {
     reactStrictMode: true,
     output: "standalone",
+    experimental: {
+        windowHistorySupport: true
+    }
 }
 
 module.exports = nextConfig

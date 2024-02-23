@@ -1,4 +1,5 @@
 import { PageProps } from "@/app/types"
+import { Nullified, nullifyEmptyArrays } from "@/lib/misc-utils"
 import { ParserBuilder } from "nuqs"
 import { SearchFilters, SearchFormData } from "../types"
 import { EMPTY_FILTERS, SEARCH_FILTERS_PARSER } from "./constants"
@@ -62,9 +63,7 @@ export function loadFromPageParams(searchParams: PageProps["searchParams"]) {
     return data
 }
 
-type SearchFiltersOrNull = {
-    [K in keyof SearchFilters]: SearchFilters[K] | null
-}
+type SearchFiltersOrNull = Nullified<SearchFilters>
 
 function submit(
     data: SearchFormData,
@@ -107,11 +106,7 @@ function submit(
     update.states = data.locations.states
 
     // Do not show empty arrays in url
-    Object.entries(update).forEach(([k, v]) => {
-        if (Array.isArray(v) && v.length === 0) {
-            update[k as keyof SearchFiltersOrNull] = null
-        }
-    })
+    nullifyEmptyArrays(update)
 
     setSearchFilters(update, { history: "push" })
 }

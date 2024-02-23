@@ -25,20 +25,3 @@ export default async function Page({ searchParams }: PageProps) {
         />
     )
 }
-
-function pageParamsToUrlParams(
-    original: PageProps["searchParams"]
-): URLSearchParams {
-    const params = new URLSearchParams()
-    Object.entries(original).forEach(([k, v]) => {
-        if (v === undefined) {
-            return
-        } else if (Array.isArray(v)) {
-            v.forEach((x) => params.append(k, x))
-        } else {
-            params.append(k, v)
-        }
-    })
-
-    return params
-}

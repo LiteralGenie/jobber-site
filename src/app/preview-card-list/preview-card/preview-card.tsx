@@ -1,20 +1,18 @@
 import { MONTHS } from "@/lib/format-utils"
-import { useHash } from "@/lib/hooks/useHash"
 import { JobData } from "@/lib/job-data"
 import LaunchIcon from "@mui/icons-material/Launch"
 import { Button, IconButton, Typography, alpha } from "@mui/material"
 import Link from "next/link"
 import { useMemo } from "react"
 import styles from "./preview-card.module.scss"
+
 export interface PreviewCardProps {
     job: JobData
+    isActive: boolean
 }
 
-export default function PreviewCard({ job }: PreviewCardProps) {
+export default function PreviewCard({ job, isActive }: PreviewCardProps) {
     const date = useMemo(() => humanizeDate(job.time_created), [job])
-
-    const { hash } = useHash()
-    const isActive = useMemo(() => hash === job.id, [hash, job])
 
     return (
         <div className="w-full flex justify-between">

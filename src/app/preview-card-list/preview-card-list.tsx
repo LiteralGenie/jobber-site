@@ -3,11 +3,17 @@ import { FirstPage, LastPage } from "@mui/icons-material"
 import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import ChevronRight from "@mui/icons-material/ChevronRight"
 import { Button, Divider, Paper, Typography } from "@mui/material"
+import { parseAsInteger, useQueryState } from "nuqs"
 import { useEffect, useMemo, useRef } from "react"
 import PreviewCard from "./preview-card/preview-card"
 
 export default function PreviewCardList() {
-    const { jobs, prevPageCursor, nextPageCursor } = useJobsQuery()
+    const { jobs, prevPageCursor, nextPageCursor, activeJob } = useJobsQuery()
+
+    const activeJobId = useMemo(
+        () => activeJob?.id ?? jobs?.[0]?.id,
+        [jobs, activeJob]
+    )
 
     const scrollElRef = useRef<HTMLDivElement>(null)
 
@@ -15,17 +21,16 @@ export default function PreviewCardList() {
     // but the last-page button that uses this will be disabled in that case anyways
     const pageSize = useMemo(() => jobs?.length, [jobs])
 
+    const [after, setAfter] = useQueryState("after", parseAsInteger)
+
     function handlePageChange(cursor?: number | null) {
-        return
-        // const update = queryParams.get()
+        // Clear url fragment
+        const update = new URL(window.location.href)
+        update.hash = ""
+        window.history.pushState({ ...window.history.state }, "", update.href)
 
-        // if (cursor === null || cursor === undefined) {
-        //     update.delete("after")
-        // } else {
-        //     update.set("after", cursor.toString())
-        // }
-
-        // queryParams.set(update)
+        // Update query params
+        setAfter(cursor ?? null, { shallow: true, history: "replace" })
     }
 
     // Reset scroll position on content change
@@ -45,7 +50,10 @@ export default function PreviewCardList() {
                     <>
                         {jobs.map((item, idx) => (
                             <div key={item.id} className="rounded-md">
-                                <PreviewCard job={item} />
+                                <PreviewCard
+                                    job={item}
+                                    isActive={item.id === activeJobId}
+                                />
 
                                 {idx == jobs.length - 1 ? "" : <Divider />}
                             </div>
@@ -103,6 +111,7 @@ export default function PreviewCardList() {
                 <Button
                     variant="outlined"
                     className="border rounded-md h-12"
+                    // If there are active filters, using pageSize as cursor can lead to empty page but whatever
                     onClick={() => handlePageChange(pageSize)}
                     disabled={nextPageCursor === null}
                     aria-label="Last page"
