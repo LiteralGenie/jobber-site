@@ -82,7 +82,12 @@ export function HomeContainer(props: HomeProps) {
     const [queryClient] = useState(
         () =>
             new QueryClient({
-                defaultOptions: { queries: { refetchOnWindowFocus: false } },
+                defaultOptions: {
+                    queries: {
+                        refetchOnWindowFocus: false,
+                        staleTime: Infinity,
+                    },
+                },
             })
     )
 
