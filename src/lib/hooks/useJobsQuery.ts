@@ -34,7 +34,6 @@ export function useJobsQuery() {
     })
 
     // Update selection on card click / filter change / pagination
-    // const { hash } = useHash()
     const hashedJob = useMemo<JobData | undefined>(() => {
         return data?.jobs.find((job) => job.id === hash)
     }, [data, hash])

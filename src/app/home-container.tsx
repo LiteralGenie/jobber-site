@@ -79,7 +79,12 @@ const darkTheme = createTheme({
 })
 
 export function HomeContainer(props: HomeProps) {
-    const [queryClient] = useState(() => new QueryClient())
+    const [queryClient] = useState(
+        () =>
+            new QueryClient({
+                defaultOptions: { queries: { refetchOnWindowFocus: false } },
+            })
+    )
 
     return (
         // DO NOT REMOVE THIS DIV!!!
