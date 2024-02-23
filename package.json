@@ -19,6 +19,7 @@
         "better-sqlite3": "^9.2.2",
         "kysely": "^0.27.1",
         "next": "14.1.1-canary.55",
+        "nuqs": "^1.17.0",
         "radash": "^11.0.0",
         "react": "^18",
         "react-dom": "^18",

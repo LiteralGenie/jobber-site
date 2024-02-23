@@ -82,13 +82,28 @@ export function HomeContainer(props: HomeProps) {
     const [queryClient] = useState(() => new QueryClient())
 
     return (
-        <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={darkTheme}>
-                <CssBaseline />
-                <QueryClientProvider client={queryClient}>
-                    <Home {...props} />
-                </QueryClientProvider>
-            </ThemeProvider>
-        </StyledEngineProvider>
+        // DO NOT REMOVE THIS DIV!!!
+        // There will be hydration errors unless CSSBaseline is inside a real tag
+        // And these errors will only show up on production with useless stacktraces
+        // And will only happen intermittently
+        // And only if the data in the props is sufficiently large
+        // ¯\_(ツ)_/¯
+        //
+        // The errors seem to be because the route (a child of <body>)
+        // is sometimes rendered after its sibling <script> tags on the client but presumably not on the server
+        // When the route is the first child of body, no errors
+        //
+        // @fixme: Revisit this when next@14.1.1 lands
+        //         This only happens on next version 14.1.1-canary.46 and later
+        <div>
+            <StyledEngineProvider injectFirst>
+                <ThemeProvider theme={darkTheme}>
+                    <CssBaseline />
+                    <QueryClientProvider client={queryClient}>
+                        <Home {...props} />
+                    </QueryClientProvider>
+                </ThemeProvider>
+            </StyledEngineProvider>
+        </div>
     )
 }
