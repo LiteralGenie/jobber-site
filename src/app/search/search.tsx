@@ -3,7 +3,6 @@
 import { Button, Divider, Paper, TextField } from "@mui/material"
 import { FormEvent } from "react"
 import { useForm } from "react-hook-form"
-import { useQueryParams } from "../../lib/hooks/useQueryParams"
 import { DutyDto } from "../api/duties/handler"
 import { LocationDto } from "../api/locations/handler"
 import { SkillDto } from "../api/skills/handler"
@@ -25,8 +24,6 @@ export interface SearchProps {
 }
 
 export default function Search({ duties, skills, locations }: SearchProps) {
-    const queryParams = useQueryParams()
-
     const { loadFromUrl, submit } = useSearchForm()
 
     const form = useForm<SearchFormData>({

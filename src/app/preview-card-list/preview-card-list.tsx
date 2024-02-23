@@ -4,13 +4,11 @@ import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import ChevronRight from "@mui/icons-material/ChevronRight"
 import { Button, Divider, Paper, Typography } from "@mui/material"
 import { useEffect, useMemo, useRef } from "react"
-import { useQueryParams } from "../../lib/hooks/useQueryParams"
 import PreviewCard from "./preview-card/preview-card"
 
 export default function PreviewCardList() {
     const { jobs, prevPageCursor, nextPageCursor } = useJobsQuery()
 
-    const queryParams = useQueryParams()
     const scrollElRef = useRef<HTMLDivElement>(null)
 
     // This can be smaller for last page
@@ -18,15 +16,16 @@ export default function PreviewCardList() {
     const pageSize = useMemo(() => jobs?.length, [jobs])
 
     function handlePageChange(cursor?: number | null) {
-        const update = queryParams.get()
+        return
+        // const update = queryParams.get()
 
-        if (cursor === null || cursor === undefined) {
-            update.delete("after")
-        } else {
-            update.set("after", cursor.toString())
-        }
+        // if (cursor === null || cursor === undefined) {
+        //     update.delete("after")
+        // } else {
+        //     update.set("after", cursor.toString())
+        // }
 
-        queryParams.set(update)
+        // queryParams.set(update)
     }
 
     // Reset scroll position on content change

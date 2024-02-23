@@ -1,51 +1,24 @@
 import { JobsDto } from "@/app/api/jobs/handler"
-import {
-    UseSuspenseQueryOptions,
-    useSuspenseQuery,
-} from "@tanstack/react-query"
+import { SEARCH_FILTER_SERIALIZER } from "@/app/search/hooks/constants"
+import { useSearchFilters } from "@/app/search/hooks/useSearchFilters"
+import { UseSuspenseQueryOptions, useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { useEffect, useMemo } from "react"
 import { JobData } from "../job-data"
 import { useHash } from "./useHash"
-import { useQueryParams } from "./useQueryParams"
-
-const PARAM_WHITELIST = [
-    "after",
-    "text",
-    "salary",
-    "location-types",
-    "skills-included",
-    "skills-excluded",
-    "duties-included",
-    "duties-excluded",
-    "cities",
-    "states",
-    "yoe-minimum",
-    "yoe-ignore-null",
-]
 
 type Options = UseSuspenseQueryOptions<JobsDto, Error, JobsDto, string[]>
 
 export function useJobsQuery(options?: Partial<Options>) {
-    const queryParams = useQueryParams()
-    const queryKey = useMemo(() => {
-        const params = queryParams.get()
+    const { searchFilters } = useSearchFilters()
 
-        // Only watch query params that affect search results
-        Array.from(params.keys())
-            .filter((k) => !PARAM_WHITELIST.includes(k))
-            .forEach((k) => params.delete(k))
-
-        params.sort()
-
-        return params.toString()
-    }, [queryParams])
+    const queryString = SEARCH_FILTER_SERIALIZER(searchFilters)
 
     // Refetch on filter change
-    const { data } = useSuspenseQuery({
-        queryKey: [queryKey],
+    const { data, isLoading } = useQuery({
+        queryKey: [queryString],
         queryFn: async () => {
-            const resp = await fetch(`/api/jobs?${queryKey}`)
+            const resp = await fetch(`/api/jobs${queryString}`)
             const update = (await resp.json()) as JobsDto
             return update
         },
@@ -68,5 +41,5 @@ export function useJobsQuery(options?: Partial<Options>) {
         }
     }, [activeJob, data, hash, router])
 
-    return { ...data, activeJob, queryKey }
+    return { ...data, isLoading, activeJob }
 }

@@ -1,4 +1,5 @@
 import {
+    createSerializer,
     parseAsArrayOf,
     parseAsBoolean,
     parseAsInteger,
@@ -71,6 +72,8 @@ export const SEARCH_FILTERS_PARSER = {
     "yoe-minimum": parseAsInteger.withDefault(d.yoe.minimum),
     "yoe-ignore-null": parseAsBoolean.withDefault(d.yoe.ignoreNull),
 }
+
+export const SEARCH_FILTER_SERIALIZER = createSerializer(SEARCH_FILTERS_PARSER)
 
 export const EMPTY_FILTERS: Record<keyof SearchFilters, null> = {
     after: null,
