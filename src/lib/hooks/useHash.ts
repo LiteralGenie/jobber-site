@@ -28,9 +28,13 @@ export function useHash() {
         const handleHashChange = () => {
             setHash(getHash())
         }
+
         window.addEventListener("hashchange", handleHashChange)
+        window.addEventListener("popstate", handleHashChange)
+
         return () => {
             window.removeEventListener("hashchange", handleHashChange)
+            window.addEventListener("popstate", handleHashChange)
         }
     }, [isClient])
 

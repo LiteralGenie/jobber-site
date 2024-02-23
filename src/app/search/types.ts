@@ -1,4 +1,14 @@
-export interface SearchFormData<NullType = ""> {
+export type LocationType = "hybrid" | "onsite" | "remote"
+
+export interface SearchFormData {
+    after: number | null
+    text: string
+    salary: number
+    clearance: boolean | null
+    locations: {
+        cities: number[]
+        states: string[]
+    }
     skills: {
         include: { id: number }[]
         exclude: { id: number }[]
@@ -12,28 +22,24 @@ export interface SearchFormData<NullType = ""> {
         onsite: boolean
         remote: boolean
     }
-    locations: {
-        cities: number[]
-        states: string[]
-    }
-    text: string
-    salary: number
-    clearance: "any" | "no" | "yes"
     yoe: {
         minimum: number
-        ignoreNull: boolean | NullType
+        ignoreNull: boolean
     }
-    after: number | NullType
 }
 
-export interface SearchParamsData {
-    text?: string
-    clearance?: boolean
-    salary?: number
-    "skills-included"?: string[]
-    "skills-excluded"?: string[]
-    "duties-included"?: string[]
-    "duties-excluded"?: string[]
-    "yoe-minimum"?: number
-    "yoe-ignore-null"?: boolean
+export interface SearchFilters {
+    after: number | null
+    text: string
+    salary: number
+    clearance: boolean | null
+    "location-types": LocationType[]
+    "skills-included": number[]
+    "skills-excluded": number[]
+    "duties-included": number[]
+    "duties-excluded": number[]
+    cities: number[]
+    states: string[]
+    "yoe-minimum": number
+    "yoe-ignore-null": boolean
 }

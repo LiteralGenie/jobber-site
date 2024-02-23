@@ -4,28 +4,17 @@ FROM node:18 AS base
 FROM base AS builder
 RUN apt update
 RUN apt install -y sqlite3-pcre libpcre3
+
 WORKDIR /app
-
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
 COPY . .
 
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV build
+# @fixme: remove force flag when 14.1.1-canary.55 lands
+#         it's necessary for using nuqs + fragments 
+#         https://github.com/47ng/nuqs/issues/498
+RUN npm install --force
 
-RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN npm run build
 
 EXPOSE 3000
 ENV PORT 3000

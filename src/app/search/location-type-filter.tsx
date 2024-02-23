@@ -1,9 +1,9 @@
 import { Checkbox, FormControlLabel, FormGroup, FormLabel } from "@mui/material"
 import { Controller, UseFormReturn } from "react-hook-form"
-import { SearchFormData } from "./types"
+import { FilterData } from "./types"
 
 export interface LocationTypeFilterProps {
-    form: UseFormReturn<SearchFormData>
+    form: UseFormReturn<FilterData>
 }
 
 export function LocationTypeFilter({ form }: LocationTypeFilterProps) {
@@ -27,7 +27,7 @@ export function LocationTypeFilter({ form }: LocationTypeFilterProps) {
 }
 
 interface OptionProps {
-    form: UseFormReturn<SearchFormData>
+    form: UseFormReturn<FilterData>
     name:
         | "locationTypes.onsite"
         | "locationTypes.hybrid"

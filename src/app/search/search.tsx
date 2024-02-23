@@ -6,15 +6,15 @@ import { useForm } from "react-hook-form"
 import { DutyDto } from "../api/duties/handler"
 import { LocationDto } from "../api/locations/handler"
 import { SkillDto } from "../api/skills/handler"
-import { useQueryParams } from "../useQueryParams"
 import { ClearanceFilter } from "./clearance-filter"
 import { DutyFilter } from "./duty-filter"
+import { SEARCH_FORM_DEFAULT } from "./hooks/constants"
+import { useSearchForm } from "./hooks/useSearchForm"
 import { LocationFilter } from "./location-filter"
 import { LocationTypeFilter } from "./location-type-filter"
 import styles from "./search.module.scss"
 import { SkillFilter } from "./skill-filter"
 import { SearchFormData } from "./types"
-import { SEARCH_FORM_DEFAULT, useSearchForm } from "./useSearchForm"
 import { YoeFilter } from "./yoe-filter"
 
 export interface SearchProps {
@@ -24,12 +24,10 @@ export interface SearchProps {
 }
 
 export default function Search({ duties, skills, locations }: SearchProps) {
-    const queryParams = useQueryParams()
-
-    const { getDefaultFromUrl, serializeForm } = useSearchForm()
+    const { loadFromUrl, submit } = useSearchForm()
 
     const form = useForm<SearchFormData>({
-        defaultValues: getDefaultFromUrl(),
+        defaultValues: loadFromUrl(),
     })
     const { register, getValues, reset, formState } = form
 
@@ -38,11 +36,7 @@ export default function Search({ duties, skills, locations }: SearchProps) {
         event.preventDefault()
 
         const data = getValues()
-
-        const update = serializeForm(data)
-        update.delete("after")
-        queryParams.set(update)
-
+        submit(data)
         reset(data)
     }
 

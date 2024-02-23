@@ -28,7 +28,3 @@ export async function getLocations(): Promise<LocationDto[]> {
 
     return data
 }
-
-export async function GET() {
-    return Response.json(await getLocations())
-}
