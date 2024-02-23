@@ -8,12 +8,8 @@ import { useEffect, useMemo, useRef } from "react"
 import PreviewCard from "./preview-card/preview-card"
 
 export default function PreviewCardList() {
-    const { jobs, prevPageCursor, nextPageCursor, activeJob } = useJobsQuery()
-
-    const activeJobId = useMemo(
-        () => activeJob?.id ?? jobs?.[0]?.id,
-        [jobs, activeJob]
-    )
+    const { jobs, isFetching, prevPageCursor, nextPageCursor, activeJob } =
+        useJobsQuery()
 
     const scrollElRef = useRef<HTMLDivElement>(null)
 
@@ -46,13 +42,13 @@ export default function PreviewCardList() {
                 className="min-h-0 h-full overflow-auto flex flex-col"
                 ref={scrollElRef}
             >
-                {jobs ? (
+                {!isFetching ? (
                     <>
                         {jobs.map((item, idx) => (
                             <div key={item.id} className="rounded-md">
                                 <PreviewCard
                                     job={item}
-                                    isActive={item.id === activeJobId}
+                                    isActive={item.id === activeJob?.id}
                                 />
 
                                 {idx == jobs.length - 1 ? "" : <Divider />}
@@ -72,7 +68,7 @@ export default function PreviewCardList() {
                         )}
                     </>
                 ) : (
-                    "lmao"
+                    "loading"
                 )}
             </Paper>
 

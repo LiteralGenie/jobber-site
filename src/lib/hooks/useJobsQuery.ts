@@ -1,12 +1,12 @@
 import { JobsDto } from "@/app/api/jobs/handler"
 import { SEARCH_FILTER_SERIALIZER } from "@/app/search/hooks/constants"
 import { useSearchFilters } from "@/app/search/hooks/useSearchFilters"
-import { UseSuspenseQueryOptions, useQuery } from "@tanstack/react-query"
+import { UseQueryOptions, useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { JobData } from "../job-data"
 import { useHash } from "./useHash"
 
-type Options = UseSuspenseQueryOptions<JobsDto, Error, JobsDto, string[]>
+type Options = UseQueryOptions<JobsDto, Error, JobsDto, string[]>
 
 export function useJobsQuery(options?: Partial<Options>) {
     const { searchFilters } = useSearchFilters()
@@ -26,11 +26,14 @@ export function useJobsQuery(options?: Partial<Options>) {
 
     // Update selection on card click / filter change / pagination
     const { hash } = useHash()
-    const activeJob = useMemo<JobData | undefined>(() => {
+    const hashedJob = useMemo<JobData | undefined>(() => {
         return data?.jobs.find((job) => job.id === hash)
     }, [data, hash])
 
-    // Set default selection on pagination / filter change
-
-    return { ...data, isFetching, activeJob }
+    return {
+        ...data,
+        isFetching,
+        jobs: data?.jobs ?? [],
+        activeJob: hashedJob ?? data?.jobs[0],
+    }
 }
