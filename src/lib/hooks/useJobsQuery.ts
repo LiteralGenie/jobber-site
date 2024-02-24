@@ -2,6 +2,7 @@ import { JobsDto } from "@/app/api/jobs/handler"
 import { SEARCH_FILTER_SERIALIZER } from "@/app/search/hooks/constants"
 import { useSearchFilters } from "@/app/search/hooks/useSearchFilters"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useSearchParams } from "next/navigation"
 import { useEffect, useMemo } from "react"
 import { JobData } from "../job-data"
 import { useHash } from "./useHash"
@@ -16,19 +17,23 @@ export function useJobsQuery() {
     const { hash } = useHash()
     const { searchFilters } = useSearchFilters()
 
+    const searchParams = useSearchParams()
     // @jank: Override nuqs state (query params) with window.location
     //        Basically, unless <Link> is used, url changes via back button aren't detected
     //        And the preview cards are using <a>s instead of <Link>s because
     //        the latter blocks on RSC stuff despite the href only pointing to a fragment (#job-id)
     const after = useMemo(() => {
+        // Use window url if possible but fall back to useSearchParams during SSR
+        // because we're doing a lot of client-side navigation that next doesnt support
         if (typeof window === "undefined") {
-            return NaN
+            const after = searchParams.get("after") ?? ""
+            return parseInt(after)
+        } else {
+            const params = new URLSearchParams(window.location.search)
+            const after = parseInt(params.get("after") ?? "")
+            return after
         }
-
-        const params = new URLSearchParams(window.location.search)
-        const after = parseInt(params.get("after") ?? "")
-        return after
-    }, [searchFilters, hash])
+    }, [searchFilters, hash, searchParams])
     searchFilters.after = isNaN(after) ? null : after
 
     const queryString = SEARCH_FILTER_SERIALIZER(searchFilters)
