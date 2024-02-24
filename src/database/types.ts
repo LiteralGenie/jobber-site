@@ -37,7 +37,7 @@ export interface LocationsTable {
 }
 
 export interface IndeedPostsTable {
-    rowid: number
+    rowid: Generated<number>
     id: string
 
     company: string

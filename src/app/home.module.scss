@@ -1,8 +1,10 @@
 .container {
-    --padding: 48px;
+    @apply p-12 h-full;
 
-    @apply grid gap-16 justify-center h-full w-full overflow-auto;
+    // Hide on mobile
+    @apply hidden;
 
-    padding: var(--padding);
+    // 3-col grid
+    @apply xl:grid gap-16 justify-center;
     grid-template-columns: max-content 350px minmax(250px, 700px);
 }

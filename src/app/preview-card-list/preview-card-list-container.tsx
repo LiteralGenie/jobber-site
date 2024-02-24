@@ -4,26 +4,16 @@ import { FirstPage, LastPage } from "@mui/icons-material"
 import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import ChevronRight from "@mui/icons-material/ChevronRight"
 import { Button, Paper } from "@mui/material"
-import { parseAsInteger, useQueryState } from "nuqs"
 import { useEffect, useRef } from "react"
 import PreviewCardList from "./preview-card-list"
+import { usePageLink } from "./usePageLink"
 
 export default function PreviewCardListContainer() {
     const { jobs, prevPageCursor, nextPageCursor } = useJobsQuery()
 
     const scrollElRef = useRef<HTMLDivElement>(null)
 
-    const [after, setAfter] = useQueryState("after", parseAsInteger)
-
-    function handlePageChange(cursor?: number | null) {
-        // Clear url fragment
-        const update = new URL(window.location.href)
-        update.hash = ""
-        window.history.pushState({ ...window.history.state }, "", update.href)
-
-        // Update query params
-        setAfter(cursor ?? null, { shallow: true, history: "replace" })
-    }
+    const { getLinkProps } = usePageLink()
 
     // Reset scroll position on content change
     useEffect(() => {
@@ -44,41 +34,44 @@ export default function PreviewCardListContainer() {
             {/* Paginator */}
             <nav className="mt-4 grid grid-cols-4 gap-4">
                 <Button
-                    variant="outlined"
-                    className="border rounded-md h-12"
-                    onClick={() => handlePageChange(null)}
+                    {...getLinkProps(null)}
                     disabled={prevPageCursor === null}
+                    variant="outlined"
+                    className="border rounded-md h-12 w-full"
                     aria-label="First page"
                     title="First page"
                 >
                     <FirstPage />
                 </Button>
+
                 <Button
-                    variant="outlined"
-                    className="border rounded-md h-12"
-                    onClick={() => handlePageChange(prevPageCursor)}
+                    {...getLinkProps(prevPageCursor)}
                     disabled={prevPageCursor === null}
+                    variant="outlined"
+                    className="border rounded-md h-12 w-full"
                     aria-label="Previous page"
                     title="Previous page"
                 >
                     <ChevronLeft />
                 </Button>
+
                 <Button
-                    variant="outlined"
-                    className="border rounded-md h-12"
-                    onClick={() => handlePageChange(nextPageCursor)}
+                    {...getLinkProps(nextPageCursor)}
                     disabled={nextPageCursor === null}
+                    variant="outlined"
+                    className="border rounded-md h-12 w-full"
                     aria-label="Next page"
                     title="Next page"
                 >
                     <ChevronRight />
                 </Button>
+
                 <Button
-                    variant="outlined"
-                    className="border rounded-md h-12"
                     // If there are active filters, using PAGE_SIZE as cursor can lead to empty page but whatever
-                    onClick={() => handlePageChange(PAGE_SIZE)}
+                    {...getLinkProps(PAGE_SIZE)}
                     disabled={nextPageCursor === null}
+                    variant="outlined"
+                    className="border rounded-md h-12 w-full"
                     aria-label="Last page"
                     title="Last page"
                 >
