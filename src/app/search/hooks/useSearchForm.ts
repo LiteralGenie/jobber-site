@@ -1,20 +1,23 @@
 import { PageProps } from "@/app/types"
-import { Nullified, nullifyEmptyArrays } from "@/lib/misc-utils"
+import { nullifyEmptyArrays } from "@/lib/misc-utils"
 import { ParserBuilder } from "nuqs"
 import { SearchFilters, SearchFormData } from "../types"
-import { EMPTY_FILTERS, SEARCH_FILTERS_PARSER } from "./constants"
-import { UseSearchFiltersReturn, useSearchFilters } from "./useSearchFilters"
+import { SEARCH_FILTERS_PARSER } from "./constants"
+import { useSearchFilters } from "./useSearchFilters"
 
 export function useSearchForm() {
     const { searchFilters, setSearchFilters } = useSearchFilters()
 
     return {
-        loadFromUrl: () => loadFromFilters(searchFilters),
-        submit: (data: SearchFormData) => submit(data, setSearchFilters),
+        loadFromUrl: () => filtersToFormData(searchFilters),
+        submit: (data: SearchFormData) => {
+            const update = formDataToFilters(data)
+            setSearchFilters(update)
+        },
     }
 }
 
-function loadFromFilters(filters: SearchFilters): SearchFormData {
+export function filtersToFormData(filters: SearchFilters): SearchFormData {
     const d = filters
 
     const locationTypes = {
@@ -49,7 +52,9 @@ function loadFromFilters(filters: SearchFilters): SearchFormData {
     }
 }
 
-export function loadFromPageParams(searchParams: PageProps["searchParams"]) {
+export function pageParamsToFilters(
+    searchParams: PageProps["searchParams"]
+): SearchFilters {
     const filters = Object.fromEntries(
         Object.entries(SEARCH_FILTERS_PARSER).map(([k, v]) => {
             const param = searchParams[k]
@@ -58,18 +63,13 @@ export function loadFromPageParams(searchParams: PageProps["searchParams"]) {
         })
     ) as SearchFilters
 
-    const data = loadFromFilters(filters)
-
-    return data
+    return filters
 }
 
-type SearchFiltersOrNull = Nullified<SearchFilters>
-
-function submit(
-    data: SearchFormData,
-    setSearchFilters: UseSearchFiltersReturn["setSearchFilters"]
-): void {
-    const update = { ...EMPTY_FILTERS } as SearchFiltersOrNull
+export function formDataToFilters(
+    data: SearchFormData
+): Partial<SearchFilters> {
+    const update = {} as Partial<SearchFilters>
 
     update.after = data.after
 
@@ -108,5 +108,5 @@ function submit(
     // Do not show empty arrays in url
     nullifyEmptyArrays(update)
 
-    setSearchFilters(update, { history: "push" })
+    return update
 }

@@ -9,6 +9,7 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useState } from "react"
 import { DutyDto } from "./api/duties/handler"
+import { JobsDto } from "./api/jobs/handler"
 import { LocationDto } from "./api/locations/handler"
 import { SkillDto } from "./api/skills/handler"
 import Home from "./home"
@@ -82,12 +83,17 @@ const darkTheme = createTheme({
 })
 
 export interface HomeContainerProps {
+    jobs: JobsDto
+    jobsQuery: string
+
     duties: DutyDto[]
     skills: SkillDto[]
     locations: LocationDto[]
 }
 
 export function HomeContainer({
+    jobs,
+    jobsQuery,
     duties,
     skills,
     locations,
@@ -105,6 +111,7 @@ export function HomeContainer({
     )
 
     // Load server-generated api data into query cache
+    queryClient.setQueryData([jobsQuery], () => jobs)
     queryClient.setQueryData(["/api/duties"], () => duties)
     queryClient.setQueryData(["/api/skills"], () => skills)
     queryClient.setQueryData(["/api/locations"], () => locations)
