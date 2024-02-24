@@ -1,16 +1,36 @@
 import { useJobsQuery } from "@/lib/hooks/useJobsQuery"
 import { ChevronLeft, ChevronRight } from "@mui/icons-material"
 import { Button, ButtonGroup, Paper } from "@mui/material"
+import { DutyDto } from "../api/duties/handler"
+import { LocationDto } from "../api/locations/handler"
+import { SkillDto } from "../api/skills/handler"
+import MobileSearchBar from "../search/mobile-search-bar"
 import PreviewCardList from "./preview-card-list"
 import { usePageLink } from "./usePageLink"
 
-export function MobilePreviewCardListContainer() {
+export interface MobilePreviewCardListContainerProps {
+    duties: DutyDto[]
+    skills: SkillDto[]
+    locations: LocationDto[]
+}
+
+export function MobilePreviewCardListContainer({
+    duties,
+    skills,
+    locations,
+}: MobilePreviewCardListContainerProps) {
     const { prevPageCursor, nextPageCursor } = useJobsQuery()
 
     const { getLinkProps } = usePageLink()
 
     return (
         <Paper variant="outlined" className="h-full flex flex-col">
+            <MobileSearchBar
+                duties={duties}
+                skills={skills}
+                locations={locations}
+            />
+
             <div className="min-h-0 h-full overflow-auto flex flex-col">
                 <PreviewCardList />
             </div>

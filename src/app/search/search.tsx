@@ -1,15 +1,12 @@
 "use-client"
 
 import { Button, Divider, Paper, TextField } from "@mui/material"
-import { FormEvent } from "react"
-import { useForm } from "react-hook-form"
+import { UseFormReturn } from "react-hook-form"
 import { DutyDto } from "../api/duties/handler"
 import { LocationDto } from "../api/locations/handler"
 import { SkillDto } from "../api/skills/handler"
 import { ClearanceFilter } from "./clearance-filter"
 import { DutyFilter } from "./duty-filter"
-import { SEARCH_FORM_DEFAULT } from "./hooks/constants"
-import { useSearchForm } from "./hooks/useSearchForm"
 import { LocationFilter } from "./location-filter"
 import { LocationTypeFilter } from "./location-type-filter"
 import styles from "./search.module.scss"
@@ -21,36 +18,29 @@ export interface SearchProps {
     duties: DutyDto[]
     skills: SkillDto[]
     locations: LocationDto[]
+    form: UseFormReturn<SearchFormData>
+    onSubmit: () => void
+    onReset: () => void
+    onClear: () => void
 }
 
-export default function Search({ duties, skills, locations }: SearchProps) {
-    const { loadFromUrl, submit } = useSearchForm()
-
-    const form = useForm<SearchFormData>({
-        defaultValues: loadFromUrl(),
-    })
-    const { register, getValues, reset, formState } = form
-
-    // POST form data and update query params
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault()
-
-        const data = getValues()
-        submit(data)
-        reset(data)
-    }
-
-    function handleReset() {
-        reset()
-    }
-
-    function handleClear() {
-        reset(SEARCH_FORM_DEFAULT(), { keepDefaultValues: true })
-    }
+export default function Search({
+    duties,
+    skills,
+    locations,
+    form,
+    onSubmit,
+    onReset,
+    onClear,
+}: SearchProps) {
+    const { register, formState } = form
 
     return (
         <form
-            onSubmit={(ev) => handleSubmit(ev)}
+            onSubmit={(ev) => {
+                ev.preventDefault()
+                onSubmit()
+            }}
             className={styles["search-form"]}
         >
             <Paper
@@ -120,7 +110,7 @@ export default function Search({ duties, skills, locations }: SearchProps) {
             <div className="pt-4 flex justify-end gap-2">
                 <Button
                     variant="outlined"
-                    onClick={handleClear}
+                    onClick={onClear}
                     aria-label="Clear filters"
                     title="Clear filters"
                 >
@@ -128,7 +118,7 @@ export default function Search({ duties, skills, locations }: SearchProps) {
                 </Button>
                 <Button
                     variant="outlined"
-                    onClick={handleReset}
+                    onClick={onReset}
                     aria-label="Reset changes"
                     title="Reset changes"
                 >
