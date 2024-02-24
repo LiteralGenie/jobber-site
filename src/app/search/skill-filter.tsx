@@ -2,11 +2,11 @@ import { FormLabel } from "@mui/material"
 import { UseFormReturn } from "react-hook-form"
 import { SkillDto } from "../api/skills/handler"
 import MultiSelect from "./multi-select"
-import { FilterData } from "./types"
+import { SearchFormData } from "./types"
 
 export interface SkillFilterProps {
     skills: SkillDto[]
-    form: UseFormReturn<FilterData>
+    form: UseFormReturn<SearchFormData>
 }
 
 export function SkillFilter({ skills, form }: SkillFilterProps) {

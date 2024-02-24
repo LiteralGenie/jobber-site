@@ -8,10 +8,10 @@ import {
     UseFormReturn,
 } from "react-hook-form"
 import { LocationDto } from "../api/locations/handler"
-import { FilterData } from "./types"
+import { SearchFormData } from "./types"
 
 export interface LocationFilterProps {
-    form: UseFormReturn<FilterData>
+    form: UseFormReturn<SearchFormData>
     locations: LocationDto[]
 }
 
@@ -36,7 +36,7 @@ type OptionMap = Record<
 
 type LocationMap = Record<LocationDto["id"], LocationDto>
 
-type Field = ControllerRenderProps<FilterData, "locations">
+type Field = ControllerRenderProps<SearchFormData, "locations">
 
 function getOptionLabel(opt: CityOrStateOption): string {
     const stateAbbrv = STATE_ABBREVIATIONS[opt.state] || opt.state
@@ -76,7 +76,7 @@ function upsertOption(list: OptionMap, loc: LocationDto): OptionMap {
 }
 
 function readFormValue(
-    value: FilterData["locations"],
+    value: SearchFormData["locations"],
     optionMap: OptionMap,
     locationMap: LocationMap
 ): CityOrStateOption[] {
@@ -97,7 +97,7 @@ function setFormValue(options: CityOrStateOption[], field: Field) {
         "city" in opt ? "cities" : "states"
     ) as { cities: CityOption[]; states: StateOption[] }
 
-    const update: FilterData["locations"] = {
+    const update: SearchFormData["locations"] = {
         states: grouped.states?.map((opt) => opt.state) || [],
         cities: grouped.cities?.map((opt) => opt.id_city) || [],
     }
@@ -105,7 +105,7 @@ function setFormValue(options: CityOrStateOption[], field: Field) {
     field.onChange(update)
 }
 
-export function LocationFilter({ form, locations }: LocationFilterProps) {
+export function LocationFilter({ locations, form }: LocationFilterProps) {
     const { control } = form
 
     const locationMap = useMemo(

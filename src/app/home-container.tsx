@@ -8,7 +8,10 @@ import {
 } from "@mui/material"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useState } from "react"
-import Home, { HomeProps } from "./home"
+import { DutyDto } from "./api/duties/handler"
+import { LocationDto } from "./api/locations/handler"
+import { SkillDto } from "./api/skills/handler"
+import Home from "./home"
 
 // const rootElement = document.getElementById("app")
 
@@ -78,7 +81,17 @@ const darkTheme = createTheme({
     },
 })
 
-export function HomeContainer(props: HomeProps) {
+export interface HomeContainerProps {
+    duties: DutyDto[]
+    skills: SkillDto[]
+    locations: LocationDto[]
+}
+
+export function HomeContainer({
+    duties,
+    skills,
+    locations,
+}: HomeContainerProps) {
     const [queryClient] = useState(
         () =>
             new QueryClient({
@@ -90,6 +103,11 @@ export function HomeContainer(props: HomeProps) {
                 },
             })
     )
+
+    // Load server-generated api data into query cache
+    queryClient.setQueryData(["/api/duties"], () => duties)
+    queryClient.setQueryData(["/api/skills"], () => skills)
+    queryClient.setQueryData(["/api/locations"], () => locations)
 
     return (
         // DO NOT REMOVE THIS DIV!!!
@@ -110,7 +128,7 @@ export function HomeContainer(props: HomeProps) {
                 <ThemeProvider theme={darkTheme}>
                     <CssBaseline />
                     <QueryClientProvider client={queryClient}>
-                        <Home {...props} />
+                        <Home />
                     </QueryClientProvider>
                 </ThemeProvider>
             </StyledEngineProvider>

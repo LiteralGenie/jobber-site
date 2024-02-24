@@ -2,11 +2,11 @@ import { FormLabel } from "@mui/material"
 import { UseFormReturn } from "react-hook-form"
 import { DutyDto } from "../api/duties/handler"
 import MultiSelect from "./multi-select"
-import { FilterData } from "./types"
+import { SearchFormData } from "./types"
 
 export interface DutyFilterProps {
     duties: DutyDto[]
-    form: UseFormReturn<FilterData>
+    form: UseFormReturn<SearchFormData>
 }
 
 export function DutyFilter({ duties, form }: DutyFilterProps) {

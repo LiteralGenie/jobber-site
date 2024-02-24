@@ -1,10 +1,8 @@
 "use-client"
 
+import { useDutyDto, useLocationDto, useSkillDto } from "@/lib/hooks/api"
 import { Button, Divider, Paper, TextField } from "@mui/material"
 import { UseFormReturn } from "react-hook-form"
-import { DutyDto } from "../api/duties/handler"
-import { LocationDto } from "../api/locations/handler"
-import { SkillDto } from "../api/skills/handler"
 import { ClearanceFilter } from "./clearance-filter"
 import { DutyFilter } from "./duty-filter"
 import { LocationFilter } from "./location-filter"
@@ -15,9 +13,6 @@ import { SearchFormData } from "./types"
 import { YoeFilter } from "./yoe-filter"
 
 export interface SearchProps {
-    duties: DutyDto[]
-    skills: SkillDto[]
-    locations: LocationDto[]
     form: UseFormReturn<SearchFormData>
     onSubmit: () => void
     onReset: () => void
@@ -25,15 +20,16 @@ export interface SearchProps {
 }
 
 export default function Search({
-    duties,
-    skills,
-    locations,
     form,
     onSubmit,
     onReset,
     onClear,
 }: SearchProps) {
     const { register, formState } = form
+
+    const { data: duties } = useDutyDto()
+    const { data: skills } = useSkillDto()
+    const { data: locations } = useLocationDto()
 
     return (
         <form
@@ -59,7 +55,7 @@ export default function Search({
                 </div>
 
                 <div className="pb-2 pt-4">
-                    <LocationFilter form={form} locations={locations} />
+                    <LocationFilter form={form} locations={locations ?? []} />
                 </div>
 
                 <div className="pb-2 pt-4">
@@ -77,7 +73,7 @@ export default function Search({
 
                 {/* Skill / duty filters */}
                 <div className="px-2">
-                    <SkillFilter skills={skills} form={form} />
+                    <SkillFilter skills={skills ?? []} form={form} />
                 </div>
 
                 <div className="pb-2 pt-4">
@@ -85,7 +81,7 @@ export default function Search({
                 </div>
 
                 <div className="px-2">
-                    <DutyFilter duties={duties} form={form} />
+                    <DutyFilter duties={duties ?? []} form={form} />
                 </div>
 
                 <div className="pb-2 pt-4">
