@@ -4,8 +4,8 @@ import { Autocomplete, TextField } from "@mui/material"
 import { alphabetical, group } from "radash"
 import { useMemo } from "react"
 import { Controller, ControllerRenderProps } from "react-hook-form"
-import { LocationDto } from "../api/locations/handler"
-import { SearchFormData } from "./types"
+import { LocationDto } from "../../api/locations/handler"
+import { SearchFormData } from "../types"
 
 export interface LocationFilterProps {
     locations: LocationDto[]

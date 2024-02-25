@@ -1,3 +1,4 @@
+import { useFormContext } from "@/lib/providers/form-provider"
 import {
     ArrowForwardOutlined,
     FilterAltOutlined,
@@ -5,27 +6,21 @@ import {
 } from "@mui/icons-material"
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { useSearchForm } from "./hooks/useSearchForm"
 import { SearchDialog } from "./search-dialog"
-import { SearchFormData } from "./types"
 
 export default function MobileSearchBar() {
-    const { loadFromUrl, submit } = useSearchForm()
-
-    const form = useForm<SearchFormData>({
-        defaultValues: loadFromUrl(),
-    })
-    const { getValues, register, reset } = form
-
-    // POST form data and update query params
-    function handleSubmit() {
-        const data = getValues()
-        submit(data)
-        reset(data)
-    }
+    const {
+        form: { register },
+        handleSubmit,
+        handleReset,
+    } = useFormContext()
 
     const [showFilters, setShowFilters] = useState(false)
+
+    function handleClose() {
+        setShowFilters(false)
+        handleReset()
+    }
 
     return (
         <>
@@ -81,10 +76,8 @@ export default function MobileSearchBar() {
                     <FilterAltOutlined />
                 </IconButton>
             </form>
-            <SearchDialog
-                open={showFilters}
-                onClose={() => setShowFilters(false)}
-            />
+
+            <SearchDialog open={showFilters} onClose={handleClose} />
         </>
     )
 }

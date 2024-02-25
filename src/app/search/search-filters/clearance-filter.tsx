@@ -8,7 +8,7 @@ import {
 } from "@mui/material"
 import { ChangeEvent } from "react"
 import { Controller, ControllerRenderProps } from "react-hook-form"
-import { SearchFormData } from "./types"
+import { SearchFormData } from "../types"
 
 type Field = ControllerRenderProps<SearchFormData, "clearance">
 

@@ -1,40 +1,40 @@
 import { useFormContext } from "@/lib/providers/form-provider"
 import { FormLabel } from "@mui/material"
-import { SkillDto } from "../api/skills/handler"
-import MultiSelect from "./multi-select"
+import { DutyDto } from "../../api/duties/handler"
+import MultiSelect from "../multi-select"
 
-export interface SkillFilterProps {
-    skills: SkillDto[]
+export interface DutyFilterProps {
+    duties: DutyDto[]
 }
 
-export function SkillFilter({ skills }: SkillFilterProps) {
+export function DutyFilter({ duties }: DutyFilterProps) {
     const { form } = useFormContext()
-    const included = form.watch("skills.include")
-    const excluded = form.watch("skills.exclude")
+    const included = form.watch("duties.include")
+    const excluded = form.watch("duties.exclude")
 
     return (
         <section>
             <div className="pb-4">
-                <FormLabel>Skills</FormLabel>
+                <FormLabel>Responsibilities</FormLabel>
             </div>
 
             <div className="flex flex-col gap-4">
                 <MultiSelect
                     form={form}
-                    controlName="skills.include"
-                    options={skills}
+                    controlName="duties.include"
+                    options={duties}
                     disabledOptions={excluded.map((v) => v.id)}
                     label="Include"
-                    ariaLabel="Skills Included"
+                    ariaLabel="Duties Included"
                 />
 
                 <MultiSelect
                     form={form}
-                    controlName="skills.exclude"
-                    options={skills}
+                    controlName="duties.exclude"
+                    options={duties}
                     disabledOptions={included.map((v) => v.id)}
                     label="Exclude"
-                    ariaLabel="Skills Excluded"
+                    ariaLabel="Duties Excluded"
                 />
             </div>
         </section>
