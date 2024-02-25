@@ -1,6 +1,12 @@
+import { PAGE_SIZE } from "@/lib/constants"
 import { useJobsQuery } from "@/lib/hooks/useJobsQuery"
-import { ChevronLeft, ChevronRight } from "@mui/icons-material"
-import { Button, ButtonGroup, Paper } from "@mui/material"
+import {
+    ChevronLeft,
+    ChevronRight,
+    FirstPage,
+    LastPage,
+} from "@mui/icons-material"
+import { Button, Paper } from "@mui/material"
 import MobileSearchBar from "../search/mobile-search-bar"
 import PreviewCardList from "./preview-card-list"
 import { usePageLink } from "./usePageLink"
@@ -23,38 +29,53 @@ export function MobilePreviewCardListContainer() {
                 <PreviewCardList />
             </Paper>
 
-            <Paper elevation={2} className="p-2 flex justify-end">
-                <ButtonGroup variant="outlined">
+            <Paper elevation={2} className="flex justify-center">
+                <nav className="p-2 w-full max-w-sm flex justify-center gap-4">
                     <Button
+                        {...getLinkProps(null)}
                         disabled={prevPageCursor === null}
-                        aria-label="Last page"
-                        title="Last page"
-                        startIcon={<ChevronLeft />}
-                        sx={{
-                            ".MuiButton-startIcon": {
-                                marginRight: 0,
-                            },
-                        }}
-                        {...getLinkProps(prevPageCursor)}
+                        variant="outlined"
+                        className="border rounded-md h-12 w-full"
+                        aria-label="First page"
+                        title="First page"
                     >
-                        <div>Prev</div>
+                        <FirstPage />
                     </Button>
 
                     <Button
+                        {...getLinkProps(prevPageCursor)}
+                        disabled={prevPageCursor === null}
+                        variant="outlined"
+                        className="border rounded-md h-12 w-full"
+                        aria-label="Previous page"
+                        title="Previous page"
+                    >
+                        <ChevronLeft />
+                    </Button>
+
+                    <Button
+                        {...getLinkProps(nextPageCursor)}
                         disabled={nextPageCursor === null}
+                        variant="outlined"
+                        className="border rounded-md h-12 w-full"
+                        aria-label="Next page"
+                        title="Next page"
+                    >
+                        <ChevronRight />
+                    </Button>
+
+                    <Button
+                        // If there are active filters, using PAGE_SIZE as cursor can lead to empty page but whatever
+                        {...getLinkProps(PAGE_SIZE)}
+                        disabled={nextPageCursor === null}
+                        variant="outlined"
+                        className="border rounded-md h-12 w-full"
                         aria-label="Last page"
                         title="Last page"
-                        endIcon={<ChevronRight />}
-                        sx={{
-                            ".MuiButton-endIcon": {
-                                marginLeft: 0,
-                            },
-                        }}
-                        {...getLinkProps(nextPageCursor)}
                     >
-                        <div>Next</div>
+                        <LastPage />
                     </Button>
-                </ButtonGroup>
+                </nav>
             </Paper>
         </Paper>
     )

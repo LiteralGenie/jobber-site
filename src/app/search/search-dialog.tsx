@@ -21,6 +21,7 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
                 onSubmit={(ev) => {
                     ev.preventDefault()
                     handleSubmit()
+                    onClose()
                 }}
                 className="min-h-0 flex flex-col"
             >

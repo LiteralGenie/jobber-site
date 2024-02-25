@@ -6,30 +6,12 @@ import {
     Radio,
     RadioGroup,
 } from "@mui/material"
-import { ChangeEvent } from "react"
-import { Controller, ControllerRenderProps } from "react-hook-form"
-import { SearchFormData } from "../types"
-
-type Field = ControllerRenderProps<SearchFormData, "clearance">
+import { Controller } from "react-hook-form"
 
 export function ClearanceFilter() {
     const {
         form: { control },
     } = useFormContext()
-
-    function onChange(field: Field, ev: ChangeEvent<any>, checked: boolean) {
-        ev.preventDefault()
-
-        if (!checked) {
-            return
-        }
-
-        if (ev.target.value === "any") {
-            field.onChange(null)
-        } else {
-            field.onChange(ev.target.value === "yes")
-        }
-    }
 
     return (
         <Controller
@@ -40,32 +22,38 @@ export function ClearanceFilter() {
                     <FormLabel id="clearance">Clearance</FormLabel>
                     <RadioGroup
                         aria-labelledby="clearance"
-                        defaultValue="any"
+                        defaultValue={null}
                         {...field}
                     >
                         <FormControlLabel
-                            value="any"
+                            value={""}
                             control={<Radio className="py-1" />}
                             label="Any"
-                            onChange={(ev, checked) =>
-                                onChange(field, ev, checked)
-                            }
+                            onChange={(ev, checked) => {
+                                if (checked) {
+                                    field.onChange("")
+                                }
+                            }}
                         />
                         <FormControlLabel
-                            value="no"
+                            value={false}
                             control={<Radio className="py-1" />}
                             label="Not required"
-                            onChange={(ev, checked) =>
-                                onChange(field, ev, checked)
-                            }
+                            onChange={(ev, checked) => {
+                                if (checked) {
+                                    field.onChange(false)
+                                }
+                            }}
                         />
                         <FormControlLabel
-                            value="yes"
+                            value={true}
                             control={<Radio className="py-1" />}
                             label="Required"
-                            onChange={(ev, checked) =>
-                                onChange(field, ev, checked)
-                            }
+                            onChange={(ev, checked) => {
+                                if (checked) {
+                                    field.onChange(true)
+                                }
+                            }}
                         />
                     </RadioGroup>
                 </FormControl>

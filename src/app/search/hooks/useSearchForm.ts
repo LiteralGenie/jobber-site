@@ -31,7 +31,7 @@ export function filtersToFormData(filters: SearchFilters): SearchFormData {
         after: d.after,
         text: d.text,
         salary: d.salary,
-        clearance: d.clearance,
+        clearance: d.clearance === null ? "" : d.clearance,
         locationTypes,
         skills: {
             include: d["skills-included"].map((id) => ({ id })),
@@ -77,7 +77,7 @@ export function formDataToFilters(
         update.text = data.text
     }
 
-    update.clearance = data.clearance
+    update.clearance = data.clearance === "" ? null : data.clearance
 
     if (data.salary > 0) {
         update.salary = data.salary
