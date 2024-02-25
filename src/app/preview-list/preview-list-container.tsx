@@ -5,10 +5,10 @@ import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import ChevronRight from "@mui/icons-material/ChevronRight"
 import { Button, Paper } from "@mui/material"
 import { useEffect, useRef } from "react"
-import PreviewCardList from "./preview-card-list"
+import PreviewList from "./preview-list"
 import { usePageLink } from "./usePageLink"
 
-export default function PreviewCardListContainer() {
+export default function PreviewListContainer() {
     const { jobs, prevPageCursor, nextPageCursor } = useJobsQuery()
 
     const scrollElRef = useRef<HTMLDivElement>(null)
@@ -28,7 +28,7 @@ export default function PreviewCardListContainer() {
                 className="min-h-0 h-full overflow-auto flex flex-col"
                 ref={scrollElRef}
             >
-                <PreviewCardList />
+                <PreviewList />
             </Paper>
 
             {/* Paginator */}

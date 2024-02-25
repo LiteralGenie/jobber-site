@@ -6,7 +6,7 @@ import { useMemo, useRef } from "react"
 import { DetailsContainer } from "./details/details-container"
 import styles from "./home.module.scss"
 import { MobileLayout } from "./mobile/mobile-layout"
-import PreviewCardListContainer from "./preview-card-list/preview-card-list-container"
+import PreviewListContainer from "./preview-list/preview-list-container"
 import Search from "./search/search"
 
 export default function Home() {
@@ -34,7 +34,7 @@ export default function Home() {
                 {!isMobile && (
                     <ActiveJobProvider shouldDefault={true}>
                         <Search className="w-64" />
-                        <PreviewCardListContainer />
+                        <PreviewListContainer />
                         <DetailsContainer />
                     </ActiveJobProvider>
                 )}

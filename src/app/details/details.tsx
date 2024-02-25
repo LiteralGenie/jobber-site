@@ -3,9 +3,9 @@ import LaunchIcon from "@mui/icons-material/Launch"
 import LinkIcon from "@mui/icons-material/Link"
 import { Button, Card, Paper, Snackbar } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
+import { useScrollTop } from "../../lib/hooks/useScrollTop"
 import { DetailsContent } from "./details-content"
 import styles from "./details.module.scss"
-import { useScrollTop } from "./useScrollTop"
 
 export interface DetailsProps {
     job: JobData

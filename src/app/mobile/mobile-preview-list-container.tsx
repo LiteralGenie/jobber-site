@@ -7,11 +7,11 @@ import {
     LastPage,
 } from "@mui/icons-material"
 import { Button, Paper } from "@mui/material"
-import PreviewCardList from "../preview-card-list/preview-card-list"
-import { usePageLink } from "../preview-card-list/usePageLink"
+import PreviewList from "../preview-list/preview-list"
+import { usePageLink } from "../preview-list/usePageLink"
 import SearchBar from "./search-bar"
 
-export function MobilePreviewCardListContainer() {
+export function MobilePreviewListContainer() {
     const { prevPageCursor, nextPageCursor } = useJobsQuery()
 
     const { getLinkProps } = usePageLink()
@@ -26,7 +26,7 @@ export function MobilePreviewCardListContainer() {
                 variant="outlined"
                 className="min-h-0 h-full overflow-auto flex flex-col"
             >
-                <PreviewCardList />
+                <PreviewList />
             </Paper>
 
             <Paper elevation={2} className="flex justify-center">

@@ -10,7 +10,7 @@ export interface PreviewCardListProps {
     disableHighlight?: boolean
 }
 
-export default function PreviewCardList({}: PreviewCardListProps) {
+export default function PreviewList({}: PreviewCardListProps) {
     const { jobs, isFetching } = useJobsQuery()
 
     const activeJob = useActiveJob()

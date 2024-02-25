@@ -1,9 +1,9 @@
 import { MONTHS, commafy } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
 import { CardContent, Divider, Typography } from "@mui/material"
-import Locations from "./locations"
-import Requirements from "./requirements"
-import Responsibilities from "./responsibilities"
+import Locations from "./sections/locations"
+import Requirements from "./sections/requirements"
+import Responsibilities from "./sections/responsibilities"
 
 export interface DetailsContentProps {
     job: JobData
