@@ -1,7 +1,6 @@
 "use client"
 
 import { useWindowSize } from "@/lib/hooks/useWindowSize"
-import { Paper } from "@mui/material"
 import { useMemo, useRef } from "react"
 import { DetailsContainer } from "./details/details-container"
 import styles from "./home.module.scss"
@@ -41,15 +40,8 @@ export default function Home() {
             </div>
 
             {/* Phone portrait layout */}
-            <div className="min-h-0 h-full overflow-auto p-4">
-                {isMobile && (
-                    <Paper
-                        variant="outlined"
-                        className="min-h-0 h-full overflow-auto flex flex-col"
-                    >
-                        <MobilePreviewCardListContainer />
-                    </Paper>
-                )}
+            <div className="min-h-0 h-full overflow-auto p-4 xl:hidden">
+                {isMobile && <MobilePreviewCardListContainer />}
             </div>
         </div>
     )

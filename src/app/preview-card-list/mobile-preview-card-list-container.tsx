@@ -12,11 +12,16 @@ export function MobilePreviewCardListContainer() {
 
     return (
         <Paper variant="outlined" className="h-full flex flex-col">
-            <MobileSearchBar />
+            <Paper elevation={2}>
+                <MobileSearchBar />
+            </Paper>
 
-            <div className="min-h-0 h-full overflow-auto flex flex-col">
+            <Paper
+                variant="outlined"
+                className="min-h-0 h-full overflow-auto flex flex-col"
+            >
                 <PreviewCardList />
-            </div>
+            </Paper>
 
             <Paper elevation={2} className="p-2 flex justify-end">
                 <ButtonGroup variant="outlined">
@@ -32,7 +37,7 @@ export function MobilePreviewCardListContainer() {
                         }}
                         {...getLinkProps(prevPageCursor)}
                     >
-                        Prev
+                        <div>Prev</div>
                     </Button>
 
                     <Button
@@ -47,7 +52,7 @@ export function MobilePreviewCardListContainer() {
                         }}
                         {...getLinkProps(nextPageCursor)}
                     >
-                        Next
+                        <div>Next</div>
                     </Button>
                 </ButtonGroup>
             </Paper>

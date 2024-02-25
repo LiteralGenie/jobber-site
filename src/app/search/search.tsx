@@ -49,7 +49,7 @@ export default function Search({
                         label="Text"
                         variant="standard"
                         type="text"
-                        placeholder="software (developer|engineer)"
+                        placeholder="software (dev|eng).*"
                         {...register("text")}
                     />
                 </div>
