@@ -1,21 +1,32 @@
 import { useFormContext } from "@/lib/providers/form-provider"
 import {
     ArrowForwardOutlined,
-    FilterAltOutlined,
+    Circle,
     SearchOutlined,
+    TuneOutlined,
 } from "@mui/icons-material"
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material"
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import { useSearchFilters } from "./hooks/useSearchFilters"
+import { removeDefaultFilters } from "./hooks/useSearchForm"
 import { SearchDialog } from "./search-dialog"
 
 export default function MobileSearchBar() {
     const {
-        form: { register },
+        form: { register, watch },
         handleSubmit,
         handleReset,
     } = useFormContext()
 
     const [showFilters, setShowFilters] = useState(false)
+
+    // Show dot on show-filter button if any are active
+    const { searchFilters } = useSearchFilters()
+    const hasChanges = useMemo(() => {
+        const filters = { ...searchFilters, text: "" }
+        const nullified = removeDefaultFilters(filters)
+        return Object.values(nullified).some((val) => val !== null)
+    }, [searchFilters])
 
     function handleClose() {
         setShowFilters(false)
@@ -68,12 +79,27 @@ export default function MobileSearchBar() {
                             paddingRight: 0,
                         },
                     }}
-                >
-                    test
-                </TextField>
+                />
 
                 <IconButton onClick={() => setShowFilters(true)}>
-                    <FilterAltOutlined />
+                    <div className="relative">
+                        {hasChanges && (
+                            <Circle
+                                sx={{
+                                    color: (theme) =>
+                                        theme.palette.primary.main,
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    transform:
+                                        "translateY(-30%) translateX(40%) scale(0.5)",
+                                }}
+                            />
+                        )}
+                        <TuneOutlined
+                            color={hasChanges ? "primary" : "inherit"}
+                        />
+                    </div>
                 </IconButton>
             </form>
 
