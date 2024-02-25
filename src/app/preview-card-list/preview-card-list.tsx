@@ -1,12 +1,19 @@
 import { PAGE_SIZE } from "@/lib/constants"
 import { useJobsQuery } from "@/lib/hooks/useJobsQuery"
+import { useActiveJob } from "@/lib/providers/active-job-provider"
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
 import { Divider, Typography } from "@mui/material"
 import PreviewCard from "./preview-card/preview-card"
 import PreviewCardSkeleton from "./preview-card/preview-card-skeleton"
 
-export default function PreviewCardList() {
-    const { jobs, isFetching, activeJob } = useJobsQuery()
+export interface PreviewCardListProps {
+    disableHighlight?: boolean
+}
+
+export default function PreviewCardList({}: PreviewCardListProps) {
+    const { jobs, isFetching } = useJobsQuery()
+
+    const activeJob = useActiveJob()
 
     if (isFetching) {
         // Loading
@@ -33,11 +40,11 @@ export default function PreviewCardList() {
         // Card list
         return (
             <>
-                {jobs.map((item, idx) => (
-                    <div key={item.id} className="rounded-md">
+                {jobs.map((job, idx) => (
+                    <div key={job.id} className="rounded-md">
                         <PreviewCard
-                            job={item}
-                            isActive={item.id === activeJob?.id}
+                            job={job}
+                            isActive={job.id === activeJob?.id}
                         />
 
                         {idx == jobs.length - 1 ? "" : <Divider />}

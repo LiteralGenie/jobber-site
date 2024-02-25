@@ -78,6 +78,6 @@ export function useJobsQuery() {
         ...data,
         isFetching,
         jobs: data?.jobs ?? [],
-        activeJob: hashedJob ?? data?.jobs[0],
+        hashedJob: hashedJob,
     }
 }

@@ -25,7 +25,8 @@ export default function MobileSearchBar() {
     // Show dot on show-filter button if any are active
     const { searchFilters } = useSearchFilters()
     const hasChanges = useMemo(() => {
-        const filters = { ...searchFilters, text: "" }
+        // Ignore text (already visible outside dialog) and cursor (not a configurable filter)
+        const filters = { ...searchFilters, text: "", after: null }
         const nullified = removeDefaultFilters(filters)
         return Object.values(nullified).some((val) => val !== null)
     }, [searchFilters])

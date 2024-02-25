@@ -30,12 +30,12 @@ export function MobilePreviewCardListContainer() {
             </Paper>
 
             <Paper elevation={2} className="flex justify-center">
-                <nav className="p-2 w-full max-w-sm flex justify-center gap-4">
+                <nav className="p-2 max-w-sm flex justify-center gap-4">
                     <Button
                         {...getLinkProps(null)}
                         disabled={prevPageCursor === null}
                         variant="outlined"
-                        className="border rounded-md h-12 w-full"
+                        className="border rounded-md h-12 min-w-0"
                         aria-label="First page"
                         title="First page"
                     >
@@ -46,7 +46,7 @@ export function MobilePreviewCardListContainer() {
                         {...getLinkProps(prevPageCursor)}
                         disabled={prevPageCursor === null}
                         variant="outlined"
-                        className="border rounded-md h-12 w-full"
+                        className="border rounded-md h-12 min-w-0"
                         aria-label="Previous page"
                         title="Previous page"
                     >
@@ -57,7 +57,7 @@ export function MobilePreviewCardListContainer() {
                         {...getLinkProps(nextPageCursor)}
                         disabled={nextPageCursor === null}
                         variant="outlined"
-                        className="border rounded-md h-12 w-full"
+                        className="border rounded-md h-12 min-w-0"
                         aria-label="Next page"
                         title="Next page"
                     >
@@ -69,7 +69,7 @@ export function MobilePreviewCardListContainer() {
                         {...getLinkProps(PAGE_SIZE)}
                         disabled={nextPageCursor === null}
                         variant="outlined"
-                        className="border rounded-md h-12 w-full"
+                        className="border rounded-md h-12 min-w-0"
                         aria-label="Last page"
                         title="Last page"
                     >
