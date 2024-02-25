@@ -1,11 +1,11 @@
 import { useFormContext } from "@/lib/providers/form-provider"
 import {
-    ArrowForwardOutlined,
     Circle,
+    Close,
     SearchOutlined,
     TuneOutlined,
 } from "@mui/icons-material"
-import { Button, IconButton, InputAdornment, TextField } from "@mui/material"
+import { IconButton, InputAdornment, TextField } from "@mui/material"
 import { useMemo, useState } from "react"
 import { useSearchFilters } from "./hooks/useSearchFilters"
 import { removeDefaultFilters } from "./hooks/useSearchForm"
@@ -13,12 +13,14 @@ import { SearchDialog } from "./search-dialog"
 
 export default function MobileSearchBar() {
     const {
-        form: { register, watch },
+        form: { register, setValue, watch },
         handleSubmit,
         handleReset,
     } = useFormContext()
 
     const [showFilters, setShowFilters] = useState(false)
+
+    const textValue = watch("text")
 
     // Show dot on show-filter button if any are active
     const { searchFilters } = useSearchFilters()
@@ -55,18 +57,49 @@ export default function MobileSearchBar() {
                             </InputAdornment>
                         ),
                         endAdornment: (
-                            <Button
-                                color="inherit"
-                                type="submit"
-                                sx={{
-                                    "&:hover": {
-                                        color: (theme) =>
-                                            theme.palette.primary.main,
-                                    },
-                                }}
-                            >
-                                <ArrowForwardOutlined />
-                            </Button>
+                            <div className="flex pr-1">
+                                {textValue && (
+                                    <IconButton
+                                        onClick={() => {
+                                            setValue("text", "")
+                                            handleSubmit()
+                                        }}
+                                        className="p-1"
+                                    >
+                                        <Close className="w-4" />
+                                    </IconButton>
+                                )}
+
+                                <IconButton
+                                    onClick={() => setShowFilters(true)}
+                                    className="p-1 mr-1"
+                                    aria-label="Search"
+                                >
+                                    <div className="relative flex">
+                                        {hasChanges && (
+                                            <Circle
+                                                sx={{
+                                                    color: (theme) =>
+                                                        theme.palette.primary
+                                                            .main,
+                                                    position: "absolute",
+                                                    top: 0,
+                                                    left: 0,
+                                                    transform:
+                                                        "translateY(-30%) translateX(40%) scale(0.5)",
+                                                }}
+                                            />
+                                        )}
+                                        <TuneOutlined
+                                            color={
+                                                hasChanges
+                                                    ? "primary"
+                                                    : "inherit"
+                                            }
+                                        />
+                                    </div>
+                                </IconButton>
+                            </div>
                         ),
                     }}
                     sx={{
@@ -80,27 +113,6 @@ export default function MobileSearchBar() {
                         },
                     }}
                 />
-
-                <IconButton onClick={() => setShowFilters(true)}>
-                    <div className="relative">
-                        {hasChanges && (
-                            <Circle
-                                sx={{
-                                    color: (theme) =>
-                                        theme.palette.primary.main,
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    transform:
-                                        "translateY(-30%) translateX(40%) scale(0.5)",
-                                }}
-                            />
-                        )}
-                        <TuneOutlined
-                            color={hasChanges ? "primary" : "inherit"}
-                        />
-                    </div>
-                </IconButton>
             </form>
 
             <SearchDialog open={showFilters} onClose={handleClose} />
