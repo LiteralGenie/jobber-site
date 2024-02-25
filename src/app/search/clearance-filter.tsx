@@ -1,3 +1,4 @@
+import { useFormContext } from "@/lib/providers/form-provider"
 import {
     FormControl,
     FormControlLabel,
@@ -6,21 +7,15 @@ import {
     RadioGroup,
 } from "@mui/material"
 import { ChangeEvent } from "react"
-import {
-    Controller,
-    ControllerRenderProps,
-    UseFormReturn,
-} from "react-hook-form"
+import { Controller, ControllerRenderProps } from "react-hook-form"
 import { SearchFormData } from "./types"
-
-export interface ClearanceFilterProps {
-    form: UseFormReturn<SearchFormData>
-}
 
 type Field = ControllerRenderProps<SearchFormData, "clearance">
 
-export function ClearanceFilter({ form }: ClearanceFilterProps) {
-    const { control } = form
+export function ClearanceFilter() {
+    const {
+        form: { control },
+    } = useFormContext()
 
     function onChange(field: Field, ev: ChangeEvent<any>, checked: boolean) {
         ev.preventDefault()

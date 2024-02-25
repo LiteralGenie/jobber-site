@@ -1,17 +1,13 @@
 import { STATE_ABBREVIATIONS } from "@/lib/format-utils"
+import { useFormContext } from "@/lib/providers/form-provider"
 import { Autocomplete, TextField } from "@mui/material"
 import { alphabetical, group } from "radash"
 import { useMemo } from "react"
-import {
-    Controller,
-    ControllerRenderProps,
-    UseFormReturn,
-} from "react-hook-form"
+import { Controller, ControllerRenderProps } from "react-hook-form"
 import { LocationDto } from "../api/locations/handler"
 import { SearchFormData } from "./types"
 
 export interface LocationFilterProps {
-    form: UseFormReturn<SearchFormData>
     locations: LocationDto[]
 }
 
@@ -105,8 +101,10 @@ function setFormValue(options: CityOrStateOption[], field: Field) {
     field.onChange(update)
 }
 
-export function LocationFilter({ locations, form }: LocationFilterProps) {
-    const { control } = form
+export function LocationFilter({ locations }: LocationFilterProps) {
+    const {
+        form: { control, register },
+    } = useFormContext()
 
     const locationMap = useMemo(
         () => Object.fromEntries(locations.map((loc) => [loc.id, loc])),

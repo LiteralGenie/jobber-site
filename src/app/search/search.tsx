@@ -1,30 +1,20 @@
-"use-client"
-
 import { useDutyDto, useLocationDto, useSkillDto } from "@/lib/hooks/api"
+import { useFormContext } from "@/lib/providers/form-provider"
 import { Button, Divider, Paper, TextField } from "@mui/material"
-import { UseFormReturn } from "react-hook-form"
 import { ClearanceFilter } from "./clearance-filter"
 import { DutyFilter } from "./duty-filter"
 import { LocationFilter } from "./location-filter"
 import { LocationTypeFilter } from "./location-type-filter"
 import styles from "./search.module.scss"
 import { SkillFilter } from "./skill-filter"
-import { SearchFormData } from "./types"
 import { YoeFilter } from "./yoe-filter"
 
 export interface SearchProps {
-    form: UseFormReturn<SearchFormData>
-    onSubmit: () => void
-    onReset: () => void
-    onClear: () => void
+    className?: string
 }
 
-export default function Search({
-    form,
-    onSubmit,
-    onReset,
-    onClear,
-}: SearchProps) {
+export default function Search({ className }: SearchProps) {
+    const { form, handleSubmit, handleReset, handleClear } = useFormContext()
     const { register, formState } = form
 
     const { data: duties } = useDutyDto()
@@ -35,16 +25,16 @@ export default function Search({
         <form
             onSubmit={(ev) => {
                 ev.preventDefault()
-                onSubmit()
+                handleSubmit()
             }}
-            className={styles["search-form"]}
+            className={`${styles["search-form"]} ${className ?? ""}`}
         >
             <Paper
                 variant="outlined"
                 className="overflow-auto flex flex-col p-2"
             >
                 {/* Text filter */}
-                <div className="px-2">
+                <div className="px-2 pt-2">
                     <TextField
                         label="Text"
                         variant="standard"
@@ -55,7 +45,7 @@ export default function Search({
                 </div>
 
                 <div className="pb-2 pt-4">
-                    <LocationFilter form={form} locations={locations ?? []} />
+                    <LocationFilter locations={locations ?? []} />
                 </div>
 
                 <div className="pb-2 pt-4">
@@ -64,7 +54,7 @@ export default function Search({
 
                 {/* Experience filter */}
                 <div className="px-2">
-                    <YoeFilter form={form} />
+                    <YoeFilter />
                 </div>
 
                 <div className="pb-2">
@@ -73,7 +63,7 @@ export default function Search({
 
                 {/* Skill / duty filters */}
                 <div className="px-2">
-                    <SkillFilter skills={skills ?? []} form={form} />
+                    <SkillFilter skills={skills ?? []} />
                 </div>
 
                 <div className="pb-2 pt-4">
@@ -81,7 +71,7 @@ export default function Search({
                 </div>
 
                 <div className="px-2">
-                    <DutyFilter duties={duties ?? []} form={form} />
+                    <DutyFilter duties={duties ?? []} />
                 </div>
 
                 <div className="pb-2 pt-4">
@@ -97,8 +87,8 @@ export default function Search({
                             type="number"
                             {...register("salary")}
                         />
-                        <LocationTypeFilter form={form} />
-                        <ClearanceFilter form={form} />
+                        <LocationTypeFilter />
+                        <ClearanceFilter />
                     </div>
                 </section>
             </Paper>
@@ -106,7 +96,7 @@ export default function Search({
             <div className="pt-4 flex justify-end gap-2">
                 <Button
                     variant="outlined"
-                    onClick={onClear}
+                    onClick={handleClear}
                     aria-label="Clear filters"
                     title="Clear filters"
                 >
@@ -114,7 +104,7 @@ export default function Search({
                 </Button>
                 <Button
                     variant="outlined"
-                    onClick={onReset}
+                    onClick={handleReset}
                     aria-label="Reset changes"
                     title="Reset changes"
                 >

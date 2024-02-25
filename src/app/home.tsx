@@ -6,7 +6,7 @@ import { DetailsContainer } from "./details/details-container"
 import styles from "./home.module.scss"
 import { MobilePreviewCardListContainer } from "./preview-card-list/mobile-preview-card-list-container"
 import PreviewCardListContainer from "./preview-card-list/preview-card-list-container"
-import SearchContainer from "./search/search-container"
+import Search from "./search/search"
 
 export default function Home() {
     const { windowSize } = useWindowSize()
@@ -32,7 +32,7 @@ export default function Home() {
             <div ref={desktopContainerRef} className={styles["container"]}>
                 {!isMobile && (
                     <>
-                        <SearchContainer />
+                        <Search className="w-64" />
                         <PreviewCardListContainer />
                         <DetailsContainer />
                     </>

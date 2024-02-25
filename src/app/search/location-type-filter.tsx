@@ -1,25 +1,21 @@
+import { useFormContext } from "@/lib/providers/form-provider"
 import { Checkbox, FormControlLabel, FormGroup, FormLabel } from "@mui/material"
-import { Controller, UseFormReturn } from "react-hook-form"
-import { FilterData } from "./types"
+import { Controller } from "react-hook-form"
 
-export interface LocationTypeFilterProps {
-    form: UseFormReturn<FilterData>
-}
-
-export function LocationTypeFilter({ form }: LocationTypeFilterProps) {
+export function LocationTypeFilter() {
     return (
         <FormGroup>
             <FormLabel id="location-type">Location type</FormLabel>
             <FormControlLabel
-                control={<Option form={form} name="locationTypes.onsite" />}
+                control={<Option name="locationTypes.onsite" />}
                 label="On-site"
             />
             <FormControlLabel
-                control={<Option form={form} name="locationTypes.hybrid" />}
+                control={<Option name="locationTypes.hybrid" />}
                 label="Hybrid"
             />
             <FormControlLabel
-                control={<Option form={form} name="locationTypes.remote" />}
+                control={<Option name="locationTypes.remote" />}
                 label="Remote"
             />
         </FormGroup>
@@ -27,15 +23,16 @@ export function LocationTypeFilter({ form }: LocationTypeFilterProps) {
 }
 
 interface OptionProps {
-    form: UseFormReturn<FilterData>
     name:
         | "locationTypes.onsite"
         | "locationTypes.hybrid"
         | "locationTypes.remote"
 }
 
-function Option({ form, name }: OptionProps) {
-    const { control } = form
+function Option({ name }: OptionProps) {
+    const {
+        form: { control },
+    } = useFormContext()
 
     return (
         // Need to rename field.value to checked for form reset to work
