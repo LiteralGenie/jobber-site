@@ -5,7 +5,7 @@ import { ActiveJobProvider } from "@/lib/providers/active-job-provider"
 import { useMemo, useRef } from "react"
 import { DetailsContainer } from "./details/details-container"
 import styles from "./home.module.scss"
-import { MobilePreviewCardListContainer } from "./preview-card-list/mobile-preview-card-list-container"
+import { MobileLayout } from "./mobile/mobile-layout"
 import PreviewCardListContainer from "./preview-card-list/preview-card-list-container"
 import Search from "./search/search"
 
@@ -42,11 +42,7 @@ export default function Home() {
 
             {/* Phone portrait layout */}
             <div className="min-h-0 h-full overflow-auto xl:hidden">
-                {isMobile && (
-                    <ActiveJobProvider shouldDefault={false}>
-                        <MobilePreviewCardListContainer />
-                    </ActiveJobProvider>
-                )}
+                {isMobile && <MobileLayout />}
             </div>
         </div>
     )

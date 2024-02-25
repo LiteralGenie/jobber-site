@@ -7,11 +7,11 @@ import {
 } from "@mui/icons-material"
 import { IconButton, InputAdornment, TextField } from "@mui/material"
 import { useMemo, useState } from "react"
-import { useSearchFilters } from "./hooks/useSearchFilters"
-import { removeDefaultFilters } from "./hooks/useSearchForm"
-import { SearchDialog } from "./search-dialog"
+import { useSearchFilters } from "../search/hooks/useSearchFilters"
+import { removeDefaultFilters } from "../search/hooks/useSearchForm"
+import { SearchDialog } from "../search/search-dialog"
 
-export default function MobileSearchBar() {
+export default function SearchBar() {
     const {
         form: { register, setValue, watch },
         handleSubmit,

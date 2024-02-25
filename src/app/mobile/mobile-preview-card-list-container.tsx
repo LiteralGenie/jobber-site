@@ -7,9 +7,9 @@ import {
     LastPage,
 } from "@mui/icons-material"
 import { Button, Paper } from "@mui/material"
-import MobileSearchBar from "../search/mobile-search-bar"
-import PreviewCardList from "./preview-card-list"
-import { usePageLink } from "./usePageLink"
+import PreviewCardList from "../preview-card-list/preview-card-list"
+import { usePageLink } from "../preview-card-list/usePageLink"
+import SearchBar from "./search-bar"
 
 export function MobilePreviewCardListContainer() {
     const { prevPageCursor, nextPageCursor } = useJobsQuery()
@@ -19,7 +19,7 @@ export function MobilePreviewCardListContainer() {
     return (
         <Paper variant="outlined" className="h-full flex flex-col">
             <Paper elevation={2}>
-                <MobileSearchBar />
+                <SearchBar />
             </Paper>
 
             <Paper
