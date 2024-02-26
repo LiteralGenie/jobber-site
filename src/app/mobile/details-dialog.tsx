@@ -1,4 +1,5 @@
 import { useActiveJob } from "@/lib/providers/active-job-provider"
+import { useHashContext } from "@/lib/providers/hash-provider"
 import { WestOutlined } from "@mui/icons-material"
 import LaunchIcon from "@mui/icons-material/Launch"
 import { Button, Dialog, Paper, Slide, Typography } from "@mui/material"
@@ -8,14 +9,44 @@ import { CopyLinkButton } from "../details/copy-link-button"
 import { DetailsContent } from "../details/details-content"
 import { hijackNavigation } from "../preview-list/usePageLink"
 
-export function DetailsDialog() {
+export interface DetailsDialogProps {
+    shouldPopStateOnClose: boolean
+}
+
+export function DetailsDialog({ shouldPopStateOnClose }: DetailsDialogProps) {
     const activeJob = useActiveJob()
 
-    const href = typeof window === "undefined" ? "" : window.location.href
+    const { recheckHash } = useHashContext()
 
-    // Unset active job
+    const url = typeof window === "undefined" ? "" : window.location.href
+
     function handleClose() {
-        window.location.hash = ""
+        // If the last history entry was for the preview list
+        // (ie they entered this dialog by clicking a card, not following a link someone pasted)
+        // we should remove this from history, to avoid the history looking like...
+        //   list page #1
+        //   card #1
+        //   list page #1
+        //   card #2
+        //   list page #1
+        //   list page #2
+        //   card ...
+        //   ...
+        if (shouldPopStateOnClose) {
+            window.history.back()
+        } else {
+            // Otherwise, if the history points to a different domain,
+            // just rewrite the current url / entry
+            const update = new URL(window.location.href)
+            update.hash = ""
+
+            window.history.replaceState(
+                { ...window.history.state },
+                "",
+                update.href
+            )
+            recheckHash()
+        }
     }
 
     return (
@@ -28,7 +59,7 @@ export function DetailsDialog() {
                     >
                         <Typography variant="h6">{activeJob.title}</Typography>
 
-                        <CopyLinkButton href={href} size="small" />
+                        <CopyLinkButton href={url} size="small" />
                     </Paper>
 
                     <div className="overflow-auto">

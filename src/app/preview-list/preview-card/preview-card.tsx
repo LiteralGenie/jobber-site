@@ -2,39 +2,29 @@ import { MONTHS } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
 import LaunchIcon from "@mui/icons-material/Launch"
 import { Button, IconButton, Typography, alpha } from "@mui/material"
-import { MouseEvent, useMemo } from "react"
-import { hijackNavigation } from "../usePageLink"
+import { useMemo } from "react"
 import styles from "./preview-card.module.scss"
 
 export interface PreviewCardProps {
     job: JobData
     isActive: boolean
-    replaceHistory?: boolean
+    onClick?: () => void
 }
 
 export default function PreviewCard({
     job,
     isActive,
-    replaceHistory,
+    onClick,
 }: PreviewCardProps) {
     const date = useMemo(() => humanizeDate(job.time_created), [job])
-
-    // If requested, do not create a back-button entry
-    function handleClick(ev: MouseEvent<HTMLAnchorElement>) {
-        if (replaceHistory) {
-            hijackNavigation(ev, () => {
-                window.location.hash = job.id
-            })
-        }
-    }
 
     return (
         <div className="w-full flex justify-between">
             {/* Overview */}
             <Button
+                onClick={onClick}
                 disabled={isActive}
-                href={`#${job.id}zz`}
-                onClick={handleClick}
+                href={`#${job.id}`}
                 className={styles.button}
                 sx={{
                     borderColor: isActive ? "info.main" : "transparent",

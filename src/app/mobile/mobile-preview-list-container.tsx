@@ -8,11 +8,17 @@ import {
 } from "@mui/icons-material"
 import { Button, Paper } from "@mui/material"
 import { useEffect, useRef } from "react"
-import PreviewList from "../preview-list/preview-list"
+import PreviewList, { PreviewListProps } from "../preview-list/preview-list"
 import { usePageLink } from "../preview-list/usePageLink"
 import SearchBar from "./search-bar"
 
-export function MobilePreviewListContainer() {
+export interface MobilePreviewListContainerProps {
+    onCardClick?: PreviewListProps["onClick"]
+}
+
+export function MobilePreviewListContainer({
+    onCardClick,
+}: MobilePreviewListContainerProps) {
     const { jobs, prevPageCursor, nextPageCursor } = useJobsQuery()
 
     const { getLinkProps } = usePageLink()
@@ -35,7 +41,7 @@ export function MobilePreviewListContainer() {
                 className="min-h-0 h-full overflow-auto flex flex-col"
                 ref={scrollElRef}
             >
-                <PreviewList replaceHistory={true} />
+                <PreviewList onClick={onCardClick} />
             </Paper>
 
             <Paper elevation={2} className="flex justify-center">

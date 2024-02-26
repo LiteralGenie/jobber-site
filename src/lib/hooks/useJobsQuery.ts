@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useMemo } from "react"
 import { JobData } from "../job-data"
-import { useHash } from "./useHash"
+import { useHashContext } from "../providers/hash-provider"
 
 async function queryJobs(queryString: string): Promise<JobsDto> {
     const resp = await fetch(`/api/jobs${queryString}`)
@@ -14,7 +14,7 @@ async function queryJobs(queryString: string): Promise<JobsDto> {
 }
 
 export function useJobsQuery() {
-    const { hash } = useHash()
+    const { hash } = useHashContext()
     const { searchFilters } = useSearchFilters()
 
     const searchParams = useSearchParams()

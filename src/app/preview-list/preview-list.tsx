@@ -3,14 +3,14 @@ import { useJobsQuery } from "@/lib/hooks/useJobsQuery"
 import { useActiveJob } from "@/lib/providers/active-job-provider"
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
 import { Divider, Typography } from "@mui/material"
-import PreviewCard from "./preview-card/preview-card"
+import PreviewCard, { PreviewCardProps } from "./preview-card/preview-card"
 import PreviewCardSkeleton from "./preview-card/preview-card-skeleton"
 
-export interface PreviewCardListProps {
-    replaceHistory?: boolean
+export interface PreviewListProps {
+    onClick?: PreviewCardProps["onClick"]
 }
 
-export default function PreviewList({ replaceHistory }: PreviewCardListProps) {
+export default function PreviewList({ onClick }: PreviewListProps) {
     const { jobs, isFetching } = useJobsQuery()
 
     const activeJob = useActiveJob()
@@ -45,7 +45,7 @@ export default function PreviewList({ replaceHistory }: PreviewCardListProps) {
                         <PreviewCard
                             job={job}
                             isActive={job.id === activeJob?.id}
-                            replaceHistory={replaceHistory}
+                            onClick={onClick}
                         />
 
                         {idx == jobs.length - 1 ? "" : <Divider />}

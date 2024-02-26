@@ -1,6 +1,7 @@
 "use client"
 
 import { FormProvider } from "@/lib/providers/form-provider"
+import { HashProvider } from "@/lib/providers/hash-provider"
 import {
     CssBaseline,
     StyledEngineProvider,
@@ -137,7 +138,9 @@ export function HomeContainer({
                     <CssBaseline />
                     <QueryClientProvider client={queryClient}>
                         <FormProvider>
-                            <Home />
+                            <HashProvider>
+                                <Home />
+                            </HashProvider>
                         </FormProvider>
                     </QueryClientProvider>
                 </ThemeProvider>
