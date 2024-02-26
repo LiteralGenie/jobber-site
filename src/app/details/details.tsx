@@ -1,9 +1,9 @@
 import { JobData } from "@/lib/job-data"
 import LaunchIcon from "@mui/icons-material/Launch"
-import LinkIcon from "@mui/icons-material/Link"
-import { Button, Card, Paper, Snackbar } from "@mui/material"
-import { useEffect, useRef, useState } from "react"
+import { Button, Card, Paper } from "@mui/material"
+import { useEffect, useRef } from "react"
 import { useScrollTop } from "../../lib/hooks/useScrollTop"
+import { CopyLinkButton } from "./copy-link-button"
 import { DetailsContent } from "./details-content"
 import styles from "./details.module.scss"
 
@@ -15,28 +15,12 @@ export default function Details({ job }: DetailsProps) {
     const scrollElRef = useRef<HTMLDivElement>(null)
     const { scrollTop } = useScrollTop(scrollElRef)
 
-    const [snackbarOpen, setSnackbarOpen] = useState(false)
+    const href = typeof window === "undefined" ? "" : window.location.href
 
     // Reset scroll position on content change
     useEffect(() => {
         scrollElRef.current?.scrollTo({ top: 0 })
     }, [job])
-
-    function handleLinkCopy() {
-        navigator.clipboard.writeText(window.location.href)
-        setSnackbarOpen(true)
-    }
-
-    const handleSnackbarClose = (
-        event: React.SyntheticEvent | Event,
-        reason?: string
-    ) => {
-        if (reason === "clickaway") {
-            return
-        }
-
-        setSnackbarOpen(false)
-    }
 
     return (
         <div className="relative overflow-hidden flex flex-col">
@@ -62,16 +46,7 @@ export default function Details({ job }: DetailsProps) {
 
             <Paper elevation={1} className="w-full p-2 flex justify-between">
                 <div className="flex gap-2">
-                    <Button
-                        size="large"
-                        color="primary"
-                        variant="outlined"
-                        aria-label="Copy link"
-                        title="Copy link"
-                        onClick={handleLinkCopy}
-                    >
-                        <LinkIcon />
-                    </Button>
+                    <CopyLinkButton href={href} />
                 </div>
 
                 <div className="flex gap-2">
@@ -90,14 +65,6 @@ export default function Details({ job }: DetailsProps) {
                     </Button>
                 </div>
             </Paper>
-
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={1500}
-                onClose={handleSnackbarClose}
-                message="Copied link to clipboard"
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            />
         </div>
     )
 }
