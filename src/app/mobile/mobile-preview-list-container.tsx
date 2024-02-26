@@ -32,7 +32,7 @@ export function MobilePreviewListContainer({
 
     return (
         <Paper variant="outlined" className="h-full flex flex-col">
-            <Paper elevation={2}>
+            <Paper elevation={2} className="p-4">
                 <SearchBar />
             </Paper>
 

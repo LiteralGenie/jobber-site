@@ -11,7 +11,11 @@ import { useSearchFilters } from "../search/hooks/useSearchFilters"
 import { removeDefaultFilters } from "../search/hooks/useSearchForm"
 import { SearchDialog } from "../search/search-dialog"
 
-export default function SearchBar() {
+export interface SearchBarProps {
+    wide?: boolean
+}
+
+export default function SearchBar({ wide }: SearchBarProps) {
     const {
         form: { register, setValue, watch },
         handleSubmit,
@@ -43,11 +47,11 @@ export default function SearchBar() {
                     ev.preventDefault()
                     handleSubmit()
                 }}
-                className="p-4 flex justify-center items-center gap-2"
+                className="flex justify-center items-center gap-2"
             >
                 <TextField
                     {...register("text")}
-                    className="w-full max-w-md"
+                    className={`w-full ${wide ? "w-full" : "max-w-md"}`}
                     placeholder="software (dev|eng).*"
                     size="small"
                     aria-label="Text to search for"
