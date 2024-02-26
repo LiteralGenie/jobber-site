@@ -1,8 +1,0 @@
-.container {
-    --padding: 48px;
-
-    @apply grid gap-16 justify-center h-full w-full overflow-auto;
-
-    padding: var(--padding);
-    grid-template-columns: max-content 350px minmax(250px, 700px);
-}

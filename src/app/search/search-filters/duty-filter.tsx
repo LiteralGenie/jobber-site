@@ -1,18 +1,16 @@
+import { useFormContext } from "@/lib/providers/form-provider"
 import { FormLabel } from "@mui/material"
-import { UseFormReturn } from "react-hook-form"
-import { DutyDto } from "../api/duties/handler"
-import MultiSelect from "./multi-select"
-import { FilterData } from "./types"
+import { DutyDto } from "../../api/duties/handler"
+import MultiSelect from "../multi-select"
 
 export interface DutyFilterProps {
     duties: DutyDto[]
-    form: UseFormReturn<FilterData>
 }
 
-export function DutyFilter({ duties, form }: DutyFilterProps) {
-    const { watch } = form
-    const included = watch("duties.include")
-    const excluded = watch("duties.exclude")
+export function DutyFilter({ duties }: DutyFilterProps) {
+    const { form } = useFormContext()
+    const included = form.watch("duties.include")
+    const excluded = form.watch("duties.exclude")
 
     return (
         <section>

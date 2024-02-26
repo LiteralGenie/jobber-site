@@ -4,7 +4,8 @@ const nextConfig = {
     output: "standalone",
     experimental: {
         windowHistorySupport: true
-    }
+    },
+    productionBrowserSourceMaps: true, // For the curious
 }
 
 module.exports = nextConfig

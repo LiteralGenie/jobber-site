@@ -1,5 +1,7 @@
 "use client"
 
+import { FormProvider } from "@/lib/providers/form-provider"
+import { HashProvider } from "@/lib/providers/hash-provider"
 import {
     CssBaseline,
     StyledEngineProvider,
@@ -8,7 +10,11 @@ import {
 } from "@mui/material"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useState } from "react"
-import Home, { HomeProps } from "./home"
+import { DutyDto } from "./api/duties/handler"
+import { JobsDto } from "./api/jobs/handler"
+import { LocationDto } from "./api/locations/handler"
+import { SkillDto } from "./api/skills/handler"
+import Home from "./home"
 
 // const rootElement = document.getElementById("app")
 
@@ -78,7 +84,22 @@ const darkTheme = createTheme({
     },
 })
 
-export function HomeContainer(props: HomeProps) {
+export interface HomeContainerProps {
+    jobs: JobsDto
+    jobsQuery: string
+
+    duties: DutyDto[]
+    skills: SkillDto[]
+    locations: LocationDto[]
+}
+
+export function HomeContainer({
+    jobs,
+    jobsQuery,
+    duties,
+    skills,
+    locations,
+}: HomeContainerProps) {
     const [queryClient] = useState(
         () =>
             new QueryClient({
@@ -90,6 +111,12 @@ export function HomeContainer(props: HomeProps) {
                 },
             })
     )
+
+    // Load server-generated api data into query cache
+    queryClient.setQueryData([jobsQuery], () => jobs)
+    queryClient.setQueryData(["/api/duties"], () => duties)
+    queryClient.setQueryData(["/api/skills"], () => skills)
+    queryClient.setQueryData(["/api/locations"], () => locations)
 
     return (
         // DO NOT REMOVE THIS DIV!!!
@@ -110,7 +137,11 @@ export function HomeContainer(props: HomeProps) {
                 <ThemeProvider theme={darkTheme}>
                     <CssBaseline />
                     <QueryClientProvider client={queryClient}>
-                        <Home {...props} />
+                        <FormProvider>
+                            <HashProvider>
+                                <Home />
+                            </HashProvider>
+                        </FormProvider>
                     </QueryClientProvider>
                 </ThemeProvider>
             </StyledEngineProvider>

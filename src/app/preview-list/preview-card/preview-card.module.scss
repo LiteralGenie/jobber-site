@@ -8,7 +8,7 @@
 
 .button {
     @apply grow p-4 pr-2 h-full w-full;
-    @apply flex flex-col text-start overflow-hidden;
+    @apply flex flex-col text-start overflow-hidden items-start;
 
     // Border is always active but only colored for active card (via sx, not this file)
     @apply border-2 border-solid;

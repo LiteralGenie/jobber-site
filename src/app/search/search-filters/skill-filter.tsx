@@ -1,18 +1,16 @@
+import { useFormContext } from "@/lib/providers/form-provider"
 import { FormLabel } from "@mui/material"
-import { UseFormReturn } from "react-hook-form"
-import { SkillDto } from "../api/skills/handler"
-import MultiSelect from "./multi-select"
-import { FilterData } from "./types"
+import { SkillDto } from "../../api/skills/handler"
+import MultiSelect from "../multi-select"
 
 export interface SkillFilterProps {
     skills: SkillDto[]
-    form: UseFormReturn<FilterData>
 }
 
-export function SkillFilter({ skills, form }: SkillFilterProps) {
-    const { watch } = form
-    const included = watch("skills.include")
-    const excluded = watch("skills.exclude")
+export function SkillFilter({ skills }: SkillFilterProps) {
+    const { form } = useFormContext()
+    const included = form.watch("skills.include")
+    const excluded = form.watch("skills.exclude")
 
     return (
         <section>

@@ -1,20 +1,25 @@
 import { PageProps } from "@/app/types"
-import { Nullified, nullifyEmptyArrays } from "@/lib/misc-utils"
+import { Nullified } from "@/lib/misc-utils"
 import { ParserBuilder } from "nuqs"
-import { SearchFilters, SearchFormData } from "../types"
-import { EMPTY_FILTERS, SEARCH_FILTERS_PARSER } from "./constants"
-import { UseSearchFiltersReturn, useSearchFilters } from "./useSearchFilters"
+import { isEqual } from "radash"
+import { LocationType, SearchFilters, SearchFormData } from "../types"
+import { SEARCH_FILTERS_PARSER } from "./constants"
+import { useSearchFilters } from "./useSearchFilters"
 
 export function useSearchForm() {
     const { searchFilters, setSearchFilters } = useSearchFilters()
 
     return {
-        loadFromUrl: () => loadFromFilters(searchFilters),
-        submit: (data: SearchFormData) => submit(data, setSearchFilters),
+        loadFromUrl: () => filtersToFormData(searchFilters),
+        submit: (data: SearchFormData) => {
+            const filters = formDataToFilters(data)
+            const update = removeDefaultFilters(filters)
+            setSearchFilters(update)
+        },
     }
 }
 
-function loadFromFilters(filters: SearchFilters): SearchFormData {
+export function filtersToFormData(filters: SearchFilters): SearchFormData {
     const d = filters
 
     const locationTypes = {
@@ -28,7 +33,7 @@ function loadFromFilters(filters: SearchFilters): SearchFormData {
         after: d.after,
         text: d.text,
         salary: d.salary,
-        clearance: d.clearance,
+        clearance: d.clearance === null ? "" : d.clearance,
         locationTypes,
         skills: {
             include: d["skills-included"].map((id) => ({ id })),
@@ -49,7 +54,9 @@ function loadFromFilters(filters: SearchFilters): SearchFormData {
     }
 }
 
-export function loadFromPageParams(searchParams: PageProps["searchParams"]) {
+export function pageParamsToFilters(
+    searchParams: PageProps["searchParams"]
+): SearchFilters {
     const filters = Object.fromEntries(
         Object.entries(SEARCH_FILTERS_PARSER).map(([k, v]) => {
             const param = searchParams[k]
@@ -58,55 +65,50 @@ export function loadFromPageParams(searchParams: PageProps["searchParams"]) {
         })
     ) as SearchFilters
 
-    const data = loadFromFilters(filters)
-
-    return data
+    return filters
 }
 
-type SearchFiltersOrNull = Nullified<SearchFilters>
+export function formDataToFilters(data: SearchFormData): SearchFilters {
+    const locTypes = [] as LocationType[]
+    if (data.locationTypes.hybrid) locTypes.push("hybrid")
+    if (data.locationTypes.onsite) locTypes.push("onsite")
+    if (data.locationTypes.remote) locTypes.push("remote")
 
-function submit(
-    data: SearchFormData,
-    setSearchFilters: UseSearchFiltersReturn["setSearchFilters"]
-): void {
-    const update = { ...EMPTY_FILTERS } as SearchFiltersOrNull
+    return {
+        after: data.after,
+        text: data.text,
+        clearance: data.clearance === "" ? null : data.clearance,
+        salary: data.salary,
+        "location-types": locTypes,
+        "yoe-minimum": data.yoe.minimum,
+        "yoe-ignore-null": data.yoe.ignoreNull,
 
-    update.after = data.after
+        "skills-included": data.skills.include.map(({ id }) => id),
+        "skills-excluded": data.skills.exclude.map(({ id }) => id),
 
-    if (data.text) {
-        update.text = data.text
+        "duties-included": data.duties.include.map(({ id }) => id),
+        "duties-excluded": data.duties.exclude.map(({ id }) => id),
+
+        cities: data.locations.cities,
+        states: data.locations.states,
     }
+}
 
-    update.clearance = data.clearance
+export function removeDefaultFilters(
+    filters: SearchFilters
+): Nullified<SearchFilters> {
+    const update: Nullified<SearchFilters> = { ...filters }
 
-    if (data.salary > 0) {
-        update.salary = data.salary
-    }
+    Object.keys(SEARCH_FILTERS_PARSER).forEach((k) => {
+        const key = k as keyof typeof SEARCH_FILTERS_PARSER
+        const parser = SEARCH_FILTERS_PARSER[key]
+        if (
+            "defaultValue" in parser &&
+            isEqual(parser.defaultValue, update[key])
+        ) {
+            update[key] = null
+        }
+    })
 
-    update["location-types"] = []
-    if (data.locationTypes.hybrid) update["location-types"].push("hybrid")
-    if (data.locationTypes.onsite) update["location-types"].push("onsite")
-    if (data.locationTypes.remote) update["location-types"].push("remote")
-
-    if (data.yoe.minimum) {
-        update["yoe-minimum"] = data.yoe.minimum
-    }
-
-    if (data.yoe.ignoreNull) {
-        update["yoe-ignore-null"] = true
-    }
-
-    update["skills-included"] = data.skills.include.map(({ id }) => id)
-    update["skills-excluded"] = data.skills.exclude.map(({ id }) => id)
-
-    update["duties-included"] = data.duties.include.map(({ id }) => id)
-    update["duties-excluded"] = data.duties.exclude.map(({ id }) => id)
-
-    update.cities = data.locations.cities
-    update.states = data.locations.states
-
-    // Do not show empty arrays in url
-    nullifyEmptyArrays(update)
-
-    setSearchFilters(update, { history: "push" })
+    return update
 }

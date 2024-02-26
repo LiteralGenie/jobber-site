@@ -35,7 +35,7 @@ export const SEARCH_FORM_DEFAULT = () =>
         },
         text: "",
         salary: 0,
-        clearance: null,
+        clearance: "",
     } as SearchFormData)
 
 const d = SEARCH_FORM_DEFAULT()
@@ -49,7 +49,7 @@ export const SEARCH_FILTERS_PARSER = {
     text: parseAsString.withDefault(d.text),
     salary: parseAsInteger.withDefault(d.salary),
     clearance:
-        d.clearance === null
+        d.clearance === ""
             ? parseAsBoolean
             : parseAsBoolean.withDefault(d.clearance),
     "location-types": parseAsArrayOf(

@@ -8,15 +8,21 @@ import styles from "./preview-card.module.scss"
 export interface PreviewCardProps {
     job: JobData
     isActive: boolean
+    onClick?: () => void
 }
 
-export default function PreviewCard({ job, isActive }: PreviewCardProps) {
+export default function PreviewCard({
+    job,
+    isActive,
+    onClick,
+}: PreviewCardProps) {
     const date = useMemo(() => humanizeDate(job.time_created), [job])
 
     return (
         <div className="w-full flex justify-between">
             {/* Overview */}
             <Button
+                onClick={onClick}
                 disabled={isActive}
                 href={`#${job.id}`}
                 className={styles.button}

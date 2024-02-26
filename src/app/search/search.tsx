@@ -1,120 +1,32 @@
-"use-client"
-
-import { Button, Divider, Paper, TextField } from "@mui/material"
-import { FormEvent } from "react"
-import { useForm } from "react-hook-form"
-import { DutyDto } from "../api/duties/handler"
-import { LocationDto } from "../api/locations/handler"
-import { SkillDto } from "../api/skills/handler"
-import { ClearanceFilter } from "./clearance-filter"
-import { DutyFilter } from "./duty-filter"
-import { SEARCH_FORM_DEFAULT } from "./hooks/constants"
-import { useSearchForm } from "./hooks/useSearchForm"
-import { LocationFilter } from "./location-filter"
-import { LocationTypeFilter } from "./location-type-filter"
-import styles from "./search.module.scss"
-import { SkillFilter } from "./skill-filter"
-import { SearchFormData } from "./types"
-import { YoeFilter } from "./yoe-filter"
+import { useFormContext } from "@/lib/providers/form-provider"
+import { Button, Paper } from "@mui/material"
+import { SearchFilters } from "./search-filters/search-filters"
 
 export interface SearchProps {
-    duties: DutyDto[]
-    skills: SkillDto[]
-    locations: LocationDto[]
+    className?: string
 }
 
-export default function Search({ duties, skills, locations }: SearchProps) {
-    const { loadFromUrl, submit } = useSearchForm()
-
-    const form = useForm<SearchFormData>({
-        defaultValues: loadFromUrl(),
-    })
-    const { register, getValues, reset, formState } = form
-
-    // POST form data and update query params
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault()
-
-        const data = getValues()
-        submit(data)
-        reset(data)
-    }
-
-    function handleReset() {
-        reset()
-    }
-
-    function handleClear() {
-        reset(SEARCH_FORM_DEFAULT(), { keepDefaultValues: true })
-    }
+export default function Search({ className }: SearchProps) {
+    const {
+        form: { formState },
+        handleSubmit,
+        handleReset,
+        handleClear,
+    } = useFormContext()
 
     return (
         <form
-            onSubmit={(ev) => handleSubmit(ev)}
-            className={styles["search-form"]}
+            onSubmit={(ev) => {
+                ev.preventDefault()
+                handleSubmit()
+            }}
+            className={`min-h-0 flex flex-col ${className ?? ""}`}
         >
             <Paper
                 variant="outlined"
                 className="overflow-auto flex flex-col p-2"
             >
-                {/* Text filter */}
-                <div className="px-2">
-                    <TextField
-                        label="Text"
-                        variant="standard"
-                        type="text"
-                        placeholder="software (developer|engineer)"
-                        {...register("text")}
-                    />
-                </div>
-
-                <div className="pb-2 pt-4">
-                    <LocationFilter form={form} locations={locations} />
-                </div>
-
-                <div className="pb-2 pt-4">
-                    <Divider />
-                </div>
-
-                {/* Experience filter */}
-                <div className="px-2">
-                    <YoeFilter form={form} />
-                </div>
-
-                <div className="pb-2">
-                    <Divider />
-                </div>
-
-                {/* Skill / duty filters */}
-                <div className="px-2">
-                    <SkillFilter skills={skills} form={form} />
-                </div>
-
-                <div className="pb-2 pt-4">
-                    <Divider />
-                </div>
-
-                <div className="px-2">
-                    <DutyFilter duties={duties} form={form} />
-                </div>
-
-                <div className="pb-2 pt-4">
-                    <Divider />
-                </div>
-
-                {/* Miscellaenous */}
-                <section className="flex flex-col px-2">
-                    <div className="flex flex-col gap-4">
-                        <TextField
-                            label="Salary"
-                            variant="standard"
-                            type="number"
-                            {...register("salary")}
-                        />
-                        <LocationTypeFilter form={form} />
-                        <ClearanceFilter form={form} />
-                    </div>
-                </section>
+                <SearchFilters />
             </Paper>
 
             <div className="pt-4 flex justify-end gap-2">

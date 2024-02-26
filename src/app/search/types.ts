@@ -4,7 +4,7 @@ export interface SearchFormData {
     after: number | null
     text: string
     salary: number
-    clearance: boolean | null
+    clearance: boolean | ""
     locations: {
         cities: number[]
         states: string[]

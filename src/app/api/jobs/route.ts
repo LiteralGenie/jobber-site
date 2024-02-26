@@ -1,4 +1,7 @@
-import { loadFromPageParams } from "@/app/search/hooks/useSearchForm"
+import {
+    filtersToFormData,
+    pageParamsToFilters,
+} from "@/app/search/hooks/useSearchForm"
 import { NextRequest } from "next/server"
 import { getJobs } from "./handler"
 
@@ -19,7 +22,8 @@ export async function GET(request: NextRequest) {
         "yoe-minimum": params.get("yoe-minimum") ?? undefined,
         "yoe-ignore-null": params.get("yoe-ignore-null") ?? undefined,
     }
-    const filters = loadFromPageParams(asObj)
+    const filters = pageParamsToFilters(asObj)
+    const formData = filtersToFormData(filters)
 
-    return Response.json(await getJobs(filters))
+    return Response.json(await getJobs(formData))
 }
