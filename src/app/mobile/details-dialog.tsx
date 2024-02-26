@@ -1,3 +1,4 @@
+import { useJobsQuery } from "@/lib/hooks/useJobsQuery"
 import { useActiveJob } from "@/lib/providers/active-job-provider"
 import { ChevronLeft, ChevronRight, WestOutlined } from "@mui/icons-material"
 import {
@@ -7,38 +8,39 @@ import {
     Paper,
     Slide,
     Typography,
+    alpha,
 } from "@mui/material"
 import { TransitionProps } from "@mui/material/transitions"
-import { forwardRef } from "react"
+import { forwardRef, useMemo } from "react"
 import { CopyLinkButton } from "../details/copy-link-button"
 import { DetailsContent } from "../details/details-content"
 
 export function DetailsDialog() {
+    const { jobs } = useJobsQuery()
     const activeJob = useActiveJob()
+
+    const [prevJob, nextJob] = useMemo(() => {
+        if (!activeJob) {
+            return [null, null]
+        }
+
+        const idx = jobs.findIndex((job) => job.id === activeJob.id)
+        if (idx === -1) {
+            console.error("activeJob not in list", activeJob, jobs)
+            return [null, null]
+        }
+
+        const prevJob = jobs[idx - 1] ?? null
+        const nextJob = jobs[idx + 1] ?? null
+
+        return [prevJob, nextJob]
+    }, [activeJob, jobs])
+    console.log(prevJob, nextJob)
 
     const href = typeof window === "undefined" ? "" : window.location.href
 
-    // Unset active job
-    function handleClose() {
-        window.location.hash = ""
-
-        // Remove the trailing #
-        // note: The above is still neccessary to notify hooks of url changes
-        //       This alone doesn't trigger any popstate / hashchange events
-        window.history.replaceState(
-            { ...window.history.state },
-            "",
-            window.location.href.split("#")[0]
-        )
-    }
-
     return (
-        <Dialog
-            open={!!activeJob}
-            onClose={handleClose}
-            fullScreen
-            TransitionComponent={Transition}
-        >
+        <Dialog open={!!activeJob} fullScreen TransitionComponent={Transition}>
             {activeJob && (
                 <Paper className="overflow-hidden h-full flex flex-col">
                     <Paper
@@ -56,7 +58,7 @@ export function DetailsDialog() {
 
                     <Paper elevation={2} className="p-4 flex justify-between">
                         <Button
-                            onClick={handleClose}
+                            href="#"
                             variant="text"
                             startIcon={<WestOutlined />}
                             aria-label="Back to search results"
@@ -65,10 +67,29 @@ export function DetailsDialog() {
                         </Button>
 
                         <ButtonGroup aria-label="Navigation">
-                            <Button aria-label="Previous post">
+                            <Button
+                                href={"#" + prevJob?.id}
+                                disabled={!prevJob}
+                                aria-label="Previous post"
+                                // Fix missing borders when neighbor is disabled
+                                // https://github.com/mui/material-ui/issues/35045
+                                sx={{
+                                    borderRightColor: (theme) =>
+                                        !nextJob
+                                            ? alpha(
+                                                  theme.palette.primary.main,
+                                                  0.5
+                                              )
+                                            : "",
+                                }}
+                            >
                                 <ChevronLeft />
                             </Button>
-                            <Button aria-label="Next post">
+                            <Button
+                                href={"#" + nextJob?.id}
+                                disabled={!nextJob}
+                                aria-label="Next post"
+                            >
                                 <ChevronRight />
                             </Button>
                         </ButtonGroup>
