@@ -35,7 +35,6 @@ export function DetailsDialog() {
 
         return [prevJob, nextJob]
     }, [activeJob, jobs])
-    console.log(prevJob, nextJob)
 
     const href = typeof window === "undefined" ? "" : window.location.href
 
@@ -76,10 +75,10 @@ export function DetailsDialog() {
                                 sx={{
                                     borderRightColor: (theme) =>
                                         !nextJob
-                                            ? alpha(
+                                            ? `${alpha(
                                                   theme.palette.primary.main,
                                                   0.5
-                                              )
+                                              )} !important`
                                             : "",
                                 }}
                             >

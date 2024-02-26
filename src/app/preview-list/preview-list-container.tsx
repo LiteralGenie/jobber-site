@@ -9,11 +9,11 @@ import PreviewList from "./preview-list"
 import { usePageLink } from "./usePageLink"
 
 export default function PreviewListContainer() {
+    const { getLinkProps } = usePageLink()
+
     const { jobs, prevPageCursor, nextPageCursor } = useJobsQuery()
 
     const scrollElRef = useRef<HTMLDivElement>(null)
-
-    const { getLinkProps } = usePageLink()
 
     // Reset scroll position on content change
     useEffect(() => {
