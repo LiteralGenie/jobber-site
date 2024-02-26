@@ -14,9 +14,9 @@
     @apply border-2 border-solid;
 
     // Undo mui defaults
-    color: inherit;
+    // color: inherit;
     &:global(.Mui-disabled) {
-        color: inherit;
+        // color: inherit;
         border-radius: 0;
     }
 
