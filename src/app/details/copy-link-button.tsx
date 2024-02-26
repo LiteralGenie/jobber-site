@@ -1,12 +1,18 @@
 import LinkIcon from "@mui/icons-material/Link"
-import { Button, ButtonProps, Snackbar } from "@mui/material"
+import { Button, ButtonProps, Snackbar, SnackbarProps } from "@mui/material"
 import { useState } from "react"
 
-export interface CopyLinkButtonProps extends ButtonProps {
+export interface CopyLinkButtonProps {
     href: string
+    buttonProps?: ButtonProps
+    snackbarProps?: SnackbarProps
 }
 
-export function CopyLinkButton({ href, ...props }: CopyLinkButtonProps) {
+export function CopyLinkButton({
+    href,
+    buttonProps,
+    snackbarProps,
+}: CopyLinkButtonProps) {
     const [snackbarOpen, setSnackbarOpen] = useState(false)
 
     function handleLinkCopy() {
@@ -31,7 +37,7 @@ export function CopyLinkButton({ href, ...props }: CopyLinkButtonProps) {
                 aria-label="Copy link"
                 title="Copy link"
                 onClick={handleLinkCopy}
-                {...props}
+                {...buttonProps}
             >
                 <LinkIcon />
             </Button>
@@ -41,7 +47,7 @@ export function CopyLinkButton({ href, ...props }: CopyLinkButtonProps) {
                 autoHideDuration={1500}
                 onClose={handleSnackbarClose}
                 message="Copied link to clipboard"
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                {...snackbarProps}
             />
         </>
     )

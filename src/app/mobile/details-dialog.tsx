@@ -59,7 +59,19 @@ export function DetailsDialog({ shouldPopStateOnClose }: DetailsDialogProps) {
                     >
                         <Typography variant="h6">{activeJob.title}</Typography>
 
-                        <CopyLinkButton href={url} size="small" />
+                        <CopyLinkButton
+                            href={url}
+                            buttonProps={{
+                                size: "small",
+                            }}
+                            snackbarProps={{
+                                anchorOrigin: {
+                                    vertical: "bottom",
+                                    horizontal: "center",
+                                },
+                                className: "mb-12 w-1/2 mx-auto",
+                            }}
+                        />
                     </Paper>
 
                     <div className="overflow-auto">
