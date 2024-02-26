@@ -21,22 +21,36 @@ export function DetailsDialog({ shouldPopStateOnClose }: DetailsDialogProps) {
     const url = typeof window === "undefined" ? "" : window.location.href
 
     function handleClose() {
-        // If the last history entry was for the preview list
-        // (ie they entered this dialog by clicking a card, not following a link someone pasted)
-        // we should remove this from history, to avoid the history looking like...
-        //   list page #1
-        //   card #1
-        //   list page #1
-        //   card #2
-        //   list page #1
-        //   list page #2
-        //   card ...
-        //   ...
         if (shouldPopStateOnClose) {
+            // If the last history entry was for the preview list
+            // (ie they entered this dialog by clicking a card, not following a link someone pasted)
+            // then the nav history will look like this
+            //   list page #1
+            //   card #1
+            //
+            // if we follow this href="#" link as-is, the history will eventually look like
+            //   list page #1
+            //   card #1
+            //   list page #1
+            //   card #2
+            //   list page #1
+            //   list page #2
+            //   card ...
+            //   ...
+            //
+            // so instead, lets back() from the current card link so the history is prettier
+            // list page #1
+            // list page #2
+            // ...
             window.history.back()
         } else {
-            // Otherwise, if the history points to a different domain,
-            // just rewrite the current url / entry
+            // Otherwise, if they followed a direct link to this card
+            //   (some other domain)
+            //   card #1
+            //
+            // just rewrite the current url / entry to point to the list page
+            //   (some other domain)
+            //   list page #1
             const update = new URL(window.location.href)
             update.hash = ""
 
@@ -55,7 +69,7 @@ export function DetailsDialog({ shouldPopStateOnClose }: DetailsDialogProps) {
                 <Paper className="overflow-hidden h-full flex flex-col">
                     <Paper
                         elevation={4}
-                        className="p-4 flex justify-between items-center"
+                        className="p-4 flex gap-2 justify-between items-center"
                     >
                         <Typography variant="h6">{activeJob.title}</Typography>
 

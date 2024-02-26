@@ -81,12 +81,11 @@ export default function SearchBar({ wide }: SearchBarProps) {
                                     aria-label="Search"
                                 >
                                     <div className="relative flex">
+                                        {/* Overlay a red dot if any filters are active */}
                                         {hasChanges && (
                                             <Circle
                                                 sx={{
-                                                    color: (theme) =>
-                                                        theme.palette.primary
-                                                            .main,
+                                                    color: "#ff0000",
                                                     position: "absolute",
                                                     top: 0,
                                                     left: 0,
@@ -95,13 +94,8 @@ export default function SearchBar({ wide }: SearchBarProps) {
                                                 }}
                                             />
                                         )}
-                                        <TuneOutlined
-                                            color={
-                                                hasChanges
-                                                    ? "primary"
-                                                    : "inherit"
-                                            }
-                                        />
+
+                                        <TuneOutlined />
                                     </div>
                                 </IconButton>
                             </div>

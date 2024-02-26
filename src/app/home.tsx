@@ -16,7 +16,8 @@ export default function Home() {
     const tabletContainerRef = useRef<HTMLDivElement | null>(null)
     const mobileContainerRef = useRef<HTMLDivElement | null>(null)
 
-    // Flag to avoid rendering child components if container is hidden
+    // Choose which components to render based on screen size
+    // (ie unmount components if a media query set the container to display: none)
     const screenType = useMemo(() => {
         if (
             !desktopContainerRef.current ||
@@ -61,7 +62,7 @@ export default function Home() {
                 {screenType === "tablet" && <TabletLayout />}
             </div>
 
-            {/* Phone portrait layout */}
+            {/* Phone layout */}
             <div
                 ref={mobileContainerRef}
                 className="h-full overflow-auto md:hidden"
