@@ -19,31 +19,29 @@ export function useHash() {
         setIsClient(true)
     }, [])
 
+    function recheckHash() {
+        setHash(getHash())
+    }
+
     // Update hash on `window.location.hash = ...` calls
     useEffect(() => {
         if (!isClient) {
             return
         }
 
-        const handleHashChange = () => {
-            setHash(getHash())
-        }
-
-        window.addEventListener("hashchange", handleHashChange)
-        window.addEventListener("popstate", handleHashChange)
+        window.addEventListener("hashchange", recheckHash)
+        window.addEventListener("popstate", recheckHash)
 
         return () => {
-            window.removeEventListener("hashchange", handleHashChange)
-            window.addEventListener("popstate", handleHashChange)
+            window.removeEventListener("hashchange", recheckHash)
+            window.addEventListener("popstate", recheckHash)
         }
     }, [isClient])
 
     // Update hash when router wipes it out
     // (which doesn't trigger hashchange events)
     const params = useSearchParams()
-    useEffect(() => {
-        setHash(getHash())
-    }, [params])
+    useEffect(() => recheckHash(), [params])
 
     return {
         hash,

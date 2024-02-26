@@ -65,7 +65,7 @@ export function usePageLink() {
  *
  * @jank
  */
-function hijackNavigation(
+export function hijackNavigation(
     ev: MouseEvent<HTMLAnchorElement>,
     updateUrl: () => void
 ): void {

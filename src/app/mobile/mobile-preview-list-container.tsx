@@ -35,7 +35,7 @@ export function MobilePreviewListContainer() {
                 className="min-h-0 h-full overflow-auto flex flex-col"
                 ref={scrollElRef}
             >
-                <PreviewList />
+                <PreviewList replaceHistory={true} />
             </Paper>
 
             <Paper elevation={2} className="flex justify-center">

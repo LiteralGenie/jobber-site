@@ -23,7 +23,7 @@ export function ActiveJobProvider({
         const firstJob = jobs[0] ?? null
         const defaultValue = shouldDefault ? firstJob : null
         return hashedJob ?? defaultValue
-    }, [hashedJob])
+    }, [jobs, hashedJob])
 
     return <ActiveJob.Provider value={value}>{children}</ActiveJob.Provider>
 }

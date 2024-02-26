@@ -11,7 +11,7 @@ export interface DetailsContentProps {
 
 export function DetailsContent({ job }: DetailsContentProps) {
     return (
-        <article className="h-full p-4">
+        <article className="p-4">
             <header>
                 {/* Basic info */}
                 <Typography>{job.title}</Typography>

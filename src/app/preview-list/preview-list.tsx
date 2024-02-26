@@ -7,10 +7,10 @@ import PreviewCard from "./preview-card/preview-card"
 import PreviewCardSkeleton from "./preview-card/preview-card-skeleton"
 
 export interface PreviewCardListProps {
-    disableHighlight?: boolean
+    replaceHistory?: boolean
 }
 
-export default function PreviewList({}: PreviewCardListProps) {
+export default function PreviewList({ replaceHistory }: PreviewCardListProps) {
     const { jobs, isFetching } = useJobsQuery()
 
     const activeJob = useActiveJob()
@@ -45,6 +45,7 @@ export default function PreviewList({}: PreviewCardListProps) {
                         <PreviewCard
                             job={job}
                             isActive={job.id === activeJob?.id}
+                            replaceHistory={replaceHistory}
                         />
 
                         {idx == jobs.length - 1 ? "" : <Divider />}
