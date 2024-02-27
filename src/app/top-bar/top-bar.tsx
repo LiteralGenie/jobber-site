@@ -65,6 +65,7 @@ function TopBarLink({ text, href }: TopBarLinkProps) {
             target="_blank"
             variant="text"
             className="min-w-0 p-2"
+            color="info"
             sx={{
                 color: (theme) =>
                     alpha(theme.palette.primary.contrastText, 0.5),
