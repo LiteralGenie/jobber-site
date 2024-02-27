@@ -39,7 +39,7 @@ export function MobilePreviewListContainer({
             <Paper variant="outlined" className="h-full flex flex-col">
                 <Paper
                     elevation={2}
-                    className="p-4 w-full flex gap-4 items-center"
+                    className="p-4 w-full flex gap-4 items-center rounded-none"
                 >
                     <IconButton onClick={() => setShowSidebar(true)}>
                         <MenuIcon />
@@ -56,7 +56,10 @@ export function MobilePreviewListContainer({
                     <PreviewList onClick={onCardClick} />
                 </Paper>
 
-                <Paper elevation={2} className="flex justify-center">
+                <Paper
+                    elevation={2}
+                    className="rounded-none flex justify-center"
+                >
                     <nav className="p-2 max-w-sm flex justify-center gap-4">
                         <Button
                             {...getLinkProps(null)}
