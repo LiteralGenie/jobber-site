@@ -2,12 +2,12 @@ import { GitHub, RssFeed } from "@mui/icons-material"
 import { Button, Drawer, IconButton, Typography } from "@mui/material"
 import { ReactNode } from "react"
 
-export interface SideBarProps {
+export interface SidebarProps {
     open: boolean
     onClose: () => void
 }
 
-export function SideBar({ open, onClose }: SideBarProps) {
+export function Sidebar({ open, onClose }: SidebarProps) {
     return (
         <Drawer open={open} onClose={onClose}>
             <div className="p-4 w-40 h-full flex flex-col items-start">
@@ -16,16 +16,16 @@ export function SideBar({ open, onClose }: SideBarProps) {
                 </Typography>
 
                 <div className="flex flex-col gap-2 items-start">
-                    <TopBarLink text="FAQ" href="/" />
-                    <TopBarLink text="API" href="/" />
+                    <SidebarLink text="FAQ" href="/faq" />
+                    <SidebarLink text="API" href="/docs" />
                 </div>
 
                 <div className="grow"></div>
 
                 <div className="w-full flex justify-center">
-                    <TopBarIcon href="/" Icon={<RssFeed />} />
+                    <SidebarIcon href="/rss" Icon={<RssFeed />} />
 
-                    <TopBarIcon
+                    <SidebarIcon
                         href="https://github.com/LiteralGenie/jobber-site"
                         Icon={<GitHub />}
                     />
@@ -35,12 +35,12 @@ export function SideBar({ open, onClose }: SideBarProps) {
     )
 }
 
-export interface TopBarLinkProps {
+export interface SidebarLinkProps {
     text: string
     href: string
 }
 
-function TopBarLink({ text, href }: TopBarLinkProps) {
+function SidebarLink({ text, href }: SidebarLinkProps) {
     return (
         <Button
             href={href}
@@ -56,12 +56,12 @@ function TopBarLink({ text, href }: TopBarLinkProps) {
     )
 }
 
-export interface TopBarIconProps {
+export interface SidebarIconProps {
     Icon: ReactNode
     href: string
 }
 
-function TopBarIcon({ Icon, href }: TopBarIconProps) {
+function SidebarIcon({ Icon, href }: SidebarIconProps) {
     return (
         <IconButton color="inherit" href={href} target="_blank" rel="noopener">
             {Icon}

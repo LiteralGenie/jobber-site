@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react"
 import PreviewList, { PreviewListProps } from "../preview-list/preview-list"
 import { usePageLink } from "../preview-list/usePageLink"
 import SearchBar from "./search-bar"
-import { SideBar } from "./side-bar"
+import { Sidebar } from "./side-bar"
 
 export interface MobilePreviewListContainerProps {
     onCardClick?: PreviewListProps["onClick"]
@@ -106,7 +106,7 @@ export function MobilePreviewListContainer({
                 </Paper>
             </Paper>
 
-            <SideBar open={showSidebar} onClose={() => setShowSidebar(false)} />
+            <Sidebar open={showSidebar} onClose={() => setShowSidebar(false)} />
         </>
     )
 }
