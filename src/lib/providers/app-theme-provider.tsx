@@ -1,4 +1,3 @@
-import { DarkTheme, LightTheme } from "@/app/theme/themes"
 import { Theme, ThemeProvider } from "@mui/material"
 import {
     ReactNode,
@@ -8,6 +7,7 @@ import {
     useMemo,
     useState,
 } from "react"
+import { DarkTheme, LightTheme } from "../components/home/theme/themes"
 import { useLocalStorage } from "../hooks/use-local-storage"
 
 interface AppThemeContextValue {

@@ -1,10 +1,10 @@
+import { LocationDto } from "@/app/api/locations/handler"
 import { STATE_ABBREVIATIONS } from "@/lib/format-utils"
 import { useFormContext } from "@/lib/providers/form-provider"
 import { Autocomplete, TextField } from "@mui/material"
 import { alphabetical, group } from "radash"
 import { useMemo } from "react"
 import { Controller, ControllerRenderProps } from "react-hook-form"
-import { LocationDto } from "../../api/locations/handler"
 import { SearchFormData } from "../types"
 
 export interface LocationFilterProps {

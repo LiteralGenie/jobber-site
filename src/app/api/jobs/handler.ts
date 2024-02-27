@@ -1,5 +1,5 @@
-import { SearchFormData } from "@/app/search/types"
 import { db } from "@/database/db"
+import { SearchFormData } from "@/lib/components/home/search/types"
 import { PAGE_SIZE } from "@/lib/constants"
 import { JobData } from "@/lib/job-data"
 import { fromSqliteBool, toSqliteBool } from "@/lib/sql-utils"
