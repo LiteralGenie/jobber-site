@@ -14,6 +14,10 @@ export function usePageLink() {
     const search = useSearchParams()
 
     function getHref(cursor?: number | null): string {
+        if (cursor === undefined) {
+            return ""
+        }
+
         const current =
             typeof window === "undefined"
                 ? `https://_${pathname}?${search.toString()}`
@@ -31,6 +35,10 @@ export function usePageLink() {
     }
 
     function updateUrl(cursor?: number | null) {
+        if (cursor === undefined) {
+            return
+        }
+
         // Update url and notify useHash (via popstate event)
         window.history.pushState(
             { ...window.history.state },
