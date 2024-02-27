@@ -1,6 +1,13 @@
 import { DarkTheme, LightTheme } from "@/app/theme/themes"
 import { Theme, ThemeProvider } from "@mui/material"
-import { ReactNode, createContext, useContext, useMemo } from "react"
+import {
+    ReactNode,
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from "react"
 import { useLocalStorage } from "../hooks/use-local-storage"
 
 interface AppThemeContextValue {
@@ -24,11 +31,27 @@ export interface AppThemeProviderProps {
 }
 
 export function AppThemeProvider({ children }: AppThemeProviderProps) {
+    // Load the default from system preference on page load
+    const [defaultTheme, setDefaultTheme] = useState<Theme>(DarkTheme)
+    useEffect(() => {
+        const prefersLight = window.matchMedia(
+            "(prefers-color-scheme: light)"
+        ).matches
+        setDefaultTheme(prefersLight ? LightTheme : DarkTheme)
+    }, [])
+
+    // Load the last-picked theme from localStorage
     const { value: themeName, setValue } = useLocalStorage("theme")
-    const theme = useMemo(
-        () => (themeName === "light" ? LightTheme : DarkTheme),
-        [themeName]
-    )
+    const theme = useMemo(() => {
+        switch (themeName) {
+            case "light":
+                return LightTheme
+            case "dark":
+                return DarkTheme
+            default:
+                return defaultTheme
+        }
+    }, [themeName, defaultTheme])
 
     const value = {
         theme,
