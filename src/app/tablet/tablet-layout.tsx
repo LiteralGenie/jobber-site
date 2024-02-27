@@ -12,7 +12,7 @@ export function TabletLayout() {
 
                 <div className="h-full min-h-0 p-8 pt-8 flex flex-col gap-6 items-start">
                     <div className="max-w-xl w-full">
-                        <SearchBar wide />
+                        <SearchBar />
                     </div>
                     <div className="h-full overflow-hidden grid gap-8 justify-center grid-cols-[minmax(20rem,1fr)_2fr]">
                         <PreviewListContainer />

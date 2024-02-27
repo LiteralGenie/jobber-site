@@ -59,7 +59,6 @@ function TopBarLink({ text, href }: TopBarLinkProps) {
             href={href}
             target="_blank"
             variant="text"
-            color="inherit"
             className="min-w-0 p-2"
             sx={{
                 color: "text.disabled",

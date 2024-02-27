@@ -11,11 +11,7 @@ import { useSearchFilters } from "../search/hooks/useSearchFilters"
 import { removeDefaultFilters } from "../search/hooks/useSearchForm"
 import { SearchDialog } from "../search/search-dialog"
 
-export interface SearchBarProps {
-    wide?: boolean
-}
-
-export default function SearchBar({ wide }: SearchBarProps) {
+export default function SearchBar() {
     const {
         form: { register, setValue, watch },
         handleSubmit,
@@ -47,11 +43,11 @@ export default function SearchBar({ wide }: SearchBarProps) {
                     ev.preventDefault()
                     handleSubmit()
                 }}
-                className="flex justify-center items-center gap-2"
+                className="w-full flex justify-center items-center gap-2"
             >
                 <TextField
                     {...register("text")}
-                    className={`w-full ${wide ? "w-full" : "max-w-md"}`}
+                    className="w-full"
                     placeholder="software (dev|eng).*"
                     size="small"
                     aria-label="Text to search for"
@@ -110,6 +106,8 @@ export default function SearchBar({ wide }: SearchBarProps) {
                         ".MuiInputBase-root": {
                             paddingRight: 0,
                         },
+                        backgroundColor: (theme) =>
+                            theme.palette.background.paper,
                     }}
                 />
             </form>
