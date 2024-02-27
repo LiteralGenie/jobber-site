@@ -32,6 +32,7 @@ export default function PreviewCard({
                         backgroundColor: (theme) =>
                             alpha(theme.palette.info.main, 0.08),
                     },
+                    color: "inherit",
                 }}
             >
                 <Typography

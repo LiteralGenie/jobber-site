@@ -1,6 +1,6 @@
 "use client"
 
-import { useWindowSize } from "@/lib/hooks/useWindowSize"
+import { useWindowSize } from "@/lib/hooks/use-window-size"
 import { ActiveJobProvider } from "@/lib/providers/active-job-provider"
 import { useMemo, useRef } from "react"
 import { DetailsContainer } from "./details/details-container"
@@ -8,6 +8,7 @@ import { MobileLayout } from "./mobile/mobile-layout"
 import PreviewListContainer from "./preview-list/preview-list-container"
 import Search from "./search/search"
 import { TabletLayout } from "./tablet/tablet-layout"
+import { TopBar } from "./top-bar/top-bar"
 
 export default function Home() {
     const { windowSize } = useWindowSize()
@@ -44,15 +45,18 @@ export default function Home() {
     return (
         <div className="h-full">
             {/* Desktop layout */}
-            <div
-                ref={desktopContainerRef}
-                className="hidden xl:grid p-12 h-full gap-16 justify-center grid-cols-[max-content_22rem_minmax(16rem,44rem)]"
-            >
+            <div ref={desktopContainerRef} className="hidden xl:block h-full">
                 {screenType === "desktop" && (
                     <ActiveJobProvider shouldDefault={true}>
-                        <Search className="w-64" />
-                        <PreviewListContainer />
-                        <DetailsContainer />
+                        <div className="h-full flex flex-col gap-8">
+                            <TopBar />
+
+                            <div className="p-8 pt-0 min-h-0 h-full grid gap-16 justify-center grid-cols-[max-content_22rem_minmax(16rem,44rem)]">
+                                <Search className="w-64" />
+                                <PreviewListContainer />
+                                <DetailsContainer />
+                            </div>
+                        </div>
                     </ActiveJobProvider>
                 )}
             </div>

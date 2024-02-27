@@ -2,10 +2,9 @@ import { JobData } from "@/lib/job-data"
 import LaunchIcon from "@mui/icons-material/Launch"
 import { Button, Card, Paper } from "@mui/material"
 import { useEffect, useRef } from "react"
-import { useScrollTop } from "../../lib/hooks/useScrollTop"
+import { useScrollTop } from "../../lib/hooks/use-scroll-top"
 import { CopyLinkButton } from "./copy-link-button"
 import { DetailsContent } from "./details-content"
-import styles from "./details.module.scss"
 
 export interface DetailsProps {
     job: JobData
@@ -23,24 +22,12 @@ export default function Details({ job }: DetailsProps) {
     }, [job])
 
     return (
-        <div className="relative overflow-hidden flex flex-col">
+        <div className="overflow-hidden">
             <Card
                 ref={scrollElRef}
                 variant="outlined"
-                className="overflow-y-auto h-full flex flex-col"
+                className="overflow-y-auto h-full"
             >
-                <div
-                    className={
-                        scrollTop > 150
-                            ? styles["header-visible"]
-                            : styles["header-hidden"]
-                    }
-                >
-                    <Paper elevation={6} className={styles["header-text"]}>
-                        {job.title}
-                    </Paper>
-                </div>
-
                 <DetailsContent job={job} />
             </Card>
 

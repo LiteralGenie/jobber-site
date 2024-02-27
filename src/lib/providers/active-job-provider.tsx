@@ -1,11 +1,11 @@
 import { ReactNode, createContext, useContext, useMemo } from "react"
-import { useJobsQuery } from "../hooks/useJobsQuery"
+import { useJobsQuery } from "../hooks/use-jobs-query"
 import { JobData } from "../job-data"
 
-const ActiveJob = createContext<JobData | null>(null)
+const ActiveJobContext = createContext<JobData | null>(null)
 
 export function useActiveJob(): JobData | null {
-    return useContext(ActiveJob)
+    return useContext(ActiveJobContext)
 }
 
 export interface ActiveJobProviderProps {
@@ -25,5 +25,9 @@ export function ActiveJobProvider({
         return hashedJob ?? defaultValue
     }, [jobs, hashedJob])
 
-    return <ActiveJob.Provider value={value}>{children}</ActiveJob.Provider>
+    return (
+        <ActiveJobContext.Provider value={value}>
+            {children}
+        </ActiveJobContext.Provider>
+    )
 }

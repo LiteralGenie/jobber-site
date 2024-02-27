@@ -1,4 +1,4 @@
-import { useJobsQuery } from "@/lib/hooks/useJobsQuery"
+import { useJobsQuery } from "@/lib/hooks/use-jobs-query"
 import { useActiveJob } from "@/lib/providers/active-job-provider"
 import Details from "./details"
 import { DetailsSkeleton } from "./details-skeleton"
