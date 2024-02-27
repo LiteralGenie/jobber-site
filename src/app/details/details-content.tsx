@@ -98,7 +98,7 @@ function humanizeSalary(salary: JobData["salary"]): string {
     } else if (salary.max) {
         return `${commafy(salary.min)} - ${commafy(salary.max)}`
     } else {
-        return `${commafy(salary.min)}`
+        return `${salary.min ? commafy(salary.min) : "???"}`
     }
 }
 
