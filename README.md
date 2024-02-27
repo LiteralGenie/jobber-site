@@ -2,8 +2,7 @@ _A job board with (mostly) working filters_
 
 Live demo: https://jobber.velchees.dev/
 
-![image](https://github.com/LiteralGenie/jobber-site/assets/24236225/83f41188-ed56-4a49-8534-918b23245580)
-
+<img width="75%" src="https://github.com/LiteralGenie/jobber-site/assets/24236225/36bb7585-1d46-4246-b88c-6487dcc7bcc1" />
 
 ## Docker Setup
 

@@ -28,7 +28,7 @@ export function TopBar() {
                 <ThemeToggle size="small" />
 
                 <div className="flex pl-4">
-                    <TopBarIcon href="/" Icon={<RssFeed />} />
+                    <TopBarIcon href="/rss" Icon={<RssFeed />} />
 
                     <TopBarIcon
                         href="https://github.com/LiteralGenie/jobber-site"
