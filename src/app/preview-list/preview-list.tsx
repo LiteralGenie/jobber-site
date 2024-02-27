@@ -1,5 +1,5 @@
 import { PAGE_SIZE } from "@/lib/constants"
-import { useJobsQuery } from "@/lib/hooks/useJobsQuery"
+import { useJobsQuery } from "@/lib/hooks/use-jobs-query"
 import { useActiveJob } from "@/lib/providers/active-job-provider"
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied"
 import { Divider, Typography } from "@mui/material"

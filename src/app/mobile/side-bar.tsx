@@ -1,6 +1,7 @@
 import { GitHub, RssFeed } from "@mui/icons-material"
 import { Button, Drawer, IconButton, Typography } from "@mui/material"
 import { ReactNode } from "react"
+import { ThemeToggle } from "../theme/theme-toggle"
 
 export interface SidebarProps {
     open: boolean
@@ -29,6 +30,10 @@ export function Sidebar({ open, onClose }: SidebarProps) {
                         href="https://github.com/LiteralGenie/jobber-site"
                         Icon={<GitHub />}
                     />
+                </div>
+
+                <div className="w-full pt-2 flex justify-center">
+                    <ThemeToggle />
                 </div>
             </div>
         </Drawer>

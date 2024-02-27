@@ -1,5 +1,5 @@
 import { PAGE_SIZE } from "@/lib/constants"
-import { useJobsQuery } from "@/lib/hooks/useJobsQuery"
+import { useJobsQuery } from "@/lib/hooks/use-jobs-query"
 import { FirstPage, LastPage } from "@mui/icons-material"
 import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import ChevronRight from "@mui/icons-material/ChevronRight"

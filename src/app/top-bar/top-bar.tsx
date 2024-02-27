@@ -8,6 +8,7 @@ import {
     alpha,
 } from "@mui/material"
 import { ReactNode } from "react"
+import { ThemeToggle } from "../theme/theme-toggle"
 
 export function TopBar() {
     return (
@@ -17,19 +18,23 @@ export function TopBar() {
                     Jobber
                 </Typography>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 pr-2">
                     <TopBarLink text="FAQ" href="/" />
                     <TopBarLink text="API" href="/" />
                 </div>
 
                 <div className="grow"></div>
 
-                <TopBarIcon href="/" Icon={<RssFeed />} />
+                <ThemeToggle size="small" />
 
-                <TopBarIcon
-                    href="https://github.com/LiteralGenie/jobber-site"
-                    Icon={<GitHub />}
-                />
+                <div className="flex pl-4">
+                    <TopBarIcon href="/" Icon={<RssFeed />} />
+
+                    <TopBarIcon
+                        href="https://github.com/LiteralGenie/jobber-site"
+                        Icon={<GitHub />}
+                    />
+                </div>
             </Toolbar>
         </AppBar>
     )
@@ -61,9 +66,11 @@ function TopBarLink({ text, href }: TopBarLinkProps) {
             variant="text"
             className="min-w-0 p-2"
             sx={{
-                color: "text.disabled",
+                color: (theme) =>
+                    alpha(theme.palette.primary.contrastText, 0.5),
                 "&:hover": {
-                    color: (theme) => alpha(theme.palette.text.disabled, 0.75),
+                    color: (theme) =>
+                        alpha(theme.palette.primary.contrastText, 0.75),
                 },
             }}
         >

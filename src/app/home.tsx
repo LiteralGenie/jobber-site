@@ -1,6 +1,6 @@
 "use client"
 
-import { useWindowSize } from "@/lib/hooks/useWindowSize"
+import { useWindowSize } from "@/lib/hooks/use-window-size"
 import { ActiveJobProvider } from "@/lib/providers/active-job-provider"
 import { useMemo, useRef } from "react"
 import { DetailsContainer } from "./details/details-container"

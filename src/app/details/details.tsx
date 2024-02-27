@@ -2,7 +2,7 @@ import { JobData } from "@/lib/job-data"
 import LaunchIcon from "@mui/icons-material/Launch"
 import { Button, Card, Paper } from "@mui/material"
 import { useEffect, useRef } from "react"
-import { useScrollTop } from "../../lib/hooks/useScrollTop"
+import { useScrollTop } from "../../lib/hooks/use-scroll-top"
 import { CopyLinkButton } from "./copy-link-button"
 import { DetailsContent } from "./details-content"
 
