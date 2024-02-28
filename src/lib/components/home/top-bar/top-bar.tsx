@@ -70,6 +70,7 @@ function TopBarLink({ text, href }: TopBarLinkProps) {
         color: (theme) => alpha(theme.palette.primary.contrastText, 0.5),
         "&:hover": {
             color: (theme) => alpha(theme.palette.primary.contrastText, 0.75),
+            backgroundColor: "inherit",
             textDecoration: "underline",
             textUnderlineOffset: 4,
         },
