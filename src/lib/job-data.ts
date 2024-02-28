@@ -8,7 +8,7 @@ export interface JobData {
     company: string
     description: string
     location_type: LocationType
-    salary: SalaryRange | null
+    salary: SalaryRange
     time_created: IsoDate
     title: string
     yoe: number | null

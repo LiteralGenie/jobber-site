@@ -43,7 +43,7 @@ export function usePageLink() {
         window.history.pushState(
             { ...window.history.state },
             "",
-            getHref(cursor)
+            getHref(cursor),
         )
 
         // Notify nuqs of the url change
@@ -75,7 +75,7 @@ export function usePageLink() {
  */
 export function hijackNavigation(
     ev: MouseEvent<HTMLAnchorElement>,
-    updateUrl: () => void
+    updateUrl: () => void,
 ): void {
     if (ev.ctrlKey) {
         return

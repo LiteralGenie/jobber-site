@@ -12,7 +12,7 @@ const conn = new (SQLite as any)(fp)
 conn.loadExtension(
     process.env.NODE_ENV === "production"
         ? "/usr/lib/sqlite3/pcre"
-        : process.env.PCRE_FILE
+        : process.env.PCRE_FILE,
 )
 
 const dialect = new SqliteDialect({

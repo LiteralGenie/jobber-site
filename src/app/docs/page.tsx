@@ -1,6 +1,6 @@
 "use client"
 
-import { Docs } from "@/lib/components/docs/swagger"
+import { Docs } from "@/lib/components/docs/docs"
 import { AppThemeProvider } from "@/lib/providers/app-theme-provider"
 import { CssBaseline, StyledEngineProvider } from "@mui/material"
 import "swagger-ui-react/swagger-ui.css"

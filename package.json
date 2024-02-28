@@ -7,6 +7,7 @@
         "build": "next experimental-compile",
         "start": "next start",
         "lint": "next lint",
+        "docs": "npx typeconv -f ts -t oapi -o openapi 'src/**/*.ts' && npx prettier --write .",
         "build-prod": "bash build-prod.sh"
     },
     "dependencies": {

@@ -37,7 +37,7 @@ export function HomeContainer({
                         staleTime: Infinity,
                     },
                 },
-            })
+            }),
     )
 
     // Load server-generated api data into query cache

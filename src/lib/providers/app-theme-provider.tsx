@@ -35,7 +35,7 @@ export function AppThemeProvider({ children }: AppThemeProviderProps) {
     const [defaultTheme, setDefaultTheme] = useState<Theme>(DarkTheme)
     useEffect(() => {
         const prefersLight = window.matchMedia(
-            "(prefers-color-scheme: light)"
+            "(prefers-color-scheme: light)",
         ).matches
         setDefaultTheme(prefersLight ? LightTheme : DarkTheme)
     }, [])

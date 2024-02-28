@@ -19,8 +19,8 @@ export function TopBar() {
                 </Typography>
 
                 <div className="flex gap-2 pr-2">
-                    <TopBarLink text="FAQ" href="/" />
-                    <TopBarLink text="API" href="/" />
+                    <TopBarLink text="FAQ" href="/faq" />
+                    <TopBarLink text="API" href="/docs" />
                 </div>
 
                 <div className="grow"></div>

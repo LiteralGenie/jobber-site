@@ -41,7 +41,7 @@ function humanizeLocationType(locationType: JobData["location_type"]) {
         .filter(([_, isAllowed]) => !!isAllowed)
         .map(
             ([type, _]) =>
-                LOCATION_TYPE_NAMES[type as keyof JobData["location_type"]]
+                LOCATION_TYPE_NAMES[type as keyof JobData["location_type"]],
         )
 
     if (types.length) {

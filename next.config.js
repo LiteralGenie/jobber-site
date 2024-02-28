@@ -3,7 +3,7 @@ const nextConfig = {
     reactStrictMode: true,
     output: "standalone",
     experimental: {
-        windowHistorySupport: true
+        windowHistorySupport: true,
     },
     productionBrowserSourceMaps: true, // For the curious
 }

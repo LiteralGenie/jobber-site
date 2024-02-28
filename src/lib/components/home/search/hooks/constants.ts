@@ -36,7 +36,7 @@ export const SEARCH_FORM_DEFAULT = () =>
         text: "",
         salary: 0,
         clearance: "",
-    } as SearchFormData)
+    }) as SearchFormData
 
 const d = SEARCH_FORM_DEFAULT()
 
@@ -53,19 +53,19 @@ export const SEARCH_FILTERS_PARSER = {
             ? parseAsBoolean
             : parseAsBoolean.withDefault(d.clearance),
     "location-types": parseAsArrayOf(
-        parseAsStringEnum(["hybrid", "onsite", "remote"] as const)
+        parseAsStringEnum(["hybrid", "onsite", "remote"] as const),
     ).withDefault(defaultLocationTypes),
     "skills-included": parseAsArrayOf(parseAsInteger).withDefault(
-        d.skills.include.map((v) => v.id)
+        d.skills.include.map((v) => v.id),
     ),
     "skills-excluded": parseAsArrayOf(parseAsInteger).withDefault(
-        d.skills.exclude.map((v) => v.id)
+        d.skills.exclude.map((v) => v.id),
     ),
     "duties-included": parseAsArrayOf(parseAsInteger).withDefault(
-        d.duties.include.map((v) => v.id)
+        d.duties.include.map((v) => v.id),
     ),
     "duties-excluded": parseAsArrayOf(parseAsInteger).withDefault(
-        d.duties.exclude.map((v) => v.id)
+        d.duties.exclude.map((v) => v.id),
     ),
     cities: parseAsArrayOf(parseAsInteger).withDefault(d.locations.cities),
     states: parseAsArrayOf(parseAsString).withDefault(d.locations.states),
