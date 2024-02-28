@@ -1,9 +1,9 @@
 # Pre-render pages
-cd /app
 npx next experimental-generate 
-mkdir /server
-cp -a ./.next/standalone/. /server/
-cp -a ./.next/static/. /server/.next/static
+
+cp -a /app/.next/standalone/. /server
+cp -a /app/.next/static/. /server/.next/static
+cp -a /app/public/. /server/public
 
 # Run server
 cd /server
