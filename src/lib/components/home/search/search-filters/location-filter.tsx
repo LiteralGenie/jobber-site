@@ -1,10 +1,10 @@
+import { LocationDto } from "@/app/api/locations/handler"
 import { STATE_ABBREVIATIONS } from "@/lib/format-utils"
 import { useFormContext } from "@/lib/providers/form-provider"
 import { Autocomplete, TextField } from "@mui/material"
 import { alphabetical, group } from "radash"
 import { useMemo } from "react"
 import { Controller, ControllerRenderProps } from "react-hook-form"
-import { LocationDto } from "../../api/locations/handler"
 import { SearchFormData } from "../types"
 
 export interface LocationFilterProps {
@@ -74,13 +74,13 @@ function upsertOption(list: OptionMap, loc: LocationDto): OptionMap {
 function readFormValue(
     value: SearchFormData["locations"],
     optionMap: OptionMap,
-    locationMap: LocationMap
+    locationMap: LocationMap,
 ): CityOrStateOption[] {
     const states = value.states.map((state) => optionMap[state].stateOption)
     const cities = value.cities.map((id) => {
         const city = locationMap[id]
         const option = optionMap[city.state].cityOptions.find(
-            (opt) => opt.id_city === id
+            (opt) => opt.id_city === id,
         ) as CityOption
         return option
     })
@@ -90,7 +90,7 @@ function readFormValue(
 
 function setFormValue(options: CityOrStateOption[], field: Field) {
     const grouped = group(options, (opt) =>
-        "city" in opt ? "cities" : "states"
+        "city" in opt ? "cities" : "states",
     ) as { cities: CityOption[]; states: StateOption[] }
 
     const update: SearchFormData["locations"] = {
@@ -108,7 +108,7 @@ export function LocationFilter({ locations }: LocationFilterProps) {
 
     const locationMap = useMemo(
         () => Object.fromEntries(locations.map((loc) => [loc.id, loc])),
-        [locations]
+        [locations],
     )
 
     // Group locations by state and get total tally per state
@@ -116,9 +116,9 @@ export function LocationFilter({ locations }: LocationFilterProps) {
         () =>
             locations.reduce(
                 (acc, loc) => upsertOption(acc, loc),
-                {} as OptionMap
+                {} as OptionMap,
             ),
-        [locations]
+        [locations],
     )
 
     // Sort by state name and flatten

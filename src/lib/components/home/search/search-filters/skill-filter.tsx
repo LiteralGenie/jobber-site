@@ -1,6 +1,6 @@
+import { SkillDto } from "@/app/api/skills/handler"
 import { useFormContext } from "@/lib/providers/form-provider"
 import { FormLabel } from "@mui/material"
-import { SkillDto } from "../../api/skills/handler"
 import MultiSelect from "../multi-select"
 
 export interface SkillFilterProps {

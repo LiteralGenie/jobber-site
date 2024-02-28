@@ -1,0 +1,442 @@
+openapi: 3.0.0
+info:
+    title: Jobber API
+    description: >-
+        Job titles and descriptions are sourced primarily from [Indeed](https://indeed.com/).
+
+
+        Other properties such as required skills and minimum experience are inferred from the description.
+        <br> Some properties tend to be more accurate than others, see the JobData schema for more info.
+
+
+        <hr/>
+
+
+        Note that there are no guarantees around API stability.
+        Endpoints may change without notice to support new features.
+        <br/>
+        That said, feel free to fork the code and clone the database!
+    contact:
+        email: velchees@gmail.com
+    license:
+        name: MIT
+        url: https://mit-license.org/
+    version: "0.1"
+tags:
+    - name: Endpoints
+paths:
+    /api/jobs:
+        get:
+            tags:
+                - Endpoints
+            summary: Recent jobs
+            description: >-
+                Gets a list of jobs, sorted by most recent first.
+            parameters:
+                - name: after
+                  in: query
+                  description: An optional prevPageCursor / nextPageCursor value from a previous call to this endpoint
+                  required: false
+                  schema:
+                      type: integer
+                - name: text
+                  in: query
+                  description: Text that the title or description must contain. This can be a regular expression like `software (eng|dev).*`
+                  required: false
+                  schema:
+                      type: string
+                - name: salary
+                  in: query
+                  description: Minimum salary. Defaults to 0.
+                  required: false
+                  schema:
+                      type: integer
+                - name: clearance
+                  in: query
+                  description: Whether a security clearance is required.
+                  required: false
+                  schema:
+                      type: boolean
+                - name: location-types
+                  in: query
+                  required: false
+                  schema:
+                      type: string
+                      enum: [onsite, hybrid, remote]
+                - name: skills-included
+                  description: Only jobs with all listed skill ids are returned
+                  in: query
+                  required: false
+                  schema:
+                      type: array
+                      items:
+                          type: number
+                - name: skills-excluded
+                  description: Any jobs with the listed skill ids are excluded
+                  in: query
+                  required: false
+                  schema:
+                      type: array
+                      items:
+                          type: number
+                - name: duties-included
+                  description: Only jobs with all listed duty ids are returned
+                  in: query
+                  required: false
+                  schema:
+                      type: array
+                      items:
+                          type: number
+                - name: duties-excluded
+                  description: Any jobs with the listed duty ids are excluded
+                  in: query
+                  required: false
+                  schema:
+                      type: array
+                      items:
+                          type: number
+                - name: cities
+                  description: Only jobs in any of the listed city ids are included
+                  in: query
+                  required: false
+                  schema:
+                      type: array
+                      items:
+                          type: number
+                - name: states
+                  description: Only jobs in any of the listed states are included
+                  in: query
+                  required: false
+                  schema:
+                      type: array
+                      items:
+                          type: string
+                - name: yoe-minimum
+                  description: Only jobs that require less than or equal to this number of years-of-experience is included
+                  in: query
+                  required: false
+                  schema:
+                      type: number
+                - name: yoe-include-null
+                  description: Jobs that do not specify a minimum years-of-experience are excluded. Defaults to `true`.
+                  in: query
+                  required: false
+                  schema:
+                      type: boolean
+            responses:
+                "200":
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/JobsDto"
+                            examples:
+                                1:
+                                    $ref: "#/components/examples/getJobsResponse"
+    /api/skills:
+        get:
+            tags:
+                - Endpoints
+            summary: All skills
+            responses:
+                "200":
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: number
+                                    name:
+                                        type: string
+    /api/duties:
+        get:
+            tags:
+                - Endpoints
+            summary: All duties
+            responses:
+                "200":
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: number
+                                    name:
+                                        type: string
+    /api/locations:
+        get:
+            tags:
+                - Endpoints
+            summary: All locations
+            description: >-
+                Note: A good chunk of job posts have incorrect location labels.
+                <br> And in the interest of not displaying garbage in the UI, the locations returned are restricted to a subet of USA locations.
+            responses:
+                "200":
+                    description: Success
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Location"
+    /api/export/sqlite:
+        get:
+            tags:
+                - Endpoints
+            summary: Get database copy
+            description: Returns a copy of the SQLite database
+            responses:
+                "200":
+                    description: Success
+                    content:
+                        application/octet-stream:
+                            schema:
+                                type: string
+                                format: binary
+components:
+    schemas:
+        JobsDto:
+            properties:
+                jobs:
+                    type: array
+                    items: { $ref: "#/components/schemas/JobData" }
+                prevPageCursor:
+                    nullable: true
+                    type: number
+                nextPageCursor:
+                    nullable: true
+                    type: number
+            required:
+                - jobs
+                - prevPageCursor
+                - nextPageCursor
+            additionalProperties: false
+            type: object
+        JobData:
+            description: >-
+                Most properties are inferred from the description text. This process isn't perfect so some of the descriptions below will warn of especially unreliable properties.
+            properties:
+                id:
+                    type: string
+                clearance:
+                    description: Flag that indicates whether a security clearance is required.
+                    type: boolean
+                company:
+                    description: "Company name"
+                    type: string
+                description:
+                    description: "Job description"
+                    type: string
+                location_type:
+                    $ref: "#/components/schemas/LocationType"
+                salary:
+                    description: >-
+                        Jobs that provide an hourly pay will often be incorrectly labeled. It will usually be absurdly low.
+
+
+                        Jobs that do not provide a salary will default to 0
+                    type: number
+                time_created:
+                    description: The time the job posting was scraped (not created!)
+                    type: string
+                yoe:
+                    description: The minimum number of years-of-experience (yoe) necessary
+                    nullable: true
+                    type: number
+                skills:
+                    description: >-
+                        Skills required for this position.
+
+
+                        This is currently generated using a dumb substring search, so will often return false positives.
+                        <br>
+                        For example the excerpt
+                        <br>
+                            "... implement blah blah using NumPy. Experience with Python (preferred) or MATLAB / Julia is required"
+                        <br>
+                        will be labeled as Python (correct), MATLAB (incorrect), and Julia (incorrect).
+                    items:
+                        properties:
+                            id:
+                                type: number
+                            name:
+                                type: string
+                        required:
+                            - id
+                            - name
+                        additionalProperties: false
+                        type: object
+                    type: array
+                duties:
+                    description: Miscellaneous and / or less technical requirements
+                    items:
+                        properties:
+                            id:
+                                type: number
+                            name:
+                                type: string
+                        required:
+                            - id
+                            - name
+                        additionalProperties: false
+                        type: object
+                    type: array
+                locations:
+                    description: >-
+                        This property is generally unreliable.
+                        <br>For example, the city and country may be incorrectly swapped.
+                        <br>The UI currently mitigates this by whitelisting the country / state filters.
+
+
+                        This is especially unreliable for jobs posted by famous companies.
+                        <br>
+                        (Common office locations for that specific company will be erroneously included.)
+
+
+                        Just LLM issues.
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Location"
+            required:
+                - id
+                - rowid
+                - clearance
+                - company
+                - description
+                - location_type
+                - salary
+                - time_created
+                - title
+                - yoe
+                - skills
+                - duties
+                - locations
+            additionalProperties: false
+            type: object
+        LocationType:
+            properties:
+                is_hybrid:
+                    type: boolean
+                is_onsite:
+                    type: boolean
+                is_remote:
+                    type: boolean
+            required:
+                - is_hybrid
+                - is_onsite
+                - is_remote
+            additionalProperties: false
+            type: object
+        Location:
+            properties:
+                id:
+                    type: number
+                country:
+                    nullable: true
+                    type: string
+                state:
+                    nullable: true
+                    type: string
+                city:
+                    nullable: true
+                    type: string
+            required:
+                - id
+                - country
+                - state
+                - city
+            additionalProperties: false
+            type: object
+
+    examples:
+        getJobsResponse:
+            summary: ""
+            value:
+                jobs:
+                    - id: 6c7df
+                      rowid: 4778
+                      clearance: false
+                      description: ...
+                      company: ...
+                      title: Deployment Engineer II
+                      yoe: 4
+                      location_type:
+                          is_hybrid: true
+                          is_onsite: true
+                          is_remote: false
+                      time_created: "2024-02-27T20:56:59.755Z"
+                      salary: 0
+                      skills:
+                          - id: 1
+                            name: Python
+                      duties:
+                          - id: 1
+                            name: On-call
+                      locations: []
+                    - id: 3d1d9
+                      rowid: 4777
+                      clearance: true
+                      description: ...
+                      company: ...
+                      title: Software Engineer (Vehicle Systems) - Early Career
+                      yoe: 4
+                      location_type:
+                          is_hybrid: false
+                          is_onsite: true
+                          is_remote: false
+                      time_created: "2024-02-27T20:56:50.569Z"
+                      salary: 0
+                      skills: []
+                      duties: []
+                      locations: []
+                    - id: ccdaa
+                      rowid: 4776
+                      clearance: false
+                      description: ...
+                      company: ...
+                      title: Senior Systems Platform Developer
+                      yoe: 3
+                      location_type:
+                          is_hybrid: false
+                          is_onsite: true
+                          is_remote: false
+                      time_created: "2024-02-27T20:56:41.362Z"
+                      salary: 101192
+                      skills: []
+                      duties: []
+                      locations:
+                          - id: 6767
+                            country: Arlington
+                            state: TX
+                            city: USA
+                    - id: b942f
+                      rowid: 4775
+                      clearance: true
+                      description: ...
+                      company: ...
+                      title: Platform Workflow Tool Developer
+                      yoe: 4
+                      location_type:
+                          is_hybrid: true
+                          is_onsite: true
+                          is_remote: false
+                      time_created: "2024-02-27T20:56:32.171Z"
+                      salary: 4
+                      skills:
+                          - id: 1
+                            name: Python
+                      duties:
+                          - id: 1
+                            name: On-call
+                      locations:
+                          - id: 33
+                            country: United States
+                            state: Maryland
+                            city: Baltimore
+                prevPageCursor: null
+                nextPageCursor: 4763

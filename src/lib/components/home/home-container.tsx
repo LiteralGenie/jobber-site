@@ -1,15 +1,15 @@
 "use client"
 
+import { DutyDto } from "@/app/api/duties/handler"
+import { JobsDto } from "@/app/api/jobs/handler"
+import { LocationDto } from "@/app/api/locations/handler"
+import { SkillDto } from "@/app/api/skills/handler"
 import { AppThemeProvider } from "@/lib/providers/app-theme-provider"
 import { FormProvider } from "@/lib/providers/form-provider"
 import { HashProvider } from "@/lib/providers/hash-provider"
 import { CssBaseline, StyledEngineProvider } from "@mui/material"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useState } from "react"
-import { DutyDto } from "./api/duties/handler"
-import { JobsDto } from "./api/jobs/handler"
-import { LocationDto } from "./api/locations/handler"
-import { SkillDto } from "./api/skills/handler"
 import Home from "./home"
 
 export interface HomeContainerProps {
@@ -37,7 +37,7 @@ export function HomeContainer({
                         staleTime: Infinity,
                     },
                 },
-            })
+            }),
     )
 
     // Load server-generated api data into query cache

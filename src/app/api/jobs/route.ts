@@ -1,7 +1,7 @@
 import {
     filtersToFormData,
     pageParamsToFilters,
-} from "@/app/search/hooks/useSearchForm"
+} from "@/lib/components/home/search/hooks/useSearchForm"
 import { NextRequest } from "next/server"
 import { getJobs } from "./handler"
 

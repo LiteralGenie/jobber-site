@@ -1,6 +1,6 @@
+import { DutyDto } from "@/app/api/duties/handler"
 import { useFormContext } from "@/lib/providers/form-provider"
 import { FormLabel } from "@mui/material"
-import { DutyDto } from "../../api/duties/handler"
 import MultiSelect from "../multi-select"
 
 export interface DutyFilterProps {

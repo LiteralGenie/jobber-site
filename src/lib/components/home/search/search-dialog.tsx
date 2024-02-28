@@ -16,7 +16,15 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
     } = useFormContext()
 
     return (
-        <Dialog open={open} onClose={onClose}>
+        <Dialog
+            open={open}
+            onClose={onClose}
+            sx={{
+                ".MuiDialog-paper": {
+                    maxHeight: "calc(100% - 128px);",
+                },
+            }}
+        >
             <form
                 onSubmit={(ev) => {
                     ev.preventDefault()
@@ -32,9 +40,19 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
                     <SearchFilters />
                 </Paper>
 
-                <Paper className="p-2 flex justify-end gap-2">
+                <Paper className="p-2 grid grid-cols-4 gap-2">
                     <Button
                         variant="outlined"
+                        color="secondary"
+                        onClick={onClose}
+                        aria-label="Cancel"
+                        title="Cancel"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        color="secondary"
                         onClick={handleClear}
                         aria-label="Clear filters"
                         title="Clear filters"
@@ -43,6 +61,7 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
                     </Button>
                     <Button
                         variant="outlined"
+                        color="secondary"
                         onClick={handleReset}
                         aria-label="Reset changes"
                         title="Reset changes"

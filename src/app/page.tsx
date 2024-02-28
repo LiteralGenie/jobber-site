@@ -1,13 +1,13 @@
+import { HomeContainer } from "@/lib/components/home/home-container"
+import { SEARCH_FILTER_SERIALIZER } from "@/lib/components/home/search/hooks/constants"
+import {
+    filtersToFormData,
+    pageParamsToFilters,
+} from "@/lib/components/home/search/hooks/useSearchForm"
 import { getDuties } from "./api/duties/handler"
 import { getJobs } from "./api/jobs/handler"
 import { getLocations } from "./api/locations/handler"
 import { getSkills } from "./api/skills/handler"
-import { HomeContainer } from "./home-container"
-import { SEARCH_FILTER_SERIALIZER } from "./search/hooks/constants"
-import {
-    filtersToFormData,
-    pageParamsToFilters,
-} from "./search/hooks/useSearchForm"
 import { PageProps } from "./types"
 
 export const dynamic = "force-dynamic"

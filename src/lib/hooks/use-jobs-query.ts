@@ -1,9 +1,9 @@
 import { JobsDto } from "@/app/api/jobs/handler"
-import { SEARCH_FILTER_SERIALIZER } from "@/app/search/hooks/constants"
-import { useSearchFilters } from "@/app/search/hooks/useSearchFilters"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useMemo } from "react"
+import { SEARCH_FILTER_SERIALIZER } from "../components/home/search/hooks/constants"
+import { useSearchFilters } from "../components/home/search/hooks/useSearchFilters"
 import { JobData } from "../job-data"
 import { useHashContext } from "../providers/hash-provider"
 

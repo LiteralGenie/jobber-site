@@ -6,7 +6,7 @@ export type UseSearchFiltersReturn = ReturnType<typeof useSearchFilters>
 
 export function useSearchFilters() {
     const [searchFilters, setSearchFilters] = useQueryStates(
-        SEARCH_FILTERS_PARSER
+        SEARCH_FILTERS_PARSER,
     ) satisfies [SearchFilters, any]
 
     return { searchFilters, setSearchFilters }
