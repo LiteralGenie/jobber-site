@@ -1,4 +1,4 @@
-import { MONTHS, commafy } from "@/lib/format-utils"
+import { MONTHS, humanizeDescription, humanizeSalary } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
 import { CardContent, Divider, Typography } from "@mui/material"
 import Locations from "./sections/locations"
@@ -47,6 +47,8 @@ export function DetailsContent({ job }: DetailsContentProps) {
                     locationType={job.location_type}
                     locations={job.locations}
                 />
+
+                {/* Skills */}
                 {Object.keys(job.skills).length ? (
                     <div>
                         <Divider className="my-4" />
@@ -80,24 +82,8 @@ export function DetailsContent({ job }: DetailsContentProps) {
     )
 }
 
-function humanizeDescription(description: JobData["description"]) {
-    let result = description.trim()
-
-    // Replace consecutive blank lines with single blank line
-    result = result.replaceAll(/\s+\n\n/g, "\n\n")
-
-    // Remove blank lines between indented lines (ie bullet points)
-    result = result.replaceAll(/\n\n(?=(\s{4}|\t))/g, "\n")
-
-    return result
-}
-
-function humanizeSalary(salary: JobData["salary"]): string {
-    return salary ? commafy(salary) : "???"
-}
-
-function humanizeDate(isoDate: string): string {
-    const d = new Date(isoDate)
+export function humanizeDate(date: string): string {
+    const d = new Date(date)
     const month = MONTHS[d.getMonth()].long
     const day = d.getDate()
     const year = d.getFullYear()

@@ -41,7 +41,11 @@ export function MobilePreviewListContainer({
                     elevation={2}
                     className="p-4 w-full flex gap-4 items-center rounded-none"
                 >
-                    <IconButton onClick={() => setShowSidebar(true)}>
+                    <IconButton
+                        onClick={() => setShowSidebar(true)}
+                        aria-label="Menu"
+                        title="Menu"
+                    >
                         <MenuIcon />
                     </IconButton>
 
@@ -60,7 +64,7 @@ export function MobilePreviewListContainer({
                     elevation={2}
                     className="rounded-none flex justify-center"
                 >
-                    <nav className="p-2 max-w-sm flex justify-center gap-4">
+                    <nav className="p-2 max-w-md flex justify-center gap-4">
                         <Button
                             {...getLinkProps(null)}
                             disabled={prevPageCursor === null}

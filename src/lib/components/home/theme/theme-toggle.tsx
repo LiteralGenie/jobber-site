@@ -18,12 +18,16 @@ export function ThemeToggle({ size }: ThemeToggleProps) {
             <ToggleButton
                 value={LightTheme}
                 onClick={() => setTheme(LightTheme)}
+                disabled={theme === LightTheme}
                 className="p-2"
+                aria-label="Light Mode"
+                title="Light Mode"
             >
                 <LightMode
                     className={`${fontSize}`}
                     sx={{
                         color: alpha("#fbc02d", theme === LightTheme ? 1 : 0.5),
+                        pointerEvents: theme === LightTheme ? "none" : "",
                     }}
                 />
             </ToggleButton>
@@ -31,8 +35,11 @@ export function ThemeToggle({ size }: ThemeToggleProps) {
             <ToggleButton
                 value={DarkTheme}
                 onClick={() => setTheme(DarkTheme)}
+                disabled={theme === DarkTheme}
                 className="p-2"
                 color={color}
+                aria-label="Dark Mode"
+                title="Dark Mode"
             >
                 <DarkMode
                     className={`${fontSize}`}
