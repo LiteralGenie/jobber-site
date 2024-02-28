@@ -22,10 +22,8 @@ info:
         name: MIT
         url: https://mit-license.org/
     version: "0.1"
-servers:
-    - url: /api
 paths:
-    /jobs:
+    /api/jobs:
         get:
             summary: Recent jobs
             description: >-
@@ -131,7 +129,7 @@ paths:
                             examples:
                                 1:
                                     $ref: "#/components/examples/getJobsResponse"
-    /skills:
+    /api/skills:
         get:
             summary: All skills
             responses:
@@ -146,7 +144,7 @@ paths:
                                         type: number
                                     name:
                                         type: string
-    /duties:
+    /api/duties:
         get:
             summary: All duties
             responses:
@@ -161,7 +159,7 @@ paths:
                                         type: number
                                     name:
                                         type: string
-    /locations:
+    /api/locations:
         get:
             summary: All locations
             description: >-
