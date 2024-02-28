@@ -3,10 +3,13 @@ import {
     AppBar,
     Button,
     IconButton,
+    SxProps,
+    Theme,
     Toolbar,
     Typography,
     alpha,
 } from "@mui/material"
+import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
 import { ThemeToggle } from "../theme/theme-toggle"
 
@@ -18,7 +21,8 @@ export function TopBar() {
                     Jobber
                 </Typography>
 
-                <div className="flex gap-2 pr-2">
+                <div className="flex gap-1 pr-2">
+                    <TopBarLink text="JOBS" href="/" />
                     <TopBarLink text="FAQ" href="/faq" />
                     <TopBarLink text="API" href="/docs" />
                 </div>
@@ -59,6 +63,25 @@ export interface TopBarLinkProps {
 }
 
 function TopBarLink({ text, href }: TopBarLinkProps) {
+    const current = usePathname()
+    const isActive = current === href
+
+    const defaultStyles: SxProps<Theme> = {
+        color: (theme) => alpha(theme.palette.primary.contrastText, 0.5),
+        "&:hover": {
+            color: (theme) => alpha(theme.palette.primary.contrastText, 0.75),
+            textDecoration: "underline",
+            textUnderlineOffset: 4,
+        },
+    }
+
+    const activeStyles: SxProps<Theme> = {
+        color: (theme) => alpha(theme.palette.primary.contrastText, 0.75),
+        pointerEvents: "none",
+        textDecoration: "underline",
+        textUnderlineOffset: 4,
+    }
+
     return (
         <Button
             href={href}
@@ -66,14 +89,7 @@ function TopBarLink({ text, href }: TopBarLinkProps) {
             variant="text"
             className="min-w-0 p-2"
             color="info"
-            sx={{
-                color: (theme) =>
-                    alpha(theme.palette.primary.contrastText, 0.5),
-                "&:hover": {
-                    color: (theme) =>
-                        alpha(theme.palette.primary.contrastText, 0.75),
-                },
-            }}
+            sx={isActive ? activeStyles : defaultStyles}
         >
             {text}
         </Button>

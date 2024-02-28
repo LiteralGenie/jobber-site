@@ -6,7 +6,7 @@ info:
 
 
         Other properties such as required skills and minimum experience are inferred from the description.
-        Some properties tend to be more accurate than others, see the JobData schema for more info.
+        <br> Some properties tend to be more accurate than others, see the JobData schema for more info.
 
 
         <hr/>
@@ -22,9 +22,13 @@ info:
         name: MIT
         url: https://mit-license.org/
     version: "0.1"
+tags:
+    - name: Endpoints
 paths:
     /api/jobs:
         get:
+            tags:
+                - Endpoints
             summary: Recent jobs
             description: >-
                 Gets a list of jobs, sorted by most recent first.
@@ -131,6 +135,8 @@ paths:
                                     $ref: "#/components/examples/getJobsResponse"
     /api/skills:
         get:
+            tags:
+                - Endpoints
             summary: All skills
             responses:
                 "200":
@@ -146,6 +152,8 @@ paths:
                                         type: string
     /api/duties:
         get:
+            tags:
+                - Endpoints
             summary: All duties
             responses:
                 "200":
@@ -161,6 +169,8 @@ paths:
                                         type: string
     /api/locations:
         get:
+            tags:
+                - Endpoints
             summary: All locations
             description: >-
                 Note: A good chunk of job posts have incorrect location labels.
