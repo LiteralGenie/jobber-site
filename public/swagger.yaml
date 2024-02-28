@@ -214,7 +214,12 @@ components:
                 location_type:
                     $ref: "#/components/schemas/LocationType"
                 salary:
-                    $ref: "#/components/schemas/SalaryRange"
+                    description: >-
+                        Jobs that provide an hourly pay will often be incorrectly labeled. It will usually be absurdly low.
+
+
+                        Jobs that do not provide a salary will default to 0
+                    type: number
                 time_created:
                     description: The time the job posting was scraped (not created!)
                     type: string
@@ -306,23 +311,6 @@ components:
                 - is_remote
             additionalProperties: false
             type: object
-        SalaryRange:
-            description: >-
-                Currently only the minimum salary is returned. The maximum will always be null.
-
-
-                Jobs that indicate an hourly pay will often be incorrectly labeled. It will usually be absurdly low.
-            properties:
-                min:
-                    type: number
-                max:
-                    nullable: true
-                    type: number
-            required:
-                - min
-                - max
-            additionalProperties: false
-            type: object
         Location:
             properties:
                 id:
@@ -357,13 +345,11 @@ components:
                       title: Deployment Engineer II
                       yoe: 4
                       location_type:
-                      is_hybrid: true
-                      is_onsite: true
-                      is_remote: false
+                          is_hybrid: true
+                          is_onsite: true
+                          is_remote: false
                       time_created: "2024-02-27T20:56:59.755Z"
-                      salary:
-                      min: 0
-                      max: null
+                      salary: 0
                       skills:
                           - id: 1
                             name: Python
@@ -379,13 +365,11 @@ components:
                       title: Software Engineer (Vehicle Systems) - Early Career
                       yoe: 4
                       location_type:
-                      is_hybrid: false
-                      is_onsite: true
-                      is_remote: false
+                          is_hybrid: false
+                          is_onsite: true
+                          is_remote: false
                       time_created: "2024-02-27T20:56:50.569Z"
-                      salary:
-                      min: 0
-                      max: null
+                      salary: 0
                       skills: []
                       duties: []
                       locations: []
@@ -397,13 +381,11 @@ components:
                       title: Senior Systems Platform Developer
                       yoe: 3
                       location_type:
-                      is_hybrid: false
-                      is_onsite: true
-                      is_remote: false
+                          is_hybrid: false
+                          is_onsite: true
+                          is_remote: false
                       time_created: "2024-02-27T20:56:41.362Z"
-                      salary:
-                      min: 101192
-                      max: null
+                      salary: 101192
                       skills: []
                       duties: []
                       locations:
@@ -419,13 +401,11 @@ components:
                       title: Platform Workflow Tool Developer
                       yoe: 4
                       location_type:
-                      is_hybrid: true
-                      is_onsite: true
-                      is_remote: false
+                          is_hybrid: true
+                          is_onsite: true
+                          is_remote: false
                       time_created: "2024-02-27T20:56:32.171Z"
-                      salary:
-                      min: 4
-                      max: null
+                      salary: 4
                       skills:
                           - id: 1
                             name: Python

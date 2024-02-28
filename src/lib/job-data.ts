@@ -8,7 +8,7 @@ export interface JobData {
     company: string
     description: string
     location_type: LocationType
-    salary: SalaryRange
+    salary: number
     time_created: IsoDate
     title: string
     yoe: number | null
@@ -35,9 +35,4 @@ interface LocationType {
     is_hybrid: boolean
     is_onsite: boolean
     is_remote: boolean
-}
-
-interface SalaryRange {
-    min: number
-    max: number | null
 }

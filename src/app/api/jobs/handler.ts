@@ -12,7 +12,7 @@ export interface JobsDto {
 }
 
 export async function getJobs(
-    formData: Partial<SearchFormData>,
+    formData: Partial<SearchFormData>
 ): Promise<JobsDto> {
     let query = db
         // Filter for fully-labeled posts
@@ -22,7 +22,7 @@ export async function getJobs(
                 .innerJoin(
                     "indeed_label_statuses as status",
                     "status.id_post",
-                    "post.id",
+                    "post.id"
                 )
                 .where("status.has_skills", "=", 1)
                 .where("status.has_duties", "=", 1)
@@ -36,7 +36,7 @@ export async function getJobs(
                     "post.text",
                     "post.company",
                     "post.time_created",
-                ]),
+                ])
         )
         // Skill array column
         .with("with_skills", (eb) => {
@@ -46,14 +46,14 @@ export async function getJobs(
                 .leftJoin("indeed_skill_labels as lbl", (join) =>
                     join
                         .onRef("lbl.id_post", "=", "post.id")
-                        .onRef("lbl.id_skill", "=", "sk.id"),
+                        .onRef("lbl.id_skill", "=", "sk.id")
                 )
                 .groupBy("post.id")
                 .select(
                     sql<string>`GROUP_CONCAT(
                         sk.id || ':' || sk.name || ':' || lbl.label, 
                         ';'
-                    )`.as("skills"),
+                    )`.as("skills")
                 )
                 .selectAll("post")
 
@@ -61,7 +61,7 @@ export async function getJobs(
                 query = query.having(
                     sql`(lbl.id_skill, lbl.label)`,
                     "=",
-                    sql`(${id}, 1)`,
+                    sql`(${id}, 1)`
                 )
             })
 
@@ -69,7 +69,7 @@ export async function getJobs(
                 query = query.having(
                     sql`(lbl.id_skill, lbl.label)`,
                     "=",
-                    sql`(${id}, 0)`,
+                    sql`(${id}, 0)`
                 )
             })
 
@@ -83,14 +83,14 @@ export async function getJobs(
                 .leftJoin("indeed_duty_labels as lbl", (join) =>
                     join
                         .onRef("lbl.id_post", "=", "post.id")
-                        .onRef("lbl.id_duty", "=", "dt.id"),
+                        .onRef("lbl.id_duty", "=", "dt.id")
                 )
                 .groupBy("post.id")
                 .select(
                     sql<string>`GROUP_CONCAT(
                         dt.id || ':' || dt.name || ':' || lbl.label, 
                         ';'
-                    )`.as("duties"),
+                    )`.as("duties")
                 )
                 .selectAll("post")
 
@@ -98,7 +98,7 @@ export async function getJobs(
                 query = query.having(
                     sql`(lbl.id_duty, lbl.label)`,
                     "=",
-                    sql`(${id}, 1)`,
+                    sql`(${id}, 1)`
                 )
             })
 
@@ -106,7 +106,7 @@ export async function getJobs(
                 query = query.having(
                     sql`(lbl.id_duty, lbl.label)`,
                     "=",
-                    sql`(${id}, 0)`,
+                    sql`(${id}, 0)`
                 )
             })
 
@@ -119,7 +119,7 @@ export async function getJobs(
                 .leftJoin(
                     "indeed_location_labels as lbl",
                     "lbl.id_post",
-                    "post.id",
+                    "post.id"
                 )
                 .leftJoin("locations as loc", "loc.id", "lbl.id_location")
                 .groupBy("post.id")
@@ -127,7 +127,7 @@ export async function getJobs(
                     sql<string>`GROUP_CONCAT(
                             loc.id || ':' || loc.country || ':' || loc.state || ':' || loc.city,
                             ';'
-                        )`.as("locations"),
+                        )`.as("locations")
                 )
                 .selectAll("post")
 
@@ -137,10 +137,10 @@ export async function getJobs(
                 query = query.where((eb) =>
                     eb.or([
                         ...cities.map((city) =>
-                            eb("lbl.id_location", "=", city),
+                            eb("lbl.id_location", "=", city)
                         ),
                         ...states.map((state) => eb("loc.state", "=", state)),
-                    ]),
+                    ])
                 )
             }
 
@@ -153,7 +153,7 @@ export async function getJobs(
                 .innerJoin(
                     "indeed_misc_labels as lbl",
                     "lbl.id_post",
-                    "post.id",
+                    "post.id"
                 )
                 .selectAll("post")
                 .select([
@@ -187,7 +187,7 @@ export async function getJobs(
             }
             if (locTypeFilters.length) {
                 query = query.where((eb) =>
-                    eb.or(locTypeFilters.map((loc) => eb(loc, "=", 1))),
+                    eb.or(locTypeFilters.map((loc) => eb(loc, "=", 1)))
                 )
             }
 
@@ -207,8 +207,8 @@ export async function getJobs(
                     eb(
                         eb.fn.coalesce("lbl.yoe", sql<number>`99`),
                         ">=",
-                        minimum,
-                    ),
+                        minimum
+                    )
                 )
             }
 
@@ -233,13 +233,13 @@ export async function getJobs(
             query = query.where(
                 sql`LOWER(post.title) || '\n\n' || LOWER(post.text)`,
                 "regexp",
-                formData.text.toLowerCase(),
+                formData.text.toLowerCase()
             )
         } else {
             query = query.where(
                 sql`LOWER(post.title) || '\n\n' || LOWER(post.text)`,
                 "=",
-                `%${formData.text.toLowerCase()}%`,
+                `%${formData.text.toLowerCase()}%`
             )
         }
     }
@@ -265,6 +265,7 @@ export async function getJobs(
                 company: d.company,
                 title: d.title,
                 yoe: d.yoe,
+                salary: d.salary,
 
                 location_type: {
                     is_hybrid: fromSqliteBool(d.is_hybrid),
@@ -273,11 +274,6 @@ export async function getJobs(
                 },
 
                 time_created: new Date(d.time_created * 1000).toISOString(),
-
-                salary: {
-                    min: d.salary,
-                    max: null,
-                },
 
                 // Only show positive skill / duty labels
                 skills: d.skills
@@ -322,7 +318,7 @@ export async function getJobs(
                                   state,
                                   city,
                               })),
-            }) satisfies JobData,
+            } satisfies JobData)
     )
 
     let nextPageCursor: number | null = null
