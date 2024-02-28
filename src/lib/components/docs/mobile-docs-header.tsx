@@ -14,6 +14,9 @@ export function MobileDocsHeader() {
                         onClick={() => setShowSidebar(true)}
                         aria-label="Menu"
                         title="Menu"
+                        sx={{
+                            color: "inherit",
+                        }}
                     >
                         <MenuIcon />
                     </IconButton>
