@@ -1,0 +1,145 @@
+openapi: 3.1.0
+info:
+    title: Jobber API
+    description: >-
+        Note that there are no guarantees around stability.
+        Endpoints may change without notice to support new features.
+
+
+        That said, feel free to fork the code and clone the database!
+    contact:
+        email: velchees@gmail.com
+    license:
+        name: MIT
+        url: https://mit-license.org/
+    version: 0.1
+servers:
+    - url: /api
+paths:
+    /jobs:
+        get:
+            description: Returns list of jobs, sorted by most recent first
+            parameters:
+                - name: after
+                  in: query
+                  description: cursor
+                  required: false
+                  explode: false
+                  schema:
+                      type: integer
+            responses:
+                "200":
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/JobDto"
+components:
+    schemas:
+        Job:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: The unique identifier for the job.
+                rowid:
+                    type: integer
+                    description: The row identifier for the job.
+                clearance:
+                    type: boolean
+                    description: Indicates if the job requires security clearance.
+                description:
+                    type: string
+                    description: The description of the job.
+                company:
+                    type: string
+                    description: The name of the company offering the job.
+                title:
+                    type: string
+                    description: The title of the job.
+                yoe:
+                    type: integer
+                    description: The years of experience required for the job.
+                location_type:
+                    type: object
+                    description: Information about the job location type.
+                    properties:
+                        is_hybrid:
+                            type: boolean
+                            description: Indicates if the job location is hybrid.
+                        is_onsite:
+                            type: boolean
+                            description: Indicates if the job location is onsite.
+                        is_remote:
+                            type: boolean
+                            description: Indicates if the job location is remote.
+                time_created:
+                    type: string
+                    format: date-time
+                    description: The timestamp when the job was created.
+                salary:
+                    type: object
+                    description: Information about the job salary.
+                    properties:
+                        min:
+                            type: integer
+                            description: The minimum salary offered for the job.
+                        max:
+                            type: integer
+                            description: The maximum salary offered for the job. Can be null if not specified.
+                skills:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            id:
+                                type: integer
+                                description: The unique identifier for the skill.
+                            name:
+                                type: string
+                                description: The name of the skill.
+                duties:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            id:
+                                type: integer
+                                description: The unique identifier for the duty.
+                            name:
+                                type: string
+                                description: The name of the duty.
+                locations:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            id:
+                                type: integer
+                                description: The unique identifier for the location.
+                            country:
+                                type: string
+                                description: The country of the location.
+                            state:
+                                type: string
+                                description: The state of the location.
+                            city:
+                                type: string
+                                description: The city of the location.
+            required:
+                - id
+                - rowid
+                - description
+                - company
+                - title
+                - time_created
+                - skills
+                - duties
+                - locations
+        JobsDto:
+            type: object
+            properties:
+                jobs:
+                    type: array
+                    items:
+                        type: Job

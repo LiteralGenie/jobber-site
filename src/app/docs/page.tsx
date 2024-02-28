@@ -1,6 +1,17 @@
+"use client"
+
+import { Docs } from "@/lib/components/docs/swagger"
+import { AppThemeProvider } from "@/lib/providers/app-theme-provider"
+import { CssBaseline, StyledEngineProvider } from "@mui/material"
 import "swagger-ui-react/swagger-ui.css"
 
-export default function Docs() {
-    // return <SwaggerUI url="https://petstore.swagger.io/v2/swagger.json" />
-    return "docs"
+export default function Page() {
+    return (
+        <StyledEngineProvider injectFirst>
+            <AppThemeProvider>
+                <CssBaseline />
+                <Docs />
+            </AppThemeProvider>
+        </StyledEngineProvider>
+    )
 }
