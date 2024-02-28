@@ -85,26 +85,25 @@ function formatDescription(j: JobData): string {
 
     const parts = []
 
-    // Title / company
-    parts.push(`${j.title}\n${j.company}`)
+    // Indeed link
+    const link = `<a href="https://www.indeed.com/viewjob?jk=${j.id}">View on Indeed</a>`
 
-    // Salary / clearance / yoe
-    const salary = `${toTitle("Salary")}: ${humanizeSalary(j.salary)}`
-    const clearance = `${toTitle("Clearance required")}: ${humanizeClearance(
-        j.clearance
-    )}`
-    const yoe = `${toTitle("Minimum experience")}: ${humanizeExperience(j.yoe)}`
-    parts.push(`${salary}\n${clearance}\n${yoe}`)
+    // Company / salary / clearance / yoe
+    const company = toTitle("Company") + ": " + j.company
+    const salary = toTitle("Salary") + ": " + humanizeSalary(j.salary)
+    const clearance =
+        toTitle("Clearance required") + ": " + humanizeClearance(j.clearance)
+    const yoe = toTitle("Minimum experience") + ": " + humanizeExperience(j.yoe)
+    parts.push(`${link}\n\n${company}\n${salary}\n${clearance}\n${yoe}`)
 
     // Locations
-    const locTypes = `${toTitle("Location Type")}: ${humanizeLocationType(
-        j.location_type
-    )}`
+    const locTypes =
+        toTitle("Location Type") + ": " + humanizeLocationType(j.location_type)
     if (j.locations.length) {
         const locs = j.locations
             .map((loc) => humanizeLocation(loc))
             .map((loc) => indent + loc)
-        const locsString = `${toTitle("Locations")}:\n` + locs.join("\n")
+        const locsString = toTitle("Locations") + ":\n" + locs.join("\n")
         parts.push(`${locTypes}\n${locsString}`)
     } else {
         parts.push(locTypes)
@@ -113,13 +112,13 @@ function formatDescription(j: JobData): string {
     // Skills
     if (j.skills.length) {
         const skills = j.skills.map(({ name }) => indent + name).join("\n")
-        parts.push(`${toTitle("Requirements")}:\n` + skills)
+        parts.push(toTitle("Requirements") + ":\n" + skills)
     }
 
     // Duties
     if (j.duties.length) {
         const duties = j.duties.map(({ name }) => indent + name).join("\n")
-        parts.push(`${toTitle("Responsibilities")}:\n` + duties)
+        parts.push(toTitle("Responsibilities") + ":\n" + duties)
     }
 
     // Description
