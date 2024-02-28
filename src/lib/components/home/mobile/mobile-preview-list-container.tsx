@@ -41,7 +41,11 @@ export function MobilePreviewListContainer({
                     elevation={2}
                     className="p-4 w-full flex gap-4 items-center rounded-none"
                 >
-                    <IconButton onClick={() => setShowSidebar(true)}>
+                    <IconButton
+                        onClick={() => setShowSidebar(true)}
+                        aria-label="Menu"
+                        title="Menu"
+                    >
                         <MenuIcon />
                     </IconButton>
 

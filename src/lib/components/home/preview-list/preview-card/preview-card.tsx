@@ -74,6 +74,8 @@ export default function PreviewCard({
                 href={`https://www.indeed.com/viewjob?jk=${job.id}`}
                 target="_blank"
                 rel="noopener"
+                aria-label="View on Indeed"
+                title="View on Indeed"
                 sx={{
                     pointerEvents: "initial",
                 }}

@@ -19,6 +19,8 @@ export function ThemeToggle({ size }: ThemeToggleProps) {
                 value={LightTheme}
                 onClick={() => setTheme(LightTheme)}
                 className="p-2"
+                aria-label="Light Mode"
+                title="Light Mode"
             >
                 <LightMode
                     className={`${fontSize}`}
@@ -33,6 +35,8 @@ export function ThemeToggle({ size }: ThemeToggleProps) {
                 onClick={() => setTheme(DarkTheme)}
                 className="p-2"
                 color={color}
+                aria-label="Dark Mode"
+                title="Dark Mode"
             >
                 <DarkMode
                     className={`${fontSize}`}
