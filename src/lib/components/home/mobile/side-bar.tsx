@@ -12,7 +12,7 @@ export interface SidebarProps {
 export function Sidebar({ open, onClose }: SidebarProps) {
     return (
         <Drawer open={open} onClose={onClose}>
-            <div className="w-40 h-full flex flex-col items-start">
+            <div className="w-48 h-full flex flex-col items-start">
                 <Typography variant="h6" className="font-bold py-2 px-4">
                     Jobber
                 </Typography>

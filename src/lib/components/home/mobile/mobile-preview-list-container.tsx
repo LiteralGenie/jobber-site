@@ -64,7 +64,7 @@ export function MobilePreviewListContainer({
                     elevation={2}
                     className="rounded-none flex justify-center"
                 >
-                    <nav className="p-2 max-w-sm flex justify-center gap-4">
+                    <nav className="p-2 max-w-md flex justify-center gap-4">
                         <Button
                             {...getLinkProps(null)}
                             disabled={prevPageCursor === null}
