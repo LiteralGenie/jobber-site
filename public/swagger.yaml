@@ -184,7 +184,20 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/Location"
-
+    /api/export/sqlite:
+        get:
+            tags:
+                - Endpoints
+            summary: Get database copy
+            description: Returns a copy of the SQLite database
+            responses:
+                "200":
+                    description: Success
+                    content:
+                        application/octet-stream:
+                            schema:
+                                type: string
+                                format: binary
 components:
     schemas:
         JobsDto:
