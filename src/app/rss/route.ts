@@ -1,5 +1,6 @@
 import {
     humanizeClearance,
+    humanizeDescription,
     humanizeExperience,
     humanizeLocation,
     humanizeLocationType,
@@ -122,7 +123,9 @@ function formatDescription(j: JobData): string {
     }
 
     // Description
-    parts.push(toTitle("Description") + ":\n" + j.description)
+    parts.push(
+        toTitle("Description") + ":\n" + humanizeDescription(j.description)
+    )
 
     const result = parts.join("\n\n---\n\n")
     return clean(result)
