@@ -16,15 +16,19 @@ export function YoeFilter() {
     return (
         <section>
             <div className="pb-4">
-                <FormLabel>Experience</FormLabel>
+                <FormLabel>Minimum Experience</FormLabel>
             </div>
 
             <div className="flex flex-col">
                 <TextField
                     type="number"
-                    label="Minimum"
                     size="small"
                     InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                &lt;=
+                            </InputAdornment>
+                        ),
                         endAdornment: (
                             <InputAdornment position="end">
                                 years
@@ -34,7 +38,7 @@ export function YoeFilter() {
                             min: 0,
                         },
                     }}
-                    aria-label="Minimum years of experience"
+                    aria-label="Exclude posts that ask for more than this amount of years-of-experience"
                     sx={{
                         ".MuiInputBase-root": {
                             paddingTop: "0.25rem",

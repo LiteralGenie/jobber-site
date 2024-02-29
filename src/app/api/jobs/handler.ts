@@ -216,13 +216,9 @@ export async function getJobs(
                 .select("lbl.yoe")
 
             const { minimum, ignoreNull } = opts.yoe ?? {}
-            if (minimum) {
+            if (typeof minimum === "number") {
                 query = query.where((eb) =>
-                    eb(
-                        eb.fn.coalesce("lbl.yoe", sql<number>`99`),
-                        ">=",
-                        minimum
-                    )
+                    eb(eb.fn.coalesce("lbl.yoe", sql<number>`0`), "<=", minimum)
                 )
             }
 
