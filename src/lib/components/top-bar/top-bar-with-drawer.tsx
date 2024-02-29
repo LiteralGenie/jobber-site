@@ -3,7 +3,7 @@ import { AppBar, IconButton, Toolbar, Typography } from "@mui/material"
 import { useState } from "react"
 import { Sidebar } from "../home/mobile/side-bar"
 
-export function MobileDocsHeader() {
+export function TopBarWithDrawer() {
     const [showSidebar, setShowSidebar] = useState(false)
 
     return (

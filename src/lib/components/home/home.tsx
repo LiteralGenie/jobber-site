@@ -4,12 +4,12 @@ import { useActiveLayout } from "@/lib/hooks/use-active-layout"
 import { useWindowSize } from "@/lib/hooks/use-window-size"
 import { ActiveJobProvider } from "@/lib/providers/active-job-provider"
 import { useEffect, useRef } from "react"
+import { TopBar } from "../top-bar/top-bar"
 import { DetailsContainer } from "./details/details-container"
 import { MobileLayout } from "./mobile/mobile-layout"
 import PreviewListContainer from "./preview-list/preview-list-container"
 import Search from "./search/search"
 import { TabletLayout } from "./tablet/tablet-layout"
-import { TopBar } from "./top-bar/top-bar"
 
 export default function Home() {
     const desktopContainerRef = useRef<HTMLDivElement | null>(null)

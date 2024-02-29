@@ -11,7 +11,7 @@ import {
 } from "@mui/material"
 import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
-import { ThemeToggle } from "../theme/theme-toggle"
+import { ThemeToggle } from "../home/theme/theme-toggle"
 
 export function TopBar() {
     return (

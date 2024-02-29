@@ -1,8 +1,8 @@
 import { ActiveJobProvider } from "@/lib/providers/active-job-provider"
+import { TopBar } from "../../top-bar/top-bar"
 import { DetailsContainer } from "../details/details-container"
 import SearchBar from "../mobile/search-bar"
 import PreviewListContainer from "../preview-list/preview-list-container"
-import { TopBar } from "../top-bar/top-bar"
 
 export function TabletLayout() {
     return (
