@@ -1,8 +1,9 @@
+import { Typography } from "@mui/material"
 import { useActiveSection } from "./use-active-section-context"
 
 type Section = {
     id: string
-    name: string
+    question: string
 }
 
 export interface TableOfContentsProps {
@@ -10,24 +11,24 @@ export interface TableOfContentsProps {
 }
 
 export function TableOfContents({ sections }: TableOfContentsProps) {
-    return sections.map(({ id, name }) => (
-        <Header key={id} id={id} name={name} />
+    return sections.map(({ id, question }) => (
+        <Header key={id} id={id} question={question} />
     ))
 }
 
 export interface HeaderProps {
     id: string
-    name: string
+    question: string
 }
 
-export function Header({ id, name }: HeaderProps) {
+export function Header({ id, question }: HeaderProps) {
     const { activeSectionId } = useActiveSection()
 
     const isActive = activeSectionId === id
 
     return (
-        <div>
-            {name} {String(isActive)}
-        </div>
+        <Typography variant="body2" display="block">
+            {question}
+        </Typography>
     )
 }

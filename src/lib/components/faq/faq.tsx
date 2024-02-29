@@ -1,33 +1,26 @@
 import { useRef } from "react"
 import { TopBar } from "../home/top-bar/top-bar"
+import { QUESTIONS } from "./questions"
 import { Section } from "./section"
 import { TableOfContents } from "./table-of-contents"
 import { ActiveSectionProvider } from "./use-active-section-context"
 
+const qs = QUESTIONS
+
 export function Faq() {
     const containerRef = useRef<HTMLDivElement | null>(null)
 
-    const qas = [
-        { id: "1", name: "1", question: "1?", answer: "1!" },
-        { id: "2", name: "2", question: "2?", answer: "2!" },
-        { id: "3", name: "3", question: "3?", answer: "3!" },
-        { id: "4", name: "4", question: "4?", answer: "4!" },
-        { id: "5", name: "5", question: "5?", answer: "5!" },
-        { id: "6", name: "6", question: "6?", answer: "6!" },
-    ]
-
     return (
-        <div className="h-full">
+        <div className="h-full flex flex-col">
             <TopBar />
 
-            <ActiveSectionProvider orderedIds={qas.map(({ id }) => id)}>
-                <div className="h-full relative">
-                    <div className="absolute top-8 right-12">
-                        <TableOfContents sections={qas} />
-                    </div>
-
-                    <div ref={containerRef} className="h-full overflow-auto">
-                        {qas.map(({ id, question, answer }) => (
+            <ActiveSectionProvider orderedIds={qs.map(({ id }) => id)}>
+                <div className="h-full overflow-auto flex justify-center gap-8 lg:gap-24">
+                    <div
+                        ref={containerRef}
+                        className="h-full max-w-3xl p-8 pr-0 mb-24 flex flex-col gap-16"
+                    >
+                        {qs.map(({ id, question, answer }) => (
                             <Section
                                 key={id}
                                 id={id}
@@ -36,6 +29,10 @@ export function Faq() {
                                 containerRef={containerRef}
                             />
                         ))}
+                    </div>
+
+                    <div className="min-w-max hidden md:block sticky top-0 pt-8 pr-12 h-min">
+                        <TableOfContents sections={qs} />
                     </div>
                 </div>
             </ActiveSectionProvider>

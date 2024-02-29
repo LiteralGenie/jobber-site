@@ -1,11 +1,11 @@
 import { useIntersectionObserver } from "@/lib/hooks/use-intersection-observer"
-import { MutableRefObject, useEffect, useRef } from "react"
+import { MutableRefObject, ReactNode, useEffect, useRef } from "react"
 import { useActiveSection } from "./use-active-section-context"
 
 export interface SectionProps {
     id: string
     question: string
-    answer: string
+    answer: ReactNode
     containerRef: MutableRefObject<Element | null>
 }
 
@@ -27,12 +27,9 @@ export function Section({ id, question, answer, containerRef }: SectionProps) {
     }, [])
 
     return (
-        <div ref={ref} className="h-80">
-            <p>{question}</p>
-            <p>{answer}</p>
-            <p>
-                {id} {String(isActive)}
-            </p>
+        <div ref={ref} className="h-full">
+            <div>{question}</div>
+            {answer}
         </div>
     )
 }

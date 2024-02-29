@@ -41,6 +41,7 @@ export function ClearanceFilter() {
                             label="Not required"
                             onChange={(ev, checked) => {
                                 if (checked) {
+                                    console.log("no")
                                     field.onChange(false)
                                 }
                             }}

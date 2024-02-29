@@ -1,4 +1,4 @@
-_A job board with (mostly) working filters_
+_A job board with all the filters_
 
 Live demo: https://jobber.velchees.dev/
 
