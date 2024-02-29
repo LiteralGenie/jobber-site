@@ -110,17 +110,17 @@ export async function getJobs(
 
             opts.duties?.include.forEach(({ id }) => {
                 query = query.having(
-                    sql`(lbl.id_duty, lbl.label)`,
+                    sql`SUM(lbl.label) FILTER (WHERE lbl.id_duty = ${id})`,
                     "=",
-                    sql`(${id}, 1)`
+                    1
                 )
             })
 
             opts.duties?.exclude.forEach(({ id }) => {
                 query = query.having(
-                    sql`(lbl.id_duty, lbl.label)`,
+                    sql`SUM(lbl.label) FILTER (WHERE lbl.id_duty = ${id})`,
                     "=",
-                    sql`(${id}, 0)`
+                    0
                 )
             })
 
@@ -216,13 +216,9 @@ export async function getJobs(
                 .select("lbl.yoe")
 
             const { minimum, ignoreNull } = opts.yoe ?? {}
-            if (minimum) {
+            if (typeof minimum === "number") {
                 query = query.where((eb) =>
-                    eb(
-                        eb.fn.coalesce("lbl.yoe", sql<number>`99`),
-                        ">=",
-                        minimum
-                    )
+                    eb(eb.fn.coalesce("lbl.yoe", sql<number>`0`), "<=", minimum)
                 )
             }
 
@@ -265,6 +261,7 @@ export async function getJobs(
         queryAfter = queryAfter.where("rowid", "<=", opts.after)
     }
     // console.log("queryAfter", queryAfter.compile().sql)
+    // console.log("vals", queryAfter.compile().parameters)
 
     const rowsAfter = await queryAfter.execute()
 
@@ -291,7 +288,7 @@ export async function getJobs(
 
                 // Only show positive skill / duty labels
                 skills: d.skills
-                    .split(",")
+                    .split(";")
                     .map((text) => text.split(":"))
                     .flatMap(([id, name, label]) => {
                         if (label === "0") {
@@ -306,7 +303,7 @@ export async function getJobs(
                         ]
                     }),
                 duties: d.duties
-                    .split(",")
+                    .split(";")
                     .map((text) => text.split(":"))
                     .flatMap(([id, name, label]) => {
                         if (label === "0") {

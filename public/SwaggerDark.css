@@ -56,7 +56,7 @@ section.models h4 {
 }
 
 .models-control {
-    fill: white;
+    fill: white !important;
 }
 
 section.models .model-container {
@@ -1281,8 +1281,7 @@ html {
 }
 
 .swagger-ui .loading-container .loading::before {
-    animation:
-        1s linear 0s infinite normal none running rotation,
+    animation: 1s linear 0s infinite normal none running rotation,
         0.5s ease 0s 1 normal none running opacity;
     border-color: rgba(0, 0, 0, 0.6) rgba(84, 84, 84, 0.1) rgba(84, 84, 84, 0.1);
 }

@@ -11,7 +11,7 @@ import { create } from "xmlbuilder2"
 import { getJobs } from "../api/jobs/handler"
 
 const ONE_DAY = 24 * 60 * 60 * 1000
-const MAX_AGE = 3 * ONE_DAY
+const MAX_AGE = 2 * ONE_DAY
 
 export async function GET() {
     const channel = {
@@ -61,6 +61,8 @@ async function getItems() {
     }))
 }
 
+// Beautifies text
+// This does not sanitize possible html tags, that should be handled by xmlbuilder2
 function clean(s: string) {
     return (
         s

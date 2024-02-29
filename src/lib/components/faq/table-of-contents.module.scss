@@ -1,0 +1,12 @@
+.link {
+    @apply pl-3 no-underline;
+
+    // Give all links have an invisible border
+    // Active / link gets a colored one
+    @apply border-0 border-l-2 border-solid border-transparent;
+
+    // Emphasize hovered links
+    &:hover {
+        color: inherit !important;
+    }
+}

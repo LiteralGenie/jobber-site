@@ -1,15 +1,22 @@
 import { GitHub, RssFeed } from "@mui/icons-material"
-import { Button, Divider, Drawer, IconButton, Typography } from "@mui/material"
+import {
+    Button,
+    ButtonProps,
+    Divider,
+    Drawer,
+    IconButton,
+    Typography,
+} from "@mui/material"
 import { usePathname } from "next/navigation"
 import { MouseEvent, ReactNode } from "react"
-import { ThemeToggle } from "../theme/theme-toggle"
+import { ThemeToggle } from "../home/theme/theme-toggle"
 
-export interface SidebarProps {
+export interface AppDrawerProps {
     open: boolean
     onClose: () => void
 }
 
-export function Sidebar({ open, onClose }: SidebarProps) {
+export function AppDrawer({ open, onClose }: AppDrawerProps) {
     return (
         <Drawer open={open} onClose={onClose}>
             <div className="w-48 h-full flex flex-col items-start">
@@ -19,11 +26,11 @@ export function Sidebar({ open, onClose }: SidebarProps) {
 
                 <div className="flex flex-col gap-2 items-start w-full">
                     <Divider flexItem />
-                    <SidebarLink text="Jobs" href="/" onClose={onClose} />
+                    <DrawerLink text="Jobs" href="/" onClose={onClose} />
                     <Divider flexItem />
-                    <SidebarLink text="FAQ" href="/faq" onClose={onClose} />
+                    <DrawerLink text="FAQ" href="/faq" onClose={onClose} />
                     <Divider flexItem />
-                    <SidebarLink text="API" href="/docs" onClose={onClose} />
+                    <DrawerLink text="API" href="/docs" onClose={onClose} />
                     <Divider flexItem />
                 </div>
 
@@ -46,13 +53,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
     )
 }
 
-export interface SidebarLinkProps {
+export interface DrawerLinkProps extends ButtonProps {
     text: string
     href: string
-    onClose: SidebarProps["onClose"]
+    onClose: AppDrawerProps["onClose"]
 }
 
-function SidebarLink({ text, href, onClose }: SidebarLinkProps) {
+function DrawerLink({ text, href, onClose }: DrawerLinkProps) {
     const current = usePathname()
     const isActive = current === href
 
@@ -68,7 +75,6 @@ function SidebarLink({ text, href, onClose }: SidebarLinkProps) {
     return (
         <Button
             href={href}
-            target="_blank"
             onClick={onClick}
             variant="text"
             className="min-w-0 px-4 py-0 normal-case"

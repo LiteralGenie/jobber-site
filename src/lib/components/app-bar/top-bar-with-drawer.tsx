@@ -1,9 +1,9 @@
 import MenuIcon from "@mui/icons-material/Menu"
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material"
 import { useState } from "react"
-import { Sidebar } from "../home/mobile/side-bar"
+import { AppDrawer } from "./app-drawer"
 
-export function MobileDocsHeader() {
+export function TopBarWithDrawer() {
     const [showSidebar, setShowSidebar] = useState(false)
 
     return (
@@ -14,6 +14,9 @@ export function MobileDocsHeader() {
                         onClick={() => setShowSidebar(true)}
                         aria-label="Menu"
                         title="Menu"
+                        sx={{
+                            color: "inherit",
+                        }}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -24,7 +27,10 @@ export function MobileDocsHeader() {
                 </Toolbar>
             </AppBar>
 
-            <Sidebar open={showSidebar} onClose={() => setShowSidebar(false)} />
+            <AppDrawer
+                open={showSidebar}
+                onClose={() => setShowSidebar(false)}
+            />
         </>
     )
 }
