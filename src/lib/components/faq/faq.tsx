@@ -15,11 +15,11 @@ export function Faq() {
             <TopBar />
 
             <ActiveSectionProvider orderedIds={qs.map(({ id }) => id)}>
-                <div className="h-full overflow-auto flex justify-center gap-8 lg:gap-24">
-                    <div
-                        ref={containerRef}
-                        className="h-full max-w-3xl p-8 pr-0 mb-24 flex flex-col gap-16"
-                    >
+                <div
+                    ref={containerRef}
+                    className="h-full overflow-auto flex justify-center gap-8 lg:gap-24"
+                >
+                    <div className="h-full max-w-3xl p-8 pr-0 mb-72 flex flex-col gap-16">
                         {qs.map(({ id, question, answer }) => (
                             <Section
                                 key={id}

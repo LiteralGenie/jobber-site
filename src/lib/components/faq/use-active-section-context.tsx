@@ -6,6 +6,7 @@ export interface ActiveSectionValue {
     activeSectionId: Id | null
     markSection: (id: string, active: boolean) => void
     deleteSection: (id: string) => void
+    setOverride: (id: string) => void
 }
 
 const ActiveSectionContext = createContext<ActiveSectionValue | null>(null)
@@ -21,7 +22,7 @@ export function useActiveSection(): ActiveSectionValue {
 
 export interface ActiveSectionProviderProps {
     children: ReactNode
-    orderedIds: string[]
+    orderedIds: Id[]
 }
 
 export function ActiveSectionProvider({
@@ -35,20 +36,26 @@ export function ActiveSectionProvider({
         [orderedIds, sections]
     )
 
+    const [activeSectionOverride, setActiveSectionOverride] =
+        useState<Id | null>(null)
+
     const value = {
-        activeSectionId,
-        markSection: (id: string, active: boolean) =>
+        activeSectionId: activeSectionOverride ?? activeSectionId,
+        markSection: (id: Id, active: boolean) => {
             setSections((sections) => ({
                 ...sections,
                 [id]: active,
-            })),
-        deleteSection: (id: string) => {
+            }))
+            setActiveSectionOverride(null)
+        },
+        deleteSection: (id: Id) => {
             const update = {
                 ...sections,
             }
             delete update[id]
             return update
         },
+        setOverride: (id: Id) => setActiveSectionOverride(id),
     }
 
     return (

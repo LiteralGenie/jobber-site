@@ -70,7 +70,7 @@ export const QUESTIONS = [
         ),
     },
     {
-        id: "contact",
+        id: "accuracy",
         question: "How accurate are the labels / filters?",
         answer: (
             <>
