@@ -107,5 +107,3 @@ export const LightTheme = createTheme({
         },
     },
 })
-
-export type Theme = typeof DarkTheme | typeof LightTheme

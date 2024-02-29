@@ -55,7 +55,13 @@ export function ActiveSectionProvider({
             delete update[id]
             return update
         },
-        setOverride: (id: Id) => setActiveSectionOverride(id),
+        setOverride: (id: Id) => {
+            // Wait for the scroll to finish and then set the override
+            // The override will be reset on next scroll
+            setTimeout(() => {
+                setActiveSectionOverride(id)
+            }, 50)
+        },
     }
 
     return (

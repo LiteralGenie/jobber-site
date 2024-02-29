@@ -1,6 +1,4 @@
-import { useTheme } from "@emotion/react"
-import { Typography, alpha } from "@mui/material"
-import { Theme } from "../home/theme/themes"
+import { Typography, alpha, useTheme } from "@mui/material"
 import styles from "./table-of-contents.module.scss"
 import { useActiveSection } from "./use-active-section-context"
 
@@ -29,22 +27,14 @@ export function Header({ id, question }: HeaderProps) {
 
     const isActive = activeSectionId === id
 
-    const theme = useTheme() as Theme
+    const theme = useTheme()
     const defaultColor = alpha(theme.palette.text.primary, 0.6)
     const activeColor = alpha(theme.palette.text.primary, 0.8)
-
-    function handleClick() {
-        // Wait for the scroll to finish and then set the override
-        // The override will be reset on next scroll
-        setTimeout(() => {
-            setOverride(id)
-        }, 50)
-    }
 
     return (
         <Typography variant="body2" display="block" color={activeColor}>
             <a
-                onClick={() => handleClick()}
+                onClick={() => setOverride(id)}
                 className={styles.link}
                 style={{
                     color: isActive ? activeColor : defaultColor,
