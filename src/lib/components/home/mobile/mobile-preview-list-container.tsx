@@ -9,10 +9,10 @@ import {
 import MenuIcon from "@mui/icons-material/Menu"
 import { Button, IconButton, Paper } from "@mui/material"
 import { useEffect, useRef, useState } from "react"
+import { AppDrawer } from "../../app-bar/app-drawer"
 import PreviewList, { PreviewListProps } from "../preview-list/preview-list"
 import { usePageLink } from "../preview-list/usePageLink"
 import SearchBar from "./search-bar"
-import { Sidebar } from "./side-bar"
 
 export interface MobilePreviewListContainerProps {
     onCardClick?: PreviewListProps["onClick"]
@@ -113,7 +113,10 @@ export function MobilePreviewListContainer({
                 </Paper>
             </Paper>
 
-            <Sidebar open={showSidebar} onClose={() => setShowSidebar(false)} />
+            <AppDrawer
+                open={showSidebar}
+                onClose={() => setShowSidebar(false)}
+            />
         </>
     )
 }

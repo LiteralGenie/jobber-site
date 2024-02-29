@@ -1,8 +1,8 @@
 import { useActiveLayout } from "@/lib/hooks/use-active-layout"
 import { useWindowSize } from "@/lib/hooks/use-window-size"
 import { useEffect, useRef } from "react"
-import { TopBar } from "../top-bar/top-bar"
-import { TopBarWithDrawer } from "../top-bar/top-bar-with-drawer"
+import { TopBar } from "../app-bar/top-bar"
+import { TopBarWithDrawer } from "../app-bar/top-bar-with-drawer"
 import { Faq } from "./faq"
 
 export function FaqContainer() {

@@ -1,7 +1,7 @@
 import MenuIcon from "@mui/icons-material/Menu"
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material"
 import { useState } from "react"
-import { Sidebar } from "../home/mobile/side-bar"
+import { AppDrawer } from "./app-drawer"
 
 export function TopBarWithDrawer() {
     const [showSidebar, setShowSidebar] = useState(false)
@@ -27,7 +27,10 @@ export function TopBarWithDrawer() {
                 </Toolbar>
             </AppBar>
 
-            <Sidebar open={showSidebar} onClose={() => setShowSidebar(false)} />
+            <AppDrawer
+                open={showSidebar}
+                onClose={() => setShowSidebar(false)}
+            />
         </>
     )
 }

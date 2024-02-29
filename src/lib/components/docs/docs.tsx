@@ -3,9 +3,9 @@ import { useWindowSize } from "@/lib/hooks/use-window-size"
 import { useAppTheme } from "@/lib/providers/app-theme-provider"
 import { useEffect, useRef } from "react"
 import SwaggerUI from "swagger-ui-react"
+import { TopBar } from "../app-bar/top-bar"
+import { TopBarWithDrawer } from "../app-bar/top-bar-with-drawer"
 import { DarkTheme } from "../home/theme/themes"
-import { TopBar } from "../top-bar/top-bar"
-import { TopBarWithDrawer } from "../top-bar/top-bar-with-drawer"
 
 export function Docs() {
     const { theme } = useAppTheme()
