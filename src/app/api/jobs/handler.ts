@@ -26,9 +26,9 @@ export async function getJobs(
         // Filter for fully-labeled posts
         .with("with_labels", (eb) => {
             let query = eb
-                .selectFrom("indeed_posts as post")
+                .selectFrom("posts as post")
                 .innerJoin(
-                    "indeed_label_statuses as status",
+                    "label_statuses as status",
                     "status.id_post",
                     "post.id"
                 )
@@ -40,10 +40,12 @@ export async function getJobs(
                 .select([
                     "post.rowid",
                     "post.id",
-                    "post.title",
-                    "post.text",
                     "post.company",
+                    "post.source",
+                    "post.text",
                     "post.time_created",
+                    "post.title",
+                    "post.url",
                 ])
 
             if (opts.startTime) {
@@ -57,7 +59,7 @@ export async function getJobs(
             let query = eb
                 .selectFrom("with_labels as post")
                 .innerJoin("skills as sk", (join) => join.onTrue())
-                .leftJoin("indeed_skill_labels as lbl", (join) =>
+                .leftJoin("skill_labels as lbl", (join) =>
                     join
                         .onRef("lbl.id_post", "=", "post.id")
                         .onRef("lbl.id_skill", "=", "sk.id")
@@ -94,7 +96,7 @@ export async function getJobs(
             let query = eb
                 .selectFrom("with_skills as post")
                 .innerJoin("duties as dt", (join) => join.onTrue())
-                .leftJoin("indeed_duty_labels as lbl", (join) =>
+                .leftJoin("duty_labels as lbl", (join) =>
                     join
                         .onRef("lbl.id_post", "=", "post.id")
                         .onRef("lbl.id_duty", "=", "dt.id")
@@ -130,11 +132,7 @@ export async function getJobs(
         .with("with_locations", (eb) => {
             let query = eb
                 .selectFrom("with_duties as post")
-                .leftJoin(
-                    "indeed_location_labels as lbl",
-                    "lbl.id_post",
-                    "post.id"
-                )
+                .leftJoin("location_labels as lbl", "lbl.id_post", "post.id")
                 .leftJoin("locations as loc", "loc.id", "lbl.id_location")
                 .groupBy("post.id")
                 .select(
@@ -164,11 +162,7 @@ export async function getJobs(
         .with("with_misc", (eb) => {
             let query = eb
                 .selectFrom("with_locations as post")
-                .innerJoin(
-                    "indeed_misc_labels as lbl",
-                    "lbl.id_post",
-                    "post.id"
-                )
+                .innerJoin("misc_labels as lbl", "lbl.id_post", "post.id")
                 .selectAll("post")
                 .select([
                     "lbl.is_hybrid",
@@ -211,7 +205,7 @@ export async function getJobs(
         .with("with_yoe", (eb) => {
             let query = eb
                 .selectFrom("with_misc as post")
-                .leftJoin("indeed_yoe_labels as lbl", "lbl.id_post", "post.id")
+                .leftJoin("yoe_labels as lbl", "lbl.id_post", "post.id")
                 .selectAll("post")
                 .select("lbl.yoe")
 
@@ -272,11 +266,13 @@ export async function getJobs(
                 rowid: d.rowid,
 
                 clearance: fromSqliteBool(d.clearance),
-                description: d.text,
                 company: d.company,
-                title: d.title,
-                yoe: d.yoe,
+                description: d.text,
                 salary: d.salary,
+                source: d.source,
+                title: d.title,
+                url: d.url,
+                yoe: d.yoe,
 
                 location_type: {
                     is_hybrid: fromSqliteBool(d.is_hybrid),
