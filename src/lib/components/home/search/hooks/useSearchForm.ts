@@ -55,14 +55,14 @@ export function filtersToFormData(filters: SearchFilters): SearchFormData {
 }
 
 export function pageParamsToFilters(
-    searchParams: PageProps["searchParams"],
+    searchParams: PageProps["searchParams"]
 ): SearchFilters {
     const filters = Object.fromEntries(
         Object.entries(SEARCH_FILTERS_PARSER).map(([k, v]) => {
             const param = searchParams[k]
             const val = (v as ParserBuilder<any>).parseServerSide(param)
             return [k, val]
-        }),
+        })
     ) as SearchFilters
 
     return filters
@@ -95,7 +95,7 @@ export function formDataToFilters(data: SearchFormData): SearchFilters {
 }
 
 export function removeDefaultFilters(
-    filters: SearchFilters,
+    filters: SearchFilters
 ): Nullified<SearchFilters> {
     const update: Nullified<SearchFilters> = { ...filters }
 
