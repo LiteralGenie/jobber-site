@@ -55,7 +55,7 @@ async function getItems() {
 
     return jobs.map((j) => ({
         title: j.title,
-        link: `https://jobber.velchees.dev/?after=${j.rowid}#${j.id}`,
+        link: `https://jobber.velchees.dev/?after=${j.id}#${j.id}`,
         description: formatDescription(j),
         guid: j.id,
         pubDate: new Date(j.time_created).toUTCString(),

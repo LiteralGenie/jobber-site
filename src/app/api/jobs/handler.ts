@@ -38,7 +38,6 @@ export async function getJobs(
                 .where("status.has_misc", "=", 1)
                 .where("status.has_yoe", "=", 1)
                 .select([
-                    "post.rowid",
                     "post.id",
                     "post.company",
                     "post.source",
@@ -250,9 +249,9 @@ export async function getJobs(
 
     // Take the newest N+1 rows
     // where the +1 is the cursor for next page
-    let queryAfter = query.orderBy("rowid", "desc").limit(limit + 1)
+    let queryAfter = query.orderBy("id", "desc").limit(limit + 1)
     if (typeof opts.after === "number") {
-        queryAfter = queryAfter.where("rowid", "<=", opts.after)
+        queryAfter = queryAfter.where("id", "<=", opts.after)
     }
     // console.log("queryAfter", queryAfter.compile().sql)
     // console.log("vals", queryAfter.compile().parameters)
@@ -263,7 +262,6 @@ export async function getJobs(
         (d) =>
             ({
                 id: d.id,
-                rowid: d.rowid,
 
                 clearance: fromSqliteBool(d.clearance),
                 company: d.company,
@@ -330,21 +328,21 @@ export async function getJobs(
 
     let nextPageCursor: number | null = null
     if (rowsAfter[limit]) {
-        nextPageCursor = rowsAfter[limit].rowid
+        nextPageCursor = rowsAfter[limit].id
     }
 
     let prevPageCursor: number | null = null
     if (opts.after) {
         const queryBefore = query
-            .where("rowid", ">", opts.after)
-            .orderBy("rowid", "asc")
+            .where("id", ">", opts.after)
+            .orderBy("id", "asc")
             .limit(limit)
 
         const rowsBefore = await queryBefore.execute()
 
         if (rowsBefore.length) {
             const idxLast = rowsBefore.length - 1
-            prevPageCursor = rowsBefore[idxLast].rowid
+            prevPageCursor = rowsBefore[idxLast].id
         }
     }
 

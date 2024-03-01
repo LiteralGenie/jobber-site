@@ -37,8 +37,7 @@ export interface LocationsTable {
 }
 
 export interface PostsTable {
-    rowid: Generated<number>
-    id: string
+    id: Generated<number>
 
     company: string
     text: string
