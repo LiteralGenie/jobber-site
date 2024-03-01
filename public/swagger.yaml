@@ -222,7 +222,7 @@ components:
                 Most properties are inferred from the description text. This process isn't perfect so some of the descriptions below will warn of especially unreliable properties.
             properties:
                 id:
-                    type: string
+                    type: number
                 clearance:
                     description: Flag that indicates whether a security clearance is required.
                     type: boolean
@@ -237,10 +237,8 @@ components:
                 salary:
                     description: >-
                         Jobs that provide an hourly pay will often be incorrectly labeled. It will usually be absurdly low.
-
-
-                        Jobs that do not provide a salary will default to 0
                     type: number
+                    nullable: true
                 time_created:
                     description: The time the job posting was scraped (not created!)
                     type: string
@@ -304,7 +302,6 @@ components:
                         $ref: "#/components/schemas/Location"
             required:
                 - id
-                - rowid
                 - clearance
                 - company
                 - description
@@ -358,8 +355,7 @@ components:
             summary: ""
             value:
                 jobs:
-                    - id: 6c7df
-                      rowid: 4778
+                    - id: 116
                       clearance: false
                       description: ...
                       company: ...
@@ -378,8 +374,7 @@ components:
                           - id: 1
                             name: On-call
                       locations: []
-                    - id: 3d1d9
-                      rowid: 4777
+                    - id: 113
                       clearance: true
                       description: ...
                       company: ...
@@ -394,8 +389,7 @@ components:
                       skills: []
                       duties: []
                       locations: []
-                    - id: ccdaa
-                      rowid: 4776
+                    - id: 112
                       clearance: false
                       description: ...
                       company: ...
@@ -414,8 +408,7 @@ components:
                             country: Arlington
                             state: TX
                             city: USA
-                    - id: b942f
-                      rowid: 4775
+                    - id: 111
                       clearance: true
                       description: ...
                       company: ...
@@ -439,4 +432,4 @@ components:
                             state: Maryland
                             city: Baltimore
                 prevPageCursor: null
-                nextPageCursor: 4763
+                nextPageCursor: 100

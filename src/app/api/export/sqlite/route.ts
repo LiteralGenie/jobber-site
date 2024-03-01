@@ -1,4 +1,5 @@
 import { sqlConn } from "@/database/db"
+import { Database as Db } from "@/database/types"
 import Database from "better-sqlite3"
 import { createReadStream, existsSync } from "fs"
 import { mkdir, stat } from "fs/promises"
@@ -8,17 +9,17 @@ import { ReadableOptions } from "stream"
 
 // Tables that should be included in export
 const TABLE_WHITELIST = [
-    "indeed_posts",
+    "posts",
     "skills",
     "duties",
     "locations",
-    "indeed_label_statuses",
-    "indeed_skill_labels",
-    "indeed_duty_labels",
-    "indeed_misc_labels",
-    "indeed_location_labels",
-    "indeed_yoe_labels",
-]
+    "label_statuses",
+    "skill_labels",
+    "duty_labels",
+    "misc_labels",
+    "location_labels",
+    "yoe_labels",
+] satisfies Array<keyof Db>
 
 export async function GET() {
     const fpBackup = await backupDb()
@@ -63,7 +64,7 @@ async function dropTables(fpBackup: string) {
 
     // Drop tables not in whitelist
     for (let { name } of tables) {
-        if (!TABLE_WHITELIST.includes(name)) {
+        if (!TABLE_WHITELIST.includes(name as any)) {
             db.prepare("DROP TABLE ?").run(name)
         }
     }
@@ -74,7 +75,7 @@ async function dropTables(fpBackup: string) {
         .all() as Array<{ name: string }>
 
     const remaining = update.filter(
-        ({ name }) => !TABLE_WHITELIST.includes(name)
+        ({ name }) => !TABLE_WHITELIST.includes(name as any)
     )
 
     if (remaining.length > 0) {

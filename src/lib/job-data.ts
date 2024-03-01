@@ -1,16 +1,17 @@
 type IsoDate = string
 
 export interface JobData {
-    id: string
-    rowid: number
+    id: number
 
     clearance: boolean
     company: string
     description: string
     location_type: LocationType
-    salary: number
+    salary: number | null
+    source: string
     time_created: IsoDate
     title: string
+    url: string
     yoe: number | null
 
     skills: Array<{

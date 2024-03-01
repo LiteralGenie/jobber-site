@@ -26,9 +26,9 @@ export async function getJobs(
         // Filter for fully-labeled posts
         .with("with_labels", (eb) => {
             let query = eb
-                .selectFrom("indeed_posts as post")
+                .selectFrom("posts as post")
                 .innerJoin(
-                    "indeed_label_statuses as status",
+                    "label_statuses as status",
                     "status.id_post",
                     "post.id"
                 )
@@ -38,12 +38,13 @@ export async function getJobs(
                 .where("status.has_misc", "=", 1)
                 .where("status.has_yoe", "=", 1)
                 .select([
-                    "post.rowid",
                     "post.id",
-                    "post.title",
-                    "post.text",
                     "post.company",
+                    "post.source",
+                    "post.text",
                     "post.time_created",
+                    "post.title",
+                    "post.url",
                 ])
 
             if (opts.startTime) {
@@ -57,7 +58,7 @@ export async function getJobs(
             let query = eb
                 .selectFrom("with_labels as post")
                 .innerJoin("skills as sk", (join) => join.onTrue())
-                .leftJoin("indeed_skill_labels as lbl", (join) =>
+                .leftJoin("skill_labels as lbl", (join) =>
                     join
                         .onRef("lbl.id_post", "=", "post.id")
                         .onRef("lbl.id_skill", "=", "sk.id")
@@ -73,17 +74,17 @@ export async function getJobs(
 
             opts.skills?.include.forEach(({ id }) => {
                 query = query.having(
-                    sql`(lbl.id_skill, lbl.label)`,
+                    sql`SUM(lbl.label) FILTER (WHERE lbl.id_skill = ${id})`,
                     "=",
-                    sql`(${id}, 1)`
+                    1
                 )
             })
 
             opts.skills?.exclude.forEach(({ id }) => {
                 query = query.having(
-                    sql`(lbl.id_skill, lbl.label)`,
+                    sql`SUM(lbl.label) FILTER (WHERE lbl.id_skill = ${id})`,
                     "=",
-                    sql`(${id}, 0)`
+                    0
                 )
             })
 
@@ -94,7 +95,7 @@ export async function getJobs(
             let query = eb
                 .selectFrom("with_skills as post")
                 .innerJoin("duties as dt", (join) => join.onTrue())
-                .leftJoin("indeed_duty_labels as lbl", (join) =>
+                .leftJoin("duty_labels as lbl", (join) =>
                     join
                         .onRef("lbl.id_post", "=", "post.id")
                         .onRef("lbl.id_duty", "=", "dt.id")
@@ -130,11 +131,7 @@ export async function getJobs(
         .with("with_locations", (eb) => {
             let query = eb
                 .selectFrom("with_duties as post")
-                .leftJoin(
-                    "indeed_location_labels as lbl",
-                    "lbl.id_post",
-                    "post.id"
-                )
+                .leftJoin("location_labels as lbl", "lbl.id_post", "post.id")
                 .leftJoin("locations as loc", "loc.id", "lbl.id_location")
                 .groupBy("post.id")
                 .select(
@@ -164,11 +161,7 @@ export async function getJobs(
         .with("with_misc", (eb) => {
             let query = eb
                 .selectFrom("with_locations as post")
-                .innerJoin(
-                    "indeed_misc_labels as lbl",
-                    "lbl.id_post",
-                    "post.id"
-                )
+                .innerJoin("misc_labels as lbl", "lbl.id_post", "post.id")
                 .selectAll("post")
                 .select([
                     "lbl.is_hybrid",
@@ -211,12 +204,12 @@ export async function getJobs(
         .with("with_yoe", (eb) => {
             let query = eb
                 .selectFrom("with_misc as post")
-                .leftJoin("indeed_yoe_labels as lbl", "lbl.id_post", "post.id")
+                .leftJoin("yoe_labels as lbl", "lbl.id_post", "post.id")
                 .selectAll("post")
                 .select("lbl.yoe")
 
             const { minimum, ignoreNull } = opts.yoe ?? {}
-            if (typeof minimum === "number") {
+            if (typeof minimum === "number" && minimum > 0) {
                 query = query.where((eb) =>
                     eb(eb.fn.coalesce("lbl.yoe", sql<number>`0`), "<=", minimum)
                 )
@@ -256,9 +249,9 @@ export async function getJobs(
 
     // Take the newest N+1 rows
     // where the +1 is the cursor for next page
-    let queryAfter = query.orderBy("rowid", "desc").limit(limit + 1)
+    let queryAfter = query.orderBy("id", "desc").limit(limit + 1)
     if (typeof opts.after === "number") {
-        queryAfter = queryAfter.where("rowid", "<=", opts.after)
+        queryAfter = queryAfter.where("id", "<=", opts.after)
     }
     // console.log("queryAfter", queryAfter.compile().sql)
     // console.log("vals", queryAfter.compile().parameters)
@@ -269,14 +262,15 @@ export async function getJobs(
         (d) =>
             ({
                 id: d.id,
-                rowid: d.rowid,
 
                 clearance: fromSqliteBool(d.clearance),
-                description: d.text,
                 company: d.company,
-                title: d.title,
-                yoe: d.yoe,
+                description: d.text,
                 salary: d.salary,
+                source: d.source,
+                title: d.title,
+                url: d.url,
+                yoe: d.yoe,
 
                 location_type: {
                     is_hybrid: fromSqliteBool(d.is_hybrid),
@@ -334,21 +328,21 @@ export async function getJobs(
 
     let nextPageCursor: number | null = null
     if (rowsAfter[limit]) {
-        nextPageCursor = rowsAfter[limit].rowid
+        nextPageCursor = rowsAfter[limit].id
     }
 
     let prevPageCursor: number | null = null
     if (opts.after) {
         const queryBefore = query
-            .where("rowid", ">", opts.after)
-            .orderBy("rowid", "asc")
+            .where("id", ">", opts.after)
+            .orderBy("id", "asc")
             .limit(limit)
 
         const rowsBefore = await queryBefore.execute()
 
         if (rowsBefore.length) {
             const idxLast = rowsBefore.length - 1
-            prevPageCursor = rowsBefore[idxLast].rowid
+            prevPageCursor = rowsBefore[idxLast].id
         }
     }
 

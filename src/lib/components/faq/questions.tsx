@@ -1,11 +1,16 @@
-import { Link, LinkProps } from "@mui/material"
+import { Link } from "@mui/material"
 import { ReactNode } from "react"
 
-function link(text: string, href: string, props?: LinkProps) {
+function link(
+    text: string,
+    href: string,
+    { prefix = true, suffix = true } = {}
+) {
     return (
         <>
-            {" "}
-            <Link {...props}>{text}</Link>{" "}
+            {prefix ? " " : ""}
+            <Link href={href}>{text}</Link>
+            {suffix ? " " : ""}
         </>
     )
 }
@@ -18,27 +23,15 @@ interface Question {
 
 export const QUESTIONS = [
     {
-        id: "where",
-        question: "Where are the jobs from?",
-        answer: (
-            <>
-                The job description and title are from
-                {link("Indeed", "https://www.indeed.com/")}
-                <br />
-                The labels (eg required skills) are inferred from the
-                description.
-            </>
-        ),
-    },
-    {
         id: "why",
         question: "Why build yet another job board?",
         answer: (
             <>
-                I wanted a job board with more specific filters (especially
-                "exclude-this" filters).
-                <br />
-                Also to learn me a React.
+                Mostly to learn React stuff. {link("MUI", "https://mui.com/")}
+                and {link("Kysely", "https://kysely.dev/", {
+                    suffix: false,
+                })}{" "}
+                have been absolute joys to use!
             </>
         ),
     },
@@ -63,9 +56,19 @@ export const QUESTIONS = [
                     "https://mistral.ai/news/announcing-mistral-7b/"
                 )}
                 + {link("guidance", "https://github.com/guidance-ai/guidance")}
+            </>
+        ),
+    },
+    {
+        id: "where",
+        question: "Where are the jobs from?",
+        answer: (
+            <>
+                The job description and title are from
+                {link("Indeed", "https://www.indeed.com/")}
                 <br />
-                For gathering data: {link("Crawlee", "https://playwright.dev/")}
-                + {link("Playwright", "https://playwright.dev/")}
+                The labels (eg required skills) are inferred from the
+                description.
             </>
         ),
     },
@@ -93,6 +96,18 @@ export const QUESTIONS = [
                     </li>
                     <li>For responsibilities, not sure.</li>
                 </ul>
+            </>
+        ),
+    },
+    {
+        id: "counts",
+        question: "What are the numbers next to some of the filter options?",
+        answer: (
+            <>
+                A filter option like "Python (42)" means that there are 42
+                recent jobs tagged with the Python requirement.
+                <br />
+                Where "recent" currently means jobs from the last 14 days.
             </>
         ),
     },

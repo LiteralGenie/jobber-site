@@ -1,3 +1,4 @@
+import { humanizeSource } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
 import LaunchIcon from "@mui/icons-material/Launch"
 import { Button, Card, Paper } from "@mui/material"
@@ -14,13 +15,15 @@ export default function Details({ job }: DetailsProps) {
 
     const href = typeof window === "undefined" ? "" : window.location.href
 
+    const source = humanizeSource(job.source)
+
     // Reset scroll position on content change
     useEffect(() => {
         scrollElRef.current?.scrollTo({ top: 0 })
     }, [job])
 
     return (
-        <div className="overflow-hidden">
+        <div className="overflow-hidden flex flex-col">
             <Card
                 ref={scrollElRef}
                 variant="outlined"
@@ -36,17 +39,17 @@ export default function Details({ job }: DetailsProps) {
 
                 <div className="flex gap-2">
                     <Button
-                        href={`https://www.indeed.com/viewjob?jk=${job.id}`}
+                        href={job.url}
                         target="_blank"
                         rel="noopener"
                         size="large"
                         color="primary"
                         variant="contained"
                         endIcon={<LaunchIcon />}
-                        aria-label="Apply on Indeed"
-                        title="Apply on Indeed"
+                        aria-label={`Apply on ${source}`}
+                        title={`Apply on ${source}`}
                     >
-                        Indeed
+                        {source}
                     </Button>
                 </div>
             </Paper>

@@ -32,7 +32,7 @@ export interface MultiSelectProps {
 
 function readFormValue(
     value: Array<{ id: number }>,
-    optionMap: OptionMap,
+    optionMap: OptionMap
 ): Option[] {
     return value.map(({ id }) => optionMap[id])
 }
@@ -55,9 +55,9 @@ export default function MultiSelect({
         () =>
             options.reduce(
                 (acc, opt) => ({ [opt.id]: opt, ...acc }),
-                {} as OptionMap,
+                {} as OptionMap
             ),
-        [options],
+        [options]
     )
 
     return (

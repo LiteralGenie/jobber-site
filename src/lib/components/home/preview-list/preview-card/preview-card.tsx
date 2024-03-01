@@ -1,4 +1,4 @@
-import { MONTHS } from "@/lib/format-utils"
+import { MONTHS, humanizeSource } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
 import LaunchIcon from "@mui/icons-material/Launch"
 import { Button, IconButton, Typography, alpha } from "@mui/material"
@@ -17,6 +17,7 @@ export default function PreviewCard({
     onClick,
 }: PreviewCardProps) {
     const date = useMemo(() => humanizeDate(job.time_created), [job])
+    const source = useMemo(() => humanizeSource(job.source), [job])
 
     return (
         <div className="w-full flex justify-between">
@@ -71,11 +72,11 @@ export default function PreviewCard({
             {/* Link to original post */}
             <IconButton
                 className="h-min self-center p-4"
-                href={`https://www.indeed.com/viewjob?jk=${job.id}`}
+                href={job.url}
                 target="_blank"
                 rel="noopener"
-                aria-label="View on Indeed"
-                title="View on Indeed"
+                aria-label={`View on ${source}`}
+                title={`View on ${source}`}
                 sx={{
                     pointerEvents: "initial",
                 }}

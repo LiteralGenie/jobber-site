@@ -5,6 +5,7 @@ import {
     humanizeLocation,
     humanizeLocationType,
     humanizeSalary,
+    humanizeSource,
 } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
 import { create } from "xmlbuilder2"
@@ -54,7 +55,7 @@ async function getItems() {
 
     return jobs.map((j) => ({
         title: j.title,
-        link: `https://jobber.velchees.dev/?after=${j.rowid}#${j.id}`,
+        link: `https://jobber.velchees.dev/?after=${j.id}#${j.id}`,
         description: formatDescription(j),
         guid: j.id,
         pubDate: new Date(j.time_created).toUTCString(),
@@ -88,8 +89,8 @@ function formatDescription(j: JobData): string {
 
     const parts = []
 
-    // Indeed link
-    const link = `<a href="https://www.indeed.com/viewjob?jk=${j.id}">View on Indeed</a>`
+    // Link
+    const link = `<a href="${j.url}">View on ${humanizeSource(j.source)}</a>`
 
     // Company / salary / clearance / yoe
     const company = toTitle("Company") + ": " + j.company

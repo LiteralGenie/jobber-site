@@ -7,13 +7,13 @@ export interface Database {
     skills: SkillsTable
     locations: LocationsTable
 
-    indeed_posts: IndeedPostsTable
-    indeed_label_statuses: IndeedLabelStatusesTable
-    indeed_skill_labels: IndeedSkillLabelsTable
-    indeed_duty_labels: IndeedDutyLabelsTable
-    indeed_misc_labels: IndeedMiscLabelsTable
-    indeed_location_labels: IndeedLocationLabelsTable
-    indeed_yoe_labels: IndeedYoeLabelsTable
+    posts: PostsTable
+    label_statuses: LabelStatusesTable
+    skill_labels: SkillLabelsTable
+    duty_labels: DutyLabelsTable
+    misc_labels: MiscLabelsTable
+    location_labels: LocationLabelsTable
+    yoe_labels: YoeLabelsTable
 }
 
 export interface DutiesTable {
@@ -36,45 +36,45 @@ export interface LocationsTable {
     city: string
 }
 
-export interface IndeedPostsTable {
-    rowid: Generated<number>
-    id: string
+export interface PostsTable {
+    id: Generated<number>
 
     company: string
     text: string
     title: string
 
-    details_html: string
-    preview_html: string
+    source: string
+    url: string
+
     time_created: number
 }
 
-export interface IndeedSkillLabelsTable {
+export interface SkillLabelsTable {
     id_skill: number
-    id_post: string
+    id_post: number
 
     label: SqliteBool
 }
 
-export interface IndeedDutyLabelsTable {
+export interface DutyLabelsTable {
     id_duty: number
-    id_post: string
+    id_post: number
 
     label: SqliteBool
 }
 
-export interface IndeedMiscLabelsTable {
-    id_post: string
+export interface MiscLabelsTable {
+    id_post: number
 
     is_hybrid: SqliteBool
     is_onsite: SqliteBool
     is_remote: SqliteBool
-    salary: number
+    salary: number | null
     clearance: SqliteBool
 }
 
-export interface IndeedLabelStatusesTable {
-    id_post: string
+export interface LabelStatusesTable {
+    id_post: number
 
     has_skills: SqliteBool
     has_duties: SqliteBool
@@ -83,13 +83,13 @@ export interface IndeedLabelStatusesTable {
     has_yoe: SqliteBool
 }
 
-export interface IndeedLocationLabelsTable {
-    id_post: string
+export interface LocationLabelsTable {
+    id_post: number
     id_location: number
 }
 
-export interface IndeedYoeLabelsTable {
-    id_post: string
+export interface YoeLabelsTable {
+    id_post: number
 
     yoe: number | null
 }

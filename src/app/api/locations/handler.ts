@@ -1,4 +1,5 @@
 import { db } from "@/database/db"
+import { ONE_DAY } from "@/lib/constants"
 
 // @jank: Backend data is kinda messy so manually curate the location filter options
 //        (eg LLM won't respect requested order (country, state, city) or will use abbreviations (USA))
@@ -16,14 +17,25 @@ export interface LocationDto {
 }
 
 export async function getLocations(): Promise<LocationDto[]> {
+    const now = new Date().getTime()
+    const start = (now - 14 * ONE_DAY) / 1000
+
+    // Return all possible locations
+    // with number of (recent) posts associated with that location
     const data = await db
         .selectFrom("locations as loc")
-        .leftJoin("indeed_location_labels as lbl", "lbl.id_location", "loc.id")
-        .where("country", "in", COUNTRY_WHITELIST)
-        .where("state", "in", STATE_WHITELIST)
+        .leftJoin("location_labels as lbl", "lbl.id_location", "loc.id")
+
+        .innerJoin("posts as p", "p.id", "lbl.id_post")
+        .where("p.time_created", ">", start)
+
+        .where("loc.country", "in", COUNTRY_WHITELIST)
+        .where("loc.state", "in", STATE_WHITELIST)
+
         .groupBy("loc.id")
-        .select(["loc.id", "loc.country", "loc.state", "loc.city"])
         .select((eb) => eb.fn.count<number>("loc.id").as("count"))
+
+        .select(["loc.id", "loc.country", "loc.state", "loc.city"])
         .execute()
 
     return data

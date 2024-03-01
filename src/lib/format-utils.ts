@@ -127,3 +127,12 @@ export function humanizeExperience(yoe: JobData["yoe"]): string {
 export function humanizeClearance(clearance: JobData["clearance"]): string {
     return clearance ? "Yes" : "No"
 }
+
+export function humanizeSource(source: string): string {
+    switch (source) {
+        case "indeed":
+            return "Indeed"
+        default:
+            return source
+    }
+}
