@@ -36,7 +36,7 @@ export default function Home() {
                             <TopBar />
 
                             <div className="p-8 pt-0 min-h-0 h-full grid gap-16 justify-center grid-cols-[max-content_22rem_minmax(16rem,44rem)]">
-                                <Search className="w-64" />
+                                <Search className="w-72" />
                                 <PreviewListContainer />
                                 <DetailsContainer />
                             </div>

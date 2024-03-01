@@ -27,11 +27,11 @@ export const QUESTIONS = [
         question: "Why build yet another job board?",
         answer: (
             <>
-                Mostly to learn React stuff. {link("MUI", "https://mui.com/")}
-                and {link("Kysely", "https://kysely.dev/", {
-                    suffix: false,
-                })}{" "}
-                have been absolute joys to use!
+                Mostly to learn React stuff.
+                <br />
+                {link("MUI", "https://mui.com/")} and{" "}
+                {link("Kysely", "https://kysely.dev/")} have been absolute joys
+                to use!
             </>
         ),
     },
