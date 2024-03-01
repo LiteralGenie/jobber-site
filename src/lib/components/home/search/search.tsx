@@ -29,7 +29,7 @@ export default function Search({ className }: SearchProps) {
                 <SearchFilters />
             </Paper>
 
-            <div className="pt-4 flex justify-end gap-2">
+            <div className="pt-4 grid grid-cols-3 gap-2">
                 <Button
                     variant="outlined"
                     onClick={handleClear}

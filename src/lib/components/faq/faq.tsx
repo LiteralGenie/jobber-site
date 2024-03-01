@@ -15,7 +15,7 @@ export function Faq() {
                 ref={containerRef}
                 className="h-full overflow-auto flex justify-center gap-8 lg:gap-24"
             >
-                <div className="h-full max-w-3xl p-8 md:pr-0 mb-72 flex flex-col gap-16">
+                <div className="h-max max-w-3xl px-8 pt-8 pb-72 md:pr-0 flex flex-col gap-16">
                     {qs.map(({ id, question, answer }) => (
                         <Section
                             key={id}
