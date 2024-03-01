@@ -23,7 +23,7 @@ export default function Details({ job }: DetailsProps) {
     }, [job])
 
     return (
-        <div className="overflow-hidden">
+        <div className="overflow-hidden flex flex-col">
             <Card
                 ref={scrollElRef}
                 variant="outlined"
