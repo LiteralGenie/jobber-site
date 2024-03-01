@@ -24,7 +24,7 @@ export function AppDrawer({ open, onClose }: AppDrawerProps) {
                     Jobber
                 </Typography>
 
-                <div className="flex flex-col gap-2 items-start w-full">
+                <div className="flex flex-col items-start w-full">
                     <Divider flexItem />
                     <DrawerLink text="Jobs" href="/" onClose={onClose} />
                     <Divider flexItem />
@@ -77,7 +77,7 @@ function DrawerLink({ text, href, onClose }: DrawerLinkProps) {
             href={href}
             onClick={onClick}
             variant="text"
-            className="min-w-0 px-4 py-0 normal-case"
+            className="min-w-0 w-full px-4 py-2 normal-case no-underline justify-start"
             sx={{
                 color: "text.disabled",
             }}

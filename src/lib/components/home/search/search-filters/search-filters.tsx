@@ -26,6 +26,7 @@ export function SearchFilters() {
                     variant="standard"
                     type="text"
                     placeholder="software (dev|eng).*"
+                    fullWidth
                     {...register("text")}
                 />
             </div>

@@ -32,7 +32,7 @@ export default function Details({ job }: DetailsProps) {
                 <DetailsContent job={job} />
             </Card>
 
-            <Paper elevation={1} className="w-full py-2 flex justify-between">
+            <Paper elevation={1} className="w-full p-2 flex justify-between">
                 <div className="flex gap-2">
                     <CopyLinkButton href={href} />
                 </div>
