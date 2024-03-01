@@ -38,7 +38,7 @@ docker run \
 jobber-site
 ```
 
-$APP will be running at http://localhost:3001
+Jobber will be running at http://localhost:3001
 
 ## Development
 
@@ -65,4 +65,4 @@ npm install
 npm run dev
 ```
 
-$APP will be running at http://localhost:3000
+Jobber will be running at http://localhost:3000
