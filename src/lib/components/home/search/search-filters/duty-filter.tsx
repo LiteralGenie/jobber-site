@@ -1,6 +1,7 @@
 import { DutyDto } from "@/app/api/duties/handler"
 import { useFormContext } from "@/lib/providers/form-provider"
 import { FormLabel } from "@mui/material"
+import { alphabetical } from "radash"
 import { useMemo } from "react"
 import MultiSelect from "../multi-select"
 
@@ -13,14 +14,16 @@ export function DutyFilter({ duties }: DutyFilterProps) {
     const included = form.watch("duties.include")
     const excluded = form.watch("duties.exclude")
 
-    const options = useMemo(
-        () =>
-            duties.map(({ id, name, count }) => ({
-                id,
-                name: `${name} (${count})`,
-            })),
-        [duties]
-    )
+    const options = useMemo(() => {
+        let renamed = duties.map(({ id, name, count }) => ({
+            id,
+            name: `${name} (${count})`,
+        }))
+
+        renamed = alphabetical(renamed, ({ name }) => name)
+
+        return renamed
+    }, [duties])
 
     return (
         <section>

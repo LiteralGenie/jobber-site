@@ -1,6 +1,7 @@
 import { SkillDto } from "@/app/api/skills/handler"
 import { useFormContext } from "@/lib/providers/form-provider"
 import { FormLabel } from "@mui/material"
+import { alphabetical } from "radash"
 import { useMemo } from "react"
 import MultiSelect from "../multi-select"
 
@@ -13,14 +14,16 @@ export function SkillFilter({ skills }: SkillFilterProps) {
     const included = form.watch("skills.include")
     const excluded = form.watch("skills.exclude")
 
-    const options = useMemo(
-        () =>
-            skills.map(({ id, name, count }) => ({
-                id,
-                name: `${name} (${count})`,
-            })),
-        [skills]
-    )
+    const options = useMemo(() => {
+        let renamed = skills.map(({ id, name, count }) => ({
+            id,
+            name: `${name} (${count})`,
+        }))
+
+        renamed = alphabetical(renamed, ({ name }) => name)
+
+        return renamed
+    }, [skills])
 
     return (
         <section>
