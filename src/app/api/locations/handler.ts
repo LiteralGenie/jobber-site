@@ -18,7 +18,7 @@ export interface LocationDto {
 export async function getLocations(): Promise<LocationDto[]> {
     const data = await db
         .selectFrom("locations as loc")
-        .leftJoin("indeed_location_labels as lbl", "lbl.id_location", "loc.id")
+        .leftJoin("location_labels as lbl", "lbl.id_location", "loc.id")
         .where("country", "in", COUNTRY_WHITELIST)
         .where("state", "in", STATE_WHITELIST)
         .groupBy("loc.id")

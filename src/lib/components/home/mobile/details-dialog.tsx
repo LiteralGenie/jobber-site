@@ -1,3 +1,4 @@
+import { humanizeSource } from "@/lib/format-utils"
 import { useActiveJob } from "@/lib/providers/active-job-provider"
 import { useHashContext } from "@/lib/providers/hash-provider"
 import { WestOutlined } from "@mui/icons-material"
@@ -15,6 +16,7 @@ export interface DetailsDialogProps {
 
 export function DetailsDialog({ shouldPopStateOnClose }: DetailsDialogProps) {
     const activeJob = useActiveJob()
+    const source = activeJob ? humanizeSource(activeJob.source) : "???"
 
     const { recheckHash } = useHashContext()
 
@@ -57,7 +59,7 @@ export function DetailsDialog({ shouldPopStateOnClose }: DetailsDialogProps) {
             window.history.replaceState(
                 { ...window.history.state },
                 "",
-                update.href,
+                update.href
             )
             recheckHash()
         }
@@ -106,16 +108,16 @@ export function DetailsDialog({ shouldPopStateOnClose }: DetailsDialogProps) {
                         </Button>
 
                         <Button
-                            href={`https://www.indeed.com/viewjob?jk=${activeJob.id}`}
+                            href={activeJob.url}
                             target="_blank"
                             rel="noopener"
                             color="primary"
                             variant="contained"
                             endIcon={<LaunchIcon />}
-                            aria-label="Apply on Indeed"
-                            title="Apply on Indeed"
+                            aria-label={`Apply on ${source}`}
+                            title={`Apply on ${source}`}
                         >
-                            Indeed
+                            {source}
                         </Button>
                     </Paper>
                 </Paper>
@@ -128,7 +130,7 @@ const Transition = forwardRef(function Transition(
     props: TransitionProps & {
         children: React.ReactElement<any, any>
     },
-    ref: React.Ref<unknown>,
+    ref: React.Ref<unknown>
 ) {
     return <Slide direction="left" ref={ref} {...props} />
 })
