@@ -1,6 +1,7 @@
 import { DutyDto } from "@/app/api/duties/handler"
 import { useFormContext } from "@/lib/providers/form-provider"
 import { FormLabel } from "@mui/material"
+import { useMemo } from "react"
 import MultiSelect from "../multi-select"
 
 export interface DutyFilterProps {
@@ -12,6 +13,15 @@ export function DutyFilter({ duties }: DutyFilterProps) {
     const included = form.watch("duties.include")
     const excluded = form.watch("duties.exclude")
 
+    const options = useMemo(
+        () =>
+            duties.map(({ id, name, count }) => ({
+                id,
+                name: `${name} (${count})`,
+            })),
+        [duties]
+    )
+
     return (
         <section>
             <div className="pb-4">
@@ -22,7 +32,7 @@ export function DutyFilter({ duties }: DutyFilterProps) {
                 <MultiSelect
                     form={form}
                     controlName="duties.include"
-                    options={duties}
+                    options={options}
                     disabledOptions={excluded.map((v) => v.id)}
                     label="Include"
                     ariaLabel="Duties Included"
@@ -31,7 +41,7 @@ export function DutyFilter({ duties }: DutyFilterProps) {
                 <MultiSelect
                     form={form}
                     controlName="duties.exclude"
-                    options={duties}
+                    options={options}
                     disabledOptions={included.map((v) => v.id)}
                     label="Exclude"
                     ariaLabel="Duties Excluded"
