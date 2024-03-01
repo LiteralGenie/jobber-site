@@ -1,6 +1,4 @@
-_A job board with all the filters_
-
-Live demo: https://jobber.velchees.dev/
+_A job board with all the filters_Live demo: https://jobber.velchees.dev/
 
 <img width="75%" src="https://github.com/LiteralGenie/jobber-site/assets/24236225/7c7d470a-1b6e-4914-aad0-0391c54490a0" />
 
@@ -9,7 +7,7 @@ Live demo: https://jobber.velchees.dev/
 - Filter jobs by tech stack (eg include Django, exclude C++)
 - Filter jobs by responsibilities (eg include on-call, exclude travel)
 - Filter jobs by minimum experience (eg include only jobs that require <N years of experience)
-- Filter jobs by based on security clearance / location requirements
+- Filter jobs based on security clearance / location requirements
 - RSS feed
 - Mobile friendly with light and dark themes
 
