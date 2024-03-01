@@ -51,20 +51,20 @@ export interface PostsTable {
 
 export interface SkillLabelsTable {
     id_skill: number
-    id_post: string
+    id_post: number
 
     label: SqliteBool
 }
 
 export interface DutyLabelsTable {
     id_duty: number
-    id_post: string
+    id_post: number
 
     label: SqliteBool
 }
 
 export interface MiscLabelsTable {
-    id_post: string
+    id_post: number
 
     is_hybrid: SqliteBool
     is_onsite: SqliteBool
@@ -74,7 +74,7 @@ export interface MiscLabelsTable {
 }
 
 export interface LabelStatusesTable {
-    id_post: string
+    id_post: number
 
     has_skills: SqliteBool
     has_duties: SqliteBool
@@ -84,12 +84,12 @@ export interface LabelStatusesTable {
 }
 
 export interface LocationLabelsTable {
-    id_post: string
+    id_post: number
     id_location: number
 }
 
 export interface YoeLabelsTable {
-    id_post: string
+    id_post: number
 
     yoe: number | null
 }

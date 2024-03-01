@@ -74,17 +74,17 @@ export async function getJobs(
 
             opts.skills?.include.forEach(({ id }) => {
                 query = query.having(
-                    sql`(lbl.id_skill, lbl.label)`,
+                    sql`SUM(lbl.label) FILTER (WHERE lbl.id_skill = ${id})`,
                     "=",
-                    sql`(${id}, 1)`
+                    1
                 )
             })
 
             opts.skills?.exclude.forEach(({ id }) => {
                 query = query.having(
-                    sql`(lbl.id_skill, lbl.label)`,
+                    sql`SUM(lbl.label) FILTER (WHERE lbl.id_skill = ${id})`,
                     "=",
-                    sql`(${id}, 0)`
+                    0
                 )
             })
 
