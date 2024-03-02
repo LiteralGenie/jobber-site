@@ -13,6 +13,8 @@ export function useSearchForm() {
         loadFromUrl: () => filtersToFormData(searchFilters),
         submit: (data: SearchFormData) => {
             const filters = formDataToFilters(data)
+            filters.after = null
+
             const update = removeDefaultFilters(filters)
             setSearchFilters(update)
         },

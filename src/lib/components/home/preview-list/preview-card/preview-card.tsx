@@ -1,6 +1,7 @@
-import { MONTHS, humanizeSource } from "@/lib/format-utils"
+import { MONTHS } from "@/lib/format-utils"
 import { JobData } from "@/lib/job-data"
-import LaunchIcon from "@mui/icons-material/Launch"
+import VisibilityIcon from "@mui/icons-material/Visibility"
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined"
 import { Button, IconButton, Typography, alpha } from "@mui/material"
 import { useMemo } from "react"
 import styles from "./preview-card.module.scss"
@@ -8,19 +9,27 @@ import styles from "./preview-card.module.scss"
 export interface PreviewCardProps {
     job: JobData
     isActive: boolean
+    isSeen: boolean
     onClick?: () => void
+    onVisibilityToggle: () => void
 }
 
 export default function PreviewCard({
     job,
     isActive,
+    isSeen,
     onClick,
+    onVisibilityToggle,
 }: PreviewCardProps) {
     const date = useMemo(() => humanizeDate(job.time_created), [job])
-    const source = useMemo(() => humanizeSource(job.source), [job])
 
     return (
-        <div className="w-full flex justify-between">
+        <div
+            className="w-full flex justify-between"
+            style={{
+                opacity: isSeen ? 0.5 : 1,
+            }}
+        >
             {/* Overview */}
             <Button
                 onClick={onClick}
@@ -70,22 +79,41 @@ export default function PreviewCard({
             </Button>
 
             {/* Link to original post */}
-            <IconButton
-                className="h-min self-center p-4"
-                href={job.url}
-                target="_blank"
-                rel="noopener"
-                aria-label={`View on ${source}`}
-                title={`View on ${source}`}
-                sx={{
-                    pointerEvents: "initial",
-                }}
-                onClick={(ev) => {
-                    ev.stopPropagation()
-                }}
-            >
-                <LaunchIcon />
-            </IconButton>
+            <div className="grid grid-rows-1 p-2">
+                {/* <IconButton
+                    className="h-min self-center"
+                    href={job.url}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={`View on ${source}`}
+                    title={`View on ${source}`}
+                    onClick={(ev) => {
+                        ev.stopPropagation()
+                    }}
+                >
+                    <LaunchIcon />
+                </IconButton> */}
+
+                {isSeen ? (
+                    <IconButton
+                        className="self-center p-4"
+                        aria-label="Mark as seen"
+                        title="Mark as seen"
+                        onClick={() => onVisibilityToggle()}
+                    >
+                        <VisibilityOffOutlinedIcon />
+                    </IconButton>
+                ) : (
+                    <IconButton
+                        className="self-center p-4"
+                        aria-label="Mark as not seen"
+                        title="Mark as not seen"
+                        onClick={() => onVisibilityToggle()}
+                    >
+                        <VisibilityIcon />
+                    </IconButton>
+                )}
+            </div>
         </div>
     )
 }
